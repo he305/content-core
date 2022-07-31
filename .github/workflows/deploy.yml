@@ -41,4 +41,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/stream-feeder:${{ steps.tag.outputs.tag }} , ${{ secrets.DOCKER_HUB_USERNAME }}/stream-feeder:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/content-core:${{ steps.tag.outputs.tag }} , ${{ secrets.DOCKER_HUB_USERNAME }}/content-core:latest
