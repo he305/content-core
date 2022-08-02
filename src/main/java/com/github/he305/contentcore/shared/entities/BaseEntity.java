@@ -1,4 +1,4 @@
-package com.github.he305.contentcore.domain.model.entities;
+package com.github.he305.contentcore.shared.entities;
 
 import java.util.Objects;
 import java.util.UUID;
