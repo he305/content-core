@@ -14,7 +14,7 @@ import java.util.*;
 public class WatchingList extends AbstractAggregateRoot<WatchingList> {
     private final UUID id;
     private final MemberId memberId;
-    private List<WatchingListEntry> watchingListEntries = new ArrayList<>();
+    private final List<WatchingListEntry> watchingListEntries = new ArrayList<>();
 
     public WatchingList(UUID id, UUID memberId) {
         this.id = id;
@@ -24,10 +24,14 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
     public WatchingList(UUID id, UUID memberId, List<WatchingListEntry> entries) {
         this.id = id;
         this.memberId = new MemberId(memberId);
-        this.watchingListEntries = entries;
+        watchingListEntries.addAll(entries);
     }
 
     public void updateWatchingListEntry(String name, Set<ContentAccountId> contentAccountSet) {
+        if (contentAccountSet.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         Optional<WatchingListEntry> existingEntry = watchingListEntries.stream().filter(entry -> entry.getContentCreatorName().equals(name)).findAny();
         if (existingEntry.isEmpty()) {
             throw new IllegalArgumentException();
@@ -43,10 +47,13 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
     }
 
     public void addWatchingListEntry(String name, Set<ContentAccountId> contentAccountSet) {
+        if (contentAccountSet.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         Optional<WatchingListEntry> existingEntry = watchingListEntries.stream().filter(entry -> entry.getContentCreatorName().equals(name)).findAny();
         if (existingEntry.isPresent()) {
-            addContentAccountSetForExistingEntry(existingEntry.get(), contentAccountSet);
-            return;
+            throw new IllegalArgumentException();
         }
 
         WatchingListEntry watchingListEntry = new WatchingListEntry(new ContentCreator(name));
@@ -55,9 +62,5 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         // TODO: event
         contentAccountSet.forEach(watchingListEntry::addContentAccount);
         watchingListEntries.add(watchingListEntry);
-    }
-
-    private void addContentAccountSetForExistingEntry(WatchingListEntry watchingListEntry, Set<ContentAccountId> contentAccountSet) {
-        contentAccountSet.forEach(watchingListEntry::addContentAccount);
     }
 }
