@@ -8,14 +8,26 @@ import lombok.Getter;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 public class WatchingListEntry extends BaseEntity {
     private final ContentCreator contentCreator;
-    private final Set<ContentAccountId> contentAccountSet = new HashSet<>();
+    private Set<ContentAccountId> contentAccountSet = new HashSet<>();
 
     public WatchingListEntry(ContentCreator contentCreator) {
         this.contentCreator = contentCreator;
+    }
+
+    public WatchingListEntry(ContentCreator contentCreator, Set<ContentAccountId> set) {
+        this.contentCreator = contentCreator;
+        this.contentAccountSet = set;
+    }
+
+    public WatchingListEntry(UUID id, ContentCreator contentCreator, Set<ContentAccountId> set) {
+        this.contentCreator = contentCreator;
+        this.contentAccountSet = set;
+        this.id = id;
     }
 
     public String getContentCreatorName() {
