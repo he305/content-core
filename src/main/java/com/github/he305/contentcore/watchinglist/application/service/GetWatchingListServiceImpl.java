@@ -26,7 +26,7 @@ public class GetWatchingListServiceImpl implements GetWatchingListService {
         MemberId memberId = new MemberId(dto.getMemberId());
         Optional<WatchingList> watchingListOptional = watchingListRepository.getWatchingListByMemberId(memberId);
         if (watchingListOptional.isEmpty()) {
-            return null;
+            throw new IllegalArgumentException();
         }
 
         List<WatchingListEntryDto> watchingListEntryDtos = watchingListOptional.get()
