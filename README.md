@@ -1,0 +1,1 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=he305_content-core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=he305_content-core)
