@@ -1,16 +1,18 @@
-package com.github.he305.contentcore.watchinglist.infra;
+package com.github.he305.contentcore.watchinglist.infra.repository;
 
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class WatchingListRepositoryImpl implements WatchingListRepository {
+/**
+ * @deprecated Will be deleted soon
+ */
+@Deprecated(since = "0.1.0", forRemoval = true)
+public class WatchingListRepositoryMock implements WatchingListRepository {
     List<WatchingList> watchingLists = new ArrayList<>();
 
     @Override
