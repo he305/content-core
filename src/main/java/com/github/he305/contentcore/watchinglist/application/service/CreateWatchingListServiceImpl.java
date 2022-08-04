@@ -1,8 +1,7 @@
-package com.github.he305.contentcore.watchinglist.application.service.impl;
+package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
-import com.github.he305.contentcore.watchinglist.application.service.CreateWatchingListService;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;

@@ -1,11 +1,10 @@
-package com.github.he305.contentcore.watchinglist.application.service.impl;
+package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.MemberIdDto;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.application.query.GetWatchingListQuery;
-import com.github.he305.contentcore.watchinglist.application.service.GetWatchingListService;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;

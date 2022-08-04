@@ -1,4 +1,4 @@
-package com.github.he305.contentcore.watchinglist.application.service.impl;
+package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class ContentAccountServiceMock implements ContentAccountService {
+public class ContentAccountMockService implements ContentAccountService {
     private final Map<ContentAccount, UUID> mockMap = new HashMap<>();
 
     @Override
