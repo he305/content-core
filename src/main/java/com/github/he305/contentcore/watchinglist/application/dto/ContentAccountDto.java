@@ -1,15 +1,13 @@
 package com.github.he305.contentcore.watchinglist.application.dto;
 
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class ContentAccountDto {
     private String name;
     private ContentAccountPlatform platform;
