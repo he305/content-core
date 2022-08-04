@@ -7,9 +7,9 @@ import lombok.Getter;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Getter
 @Builder
-@AllArgsConstructor
 @EqualsAndHashCode
 public class WatchingListEntryDto {
     private String name;
