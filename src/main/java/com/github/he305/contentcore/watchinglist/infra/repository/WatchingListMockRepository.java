@@ -12,7 +12,7 @@ import java.util.Optional;
  * @deprecated Will be deleted soon
  */
 @Deprecated(since = "0.1.0", forRemoval = true)
-public class WatchingListRepositoryMock implements WatchingListRepository {
+public class WatchingListMockRepository implements WatchingListRepository {
     List<WatchingList> watchingLists = new ArrayList<>();
 
     @Override
