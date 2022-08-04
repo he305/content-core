@@ -1,12 +1,14 @@
 package com.github.he305.contentcore.watchinglist.application.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
+@Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class WatchingListEntryDto {

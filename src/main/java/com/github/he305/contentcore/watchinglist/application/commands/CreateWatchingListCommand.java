@@ -3,16 +3,14 @@ package com.github.he305.contentcore.watchinglist.application.commands;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class CreateWatchingListCommand {
     private UUID memberId;
     private List<WatchingListEntryDto> watchingList;

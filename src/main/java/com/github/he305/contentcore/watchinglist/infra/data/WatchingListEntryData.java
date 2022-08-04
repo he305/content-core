@@ -1,6 +1,9 @@
 package com.github.he305.contentcore.watchinglist.infra.data;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -9,11 +12,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "watching_list_entry")
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@NoArgsConstructor
+@Getter
 public class WatchingListEntryData {
     @Id
     @Column(name = "id")

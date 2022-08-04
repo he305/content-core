@@ -1,6 +1,9 @@
 package com.github.he305.contentcore.watchinglist.infra.data;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -10,11 +13,10 @@ import java.util.UUID;
 
 @Embeddable
 @Table(name = "content_account_id")
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
+@Getter
 public class ContentAccountIdData {
     @Column(name = "id")
     @Type(type = "uuid-char")
