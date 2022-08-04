@@ -32,7 +32,7 @@ class DomainArchitectureTest {
     void serviceClassesShouldOnlyBeAccessedByController() {
         classes()
                 .that().resideInAPackage("..service..")
-                .should().onlyBeAccessed().byAnyPackage("..service..", "..controller..")
+                .should().onlyBeAccessed().byAnyPackage("..service..", "..controller..", "..mapper..")
                 .allowEmptyShould(true).check(importedClasses);
     }
 
