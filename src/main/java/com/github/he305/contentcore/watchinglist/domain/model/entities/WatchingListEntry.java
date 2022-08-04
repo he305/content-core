@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 public class WatchingListEntry extends BaseEntity {
     private final ContentCreator contentCreator;
-    private Set<ContentAccountId> contentAccountSet = new HashSet<>();
+    private final Set<ContentAccountId> contentAccountSet = new HashSet<>();
 
     public WatchingListEntry(ContentCreator contentCreator) {
         this.contentCreator = contentCreator;
@@ -21,12 +21,11 @@ public class WatchingListEntry extends BaseEntity {
 
     public WatchingListEntry(ContentCreator contentCreator, Set<ContentAccountId> set) {
         this.contentCreator = contentCreator;
-        this.contentAccountSet = set;
+        this.contentAccountSet.addAll(set);
     }
 
     public WatchingListEntry(UUID id, ContentCreator contentCreator, Set<ContentAccountId> set) {
-        this.contentCreator = contentCreator;
-        this.contentAccountSet = set;
+        this(contentCreator, set);
         this.id = id;
     }
 
