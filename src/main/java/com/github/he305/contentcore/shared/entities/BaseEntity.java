@@ -1,8 +1,11 @@
 package com.github.he305.contentcore.shared.entities;
 
+import lombok.Getter;
+
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public abstract class BaseEntity {
     protected UUID id = UUID.randomUUID();
 
