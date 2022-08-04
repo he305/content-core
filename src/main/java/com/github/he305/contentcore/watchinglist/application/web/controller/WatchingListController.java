@@ -1,4 +1,4 @@
-package com.github.he305.contentcore.watchinglist.application.web;
+package com.github.he305.contentcore.watchinglist.application.web.controller;
 
 import com.github.he305.contentcore.watchinglist.application.commands.AddWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
