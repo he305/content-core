@@ -1,10 +1,7 @@
 package com.github.he305.contentcore.watchinglist.application.query;
 
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +10,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class GetWatchingListQuery {
     private UUID memberId;
     private List<WatchingListEntryDto> watchingList;

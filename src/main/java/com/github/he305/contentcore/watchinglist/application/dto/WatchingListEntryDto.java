@@ -1,9 +1,6 @@
 package com.github.he305.contentcore.watchinglist.application.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +8,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class WatchingListEntryDto {
     private String name;
     private List<ContentAccountDto> accounts;

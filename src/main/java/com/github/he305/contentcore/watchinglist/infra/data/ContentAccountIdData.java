@@ -1,9 +1,6 @@
 package com.github.he305.contentcore.watchinglist.infra.data;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class ContentAccountIdData {
     @Column(name = "id")
     @Type(type = "uuid-char")
