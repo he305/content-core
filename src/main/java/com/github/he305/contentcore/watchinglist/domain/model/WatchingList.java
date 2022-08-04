@@ -14,11 +14,17 @@ import java.util.*;
 public class WatchingList extends AbstractAggregateRoot<WatchingList> {
     private final UUID id;
     private final MemberId memberId;
-    private final List<WatchingListEntry> watchingListEntries = new ArrayList<>();
+    private List<WatchingListEntry> watchingListEntries = new ArrayList<>();
 
     public WatchingList(UUID id, UUID memberId) {
         this.id = id;
         this.memberId = new MemberId(memberId);
+    }
+
+    public WatchingList(UUID id, UUID memberId, List<WatchingListEntry> entries) {
+        this.id = id;
+        this.memberId = new MemberId(memberId);
+        this.watchingListEntries = entries;
     }
 
     public void updateWatchingListEntry(String name, Set<ContentAccountId> contentAccountSet) {
