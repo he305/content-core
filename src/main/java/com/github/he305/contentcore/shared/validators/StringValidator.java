@@ -5,7 +5,7 @@ public class StringValidator {
     }
 
     public static String isNullOrEmpty(String instance) {
-        if (instance == null || instance.isEmpty()) {
+        if (instance == null || instance.trim().isEmpty()) {
             throw new IllegalArgumentException();
         }
         return instance;
