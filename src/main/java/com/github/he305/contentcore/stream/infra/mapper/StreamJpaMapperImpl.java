@@ -21,8 +21,10 @@ public class StreamJpaMapperImpl implements StreamJpaMapper {
         StreamJpa streamJpa = StreamJpa.builder()
                 .id(data.getId())
                 .maxViewers(data.getMaxViewers())
+                .isLive(data.isLive())
                 .startedAt(data.getStartedAt())
                 .endedAt(data.getEndedAt())
+                .streamChannel(streamChannelJpa)
                 .build();
 
         List<StreamDataJpa> streamDataJpaList = data
