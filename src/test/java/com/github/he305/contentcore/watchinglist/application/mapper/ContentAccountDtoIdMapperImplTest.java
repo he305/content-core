@@ -4,7 +4,7 @@ import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountD
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
-import com.github.he305.contentcore.watchinglist.domain.service.ContentAccountService;
+import com.github.he305.contentcore.watchinglist.domain.service.ContentAccountExchangeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ContentAccountDtoIdMapperImplTest {
 
     @Mock
-    private ContentAccountService contentAccountService;
+    private ContentAccountExchangeService contentAccountExchangeService;
 
     @InjectMocks
     private ContentAccountDtoIdMapperImpl underTest;
@@ -31,7 +31,7 @@ class ContentAccountDtoIdMapperImplTest {
         ContentAccountDto data = new ContentAccountDto("name", ContentAccountPlatform.TWITCH);
         ContentAccount mapped = new ContentAccount("name", ContentAccountPlatform.TWITCH);
         ContentAccountId expected = new ContentAccountId(UUID.randomUUID());
-        Mockito.when(contentAccountService.getContentAccountId(mapped)).thenReturn(expected);
+        Mockito.when(contentAccountExchangeService.getContentAccountId(mapped)).thenReturn(expected);
 
         ContentAccountId actual = underTest.toContentAccountId(data);
         assertEquals(expected, actual);
@@ -42,7 +42,7 @@ class ContentAccountDtoIdMapperImplTest {
         ContentAccountId data = new ContentAccountId(UUID.randomUUID());
         ContentAccount mapped = new ContentAccount("name", ContentAccountPlatform.TWITCH);
         ContentAccountDto expected = new ContentAccountDto("name", ContentAccountPlatform.TWITCH);
-        Mockito.when(contentAccountService.getContentAccount(data)).thenReturn(mapped);
+        Mockito.when(contentAccountExchangeService.getContentAccount(data)).thenReturn(mapped);
 
         ContentAccountDto actual = underTest.toContentAccountDto(data);
         assertEquals(expected, actual);

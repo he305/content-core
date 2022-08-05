@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.watchinglist.infra.repository;
 
+import com.github.he305.contentcore.shared.events.EventPublisher;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import com.github.he305.contentcore.watchinglist.infra.data.WatchingListData;
@@ -24,6 +25,8 @@ class WatchingListRepositoryImplTest {
     private JpaWatchingListRepository jpaWatchingListRepository;
     @Mock
     private WatchingListMapper watchingListMapper;
+    @Mock
+    private EventPublisher eventPublisher;
 
     @InjectMocks
     private WatchingListRepositoryImpl underTest;

@@ -13,7 +13,6 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
         use_sql_comment: true
         format_sql: true
   datasource:
