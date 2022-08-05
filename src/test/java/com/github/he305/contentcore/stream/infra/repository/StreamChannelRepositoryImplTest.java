@@ -4,6 +4,7 @@ import com.github.he305.contentcore.shared.events.EventPublisher;
 import com.github.he305.contentcore.stream.domain.exceptions.StreamChannelWithContentAccountIdNotFoundException;
 import com.github.he305.contentcore.stream.domain.model.StreamChannel;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
+import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelStatus;
 import com.github.he305.contentcore.stream.domain.model.values.StreamChannelContentAccountId;
 import com.github.he305.contentcore.stream.infra.data.StreamChannelJpa;
 import com.github.he305.contentcore.stream.infra.jpa.JpaStreamChannelRepository;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,5 +61,26 @@ class StreamChannelRepositoryImplTest {
         Mockito.when(jpaStreamChannelRepository.findByContentAccountId(id.getId())).thenReturn(Optional.empty());
         assertThrows(StreamChannelWithContentAccountIdNotFoundException.class, () ->
                 underTest.getByContentAccountId(id));
+    }
+
+    @Test
+    void getById() {
+        UUID id = UUID.randomUUID();
+        StreamChannelJpa jpa = StreamChannelJpa.builder().build();
+        StreamChannel expected = new StreamChannel(new StreamChannelContentAccountId(id), StreamChannelPlatform.TWITCH);
+        Mockito.when(jpaStreamChannelRepository.getReferenceById(id)).thenReturn(jpa);
+        Mockito.when(streamChannelJpaMapper.toDomain(jpa)).thenReturn(expected);
+        assertDoesNotThrow(() -> underTest.getById(id));
+    }
+
+    @Test
+    void getByStreamContentStatus() {
+        StreamChannelStatus status = StreamChannelStatus.OBSERVABLE;
+        StreamChannelJpa jpa = StreamChannelJpa.builder().build();
+        StreamChannel expected = new StreamChannel(new StreamChannelContentAccountId(UUID.randomUUID()), StreamChannelPlatform.TWITCH);
+        Mockito.when(jpaStreamChannelRepository.findByStatus(status)).thenReturn(List.of(jpa));
+        Mockito.when(streamChannelJpaMapper.toDomain(jpa)).thenReturn(expected);
+
+        assertDoesNotThrow(() -> underTest.getByStreamContentStatus(status));
     }
 }
