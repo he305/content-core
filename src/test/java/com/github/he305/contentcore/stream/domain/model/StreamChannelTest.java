@@ -8,6 +8,8 @@ import com.github.he305.contentcore.stream.domain.model.entities.StreamData;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelStatus;
 import com.github.he305.contentcore.stream.domain.model.values.StreamChannelContentAccountId;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -143,5 +145,10 @@ class StreamChannelTest {
 
         assertThrows(NoLiveStreamFoundException.class, () ->
                 streamChannel.endStream(now));
+    }
+
+    @Test
+    void equals() {
+        EqualsVerifier.forClass(StreamChannel.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 }

@@ -13,6 +13,7 @@ import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatf
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelStatus;
 import com.github.he305.contentcore.stream.domain.model.values.StreamChannelContentAccountId;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
@@ -21,7 +22,8 @@ import java.util.*;
 
 @Getter
 @AllArgsConstructor
-public class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
     private final UUID id;
     private final StreamChannelContentAccountId streamChannelContentAccountId;
     private final StreamChannelPlatform platform;
