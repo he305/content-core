@@ -81,6 +81,10 @@ public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
         registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(data.toString())));
     }
 
+    public boolean isLive() {
+        return streams.stream().anyMatch(Stream::isLive);
+    }
+
     public Collection<Object> getEvents() {
         return domainEvents();
     }

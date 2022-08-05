@@ -21,7 +21,7 @@ public class StreamJpa {
     @Type(type = "uuid-char")
     private UUID id;
 
-    @Column(name = "max_viewers")
+    @Column(name = "max_viewers", nullable = false)
     private int maxViewers;
 
     @Column(name = "started_at", nullable = false, columnDefinition = "TIMESTAMP")
@@ -30,7 +30,7 @@ public class StreamJpa {
     @Column(name = "ended_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime endedAt;
 
-    @Column(name = "is_live")
+    @Column(name = "is_live", nullable = false)
     private boolean isLive;
 
     @ManyToOne(optional = false)
