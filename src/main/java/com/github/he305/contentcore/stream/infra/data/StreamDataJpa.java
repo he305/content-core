@@ -18,17 +18,17 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class StreamDataJpa {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     @Type(type = "uuid-char")
     private UUID id;
 
-    @Column(name = "game_name")
+    @Column(name = "game_name", nullable = false)
     private String gameName;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "viewer_count")
+    @Column(name = "viewer_count", nullable = false)
     private int viewerCount;
 
     @Column(name = "stream_data_time", nullable = false, columnDefinition = "TIMESTAMP")
