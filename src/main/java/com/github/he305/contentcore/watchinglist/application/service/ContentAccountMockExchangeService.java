@@ -2,17 +2,19 @@ package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
-import com.github.he305.contentcore.watchinglist.domain.service.ContentAccountService;
+import com.github.he305.contentcore.watchinglist.domain.service.ContentAccountExchangeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Service
+/**
+ * @deprecated Will be deleted at next minor update
+ */
 @Slf4j
-public class ContentAccountMockService implements ContentAccountService {
+@Deprecated(since = "0.4.0", forRemoval = true)
+public class ContentAccountMockExchangeService implements ContentAccountExchangeService {
     private final Map<ContentAccount, UUID> mockMap = new HashMap<>();
 
     @Override
