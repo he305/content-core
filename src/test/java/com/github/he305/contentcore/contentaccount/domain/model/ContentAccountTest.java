@@ -71,4 +71,13 @@ class ContentAccountTest {
         assertEquals(1, events.size());
         events.forEach(event -> assertTrue(event instanceof NewContentAccountAddedEvent));
     }
+
+    @Test
+    void hashCode_equals() {
+        UUID id = UUID.randomUUID();
+        ContentAccount first = new ContentAccount(id, new ContentAccountDetails("name", Platform.TWITCH), new UseCounter(255), Status.ACTIVE);
+        ContentAccount second = new ContentAccount(id, new ContentAccountDetails("name", Platform.TWITCH), new UseCounter(255), Status.ACTIVE);
+
+        assertEquals(first.hashCode(), second.hashCode());
+    }
 }
