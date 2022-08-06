@@ -25,10 +25,10 @@ public class StreamChannelController {
     private final PostStreamerDataService postStreamerDataService;
     private final EndStreamService endStreamService;
 
-    @GetMapping("/{status}")
-    public ResponseEntity<StreamChannelList> getStreamChannelsByStatus(@PathVariable StreamChannelStatus status) {
+    @GetMapping()
+    public ResponseEntity<StreamChannelList> getObservableStreamChannels() {
         try {
-            GetStreamChannelByStatusQuery query = new GetStreamChannelByStatusQuery(status);
+            GetStreamChannelByStatusQuery query = new GetStreamChannelByStatusQuery(StreamChannelStatus.OBSERVABLE);
             return ResponseEntity.ok(getStreamChannelByStatusService.execute(query));
         } catch (ContentCoreException ex) {
             log.error(ex.toString());

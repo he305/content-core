@@ -48,7 +48,7 @@ class StreamChannelControllerTest {
         StreamChannelStatus status = StreamChannelStatus.OBSERVABLE;
         Mockito.when(getStreamChannelByStatusService.execute(new GetStreamChannelByStatusQuery(status))).thenThrow(ContentCoreException.class);
 
-        ResponseEntity<StreamChannelList> actual = underTest.getStreamChannelsByStatus(status);
+        ResponseEntity<StreamChannelList> actual = underTest.getObservableStreamChannels();
         assertEquals(expected, actual);
     }
 
@@ -59,7 +59,7 @@ class StreamChannelControllerTest {
         ResponseEntity<StreamChannelList> expected = ResponseEntity.ok(list);
         Mockito.when(getStreamChannelByStatusService.execute(new GetStreamChannelByStatusQuery(status))).thenReturn(list);
 
-        ResponseEntity<StreamChannelList> actual = underTest.getStreamChannelsByStatus(status);
+        ResponseEntity<StreamChannelList> actual = underTest.getObservableStreamChannels();
         assertEquals(expected.getStatusCode(), actual.getStatusCode());
         assertNotNull(expected.getBody());
         assertEquals(expected.getBody().getChannels().size(), expected.getBody().getChannels().size());
