@@ -28,13 +28,6 @@ class DomainArchitectureTest {
         rule.allowEmptyShould(true).check(importedClasses);
     }
 
-    @Test
-    void serviceClassesShouldOnlyBeAccessedByController() {
-        classes()
-                .that().resideInAPackage("..service..")
-                .should().onlyBeAccessed().byAnyPackage("..service..", "..controller..")
-                .allowEmptyShould(true).check(importedClasses);
-    }
 
     @Test
     void serviceClassesShouldBeNamedXServiceOrXComponentOrXServiceImpl() {

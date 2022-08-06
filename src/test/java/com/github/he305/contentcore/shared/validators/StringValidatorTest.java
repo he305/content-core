@@ -1,6 +1,5 @@
 package com.github.he305.contentcore.shared.validators;
 
-import com.github.he305.contentcore.shared.exceptions.StringInvalidException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,24 +8,30 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class StringValidatorTest {
 
     @Test
-    void isNullOrEmpty_valid() {
-        String validString = "valid";
-
-        String actual = StringValidator.isNullOrEmpty(validString);
-        assertEquals(validString, actual);
-    }
-
-    @Test
-    void isNullOrEmpty_nullString_shouldThrow() {
-        assertThrows(StringInvalidException.class, () ->
+    void isNullOrEmpty_nullString() {
+        assertThrows(IllegalArgumentException.class, () ->
                 StringValidator.isNullOrEmpty(null));
     }
 
     @Test
-    void isNullOrEmpty_blankString_shouldThrow() {
+    void isNullOrEmpty_blank() {
         String blank = "";
-        assertThrows(StringInvalidException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 StringValidator.isNullOrEmpty(blank));
     }
 
+    @Test
+    void isNullOrEmpty_whitespace() {
+        String whitespace = " ";
+        assertThrows(IllegalArgumentException.class, () ->
+                StringValidator.isNullOrEmpty(whitespace));
+    }
+
+    @Test
+    void isNullOrEmpty_valid() {
+        String valid = "valid";
+        String actual = StringValidator.isNullOrEmpty(valid);
+
+        assertEquals(valid, actual);
+    }
 }
