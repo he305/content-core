@@ -1,15 +1,11 @@
 package com.github.he305.contentcore.account.application.commands;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class RegisterAccountCommand {
+@Getter
+public class LoginAccountCommand {
     private String username;
     private String password;
 }
