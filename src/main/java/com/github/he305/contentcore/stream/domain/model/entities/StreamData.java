@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.stream.domain.model.entities;
 
+import com.github.he305.contentcore.shared.validators.NotInFutureTimeValidator;
 import com.github.he305.contentcore.shared.validators.PositiveOrZeroNumberValidator;
 import com.github.he305.contentcore.shared.validators.StringValidator;
 import lombok.EqualsAndHashCode;
@@ -24,8 +25,7 @@ public final class StreamData {
         this.gameName = StringValidator.isNullOrEmpty(gameName);
         this.title = StringValidator.isNullOrEmpty(title);
         this.viewerCount = PositiveOrZeroNumberValidator.validate(viewerCount);
-        // TODO: somehow validate time?
-        this.streamDataTime = streamDataTime;
+        this.streamDataTime = NotInFutureTimeValidator.validate(streamDataTime);
     }
 
     public StreamData(UUID id, String gameName, String title, int viewerCount, LocalDateTime streamDataTime) {
@@ -33,7 +33,6 @@ public final class StreamData {
         this.gameName = StringValidator.isNullOrEmpty(gameName);
         this.title = StringValidator.isNullOrEmpty(title);
         this.viewerCount = PositiveOrZeroNumberValidator.validate(viewerCount);
-        // TODO: somehow validate time?
-        this.streamDataTime = streamDataTime;
+        this.streamDataTime = NotInFutureTimeValidator.validate(streamDataTime);
     }
 }

@@ -1,10 +1,12 @@
 package com.github.he305.contentcore.watchinglist.application.query;
 
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
