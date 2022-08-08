@@ -28,6 +28,10 @@ public class Account extends AbstractAggregateRoot<Account> {
         return new Account(UUID.randomUUID(), name, password, Role.USER);
     }
 
+    public static Account registerService(String name, String password) {
+        return new Account(UUID.randomUUID(), name, password, Role.SERVICE);
+    }
+
     public String getUsername() {
         return accountProperties.getUsername();
     }

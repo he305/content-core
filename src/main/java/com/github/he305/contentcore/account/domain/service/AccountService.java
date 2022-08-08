@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface AccountService {
     Account register(String username, String password) throws AccountAlreadyExistsException;
 
+    Account registerService(String username, String password) throws AccountAlreadyExistsException;
+
     Account login(String username, String password) throws AccountLoginException;
 
     Account loginByUsername(String username) throws AccountNotFoundException;
