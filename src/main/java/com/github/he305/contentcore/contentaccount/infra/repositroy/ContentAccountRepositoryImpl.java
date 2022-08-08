@@ -29,8 +29,11 @@ public class ContentAccountRepositoryImpl implements ContentAccountRepository {
 
     @Override
     public ContentAccount getById(UUID id) {
-        ContentAccountData data = jpaContentAccountRepository.getReferenceById(id);
-        return contentAccountDataMapper.toDomain(data);
+        Optional<ContentAccountData> data = jpaContentAccountRepository.findById(id);
+        if (data.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return contentAccountDataMapper.toDomain(data.get());
     }
 
     @Override

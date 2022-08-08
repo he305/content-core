@@ -68,9 +68,16 @@ class StreamChannelRepositoryImplTest {
         UUID id = UUID.randomUUID();
         StreamChannelJpa jpa = StreamChannelJpa.builder().build();
         StreamChannel expected = new StreamChannel(new StreamChannelContentAccountId(id), StreamChannelPlatform.TWITCH);
-        Mockito.when(jpaStreamChannelRepository.getReferenceById(id)).thenReturn(jpa);
+        Mockito.when(jpaStreamChannelRepository.findById(id)).thenReturn(Optional.ofNullable(jpa));
         Mockito.when(streamChannelJpaMapper.toDomain(jpa)).thenReturn(expected);
         assertDoesNotThrow(() -> underTest.getById(id));
+    }
+
+    @Test
+    void getById_empty() {
+        UUID id = UUID.randomUUID();
+        Mockito.when(jpaStreamChannelRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> underTest.getById(id));
     }
 
     @Test

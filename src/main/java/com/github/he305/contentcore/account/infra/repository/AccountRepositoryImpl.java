@@ -46,7 +46,6 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Optional<Account> findById(UUID id) {
-        // TODO: fix find by id in other repos
         Optional<AccountData> data = jpaAccountRepository.findById(id);
         if (data.isEmpty()) {
             return Optional.empty();

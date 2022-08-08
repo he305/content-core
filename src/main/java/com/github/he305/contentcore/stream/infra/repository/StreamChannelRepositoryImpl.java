@@ -34,8 +34,11 @@ public class StreamChannelRepositoryImpl implements StreamChannelRepository {
 
     @Override
     public StreamChannel getById(UUID id) {
-        StreamChannelJpa jpa = jpaStreamChannelRepository.getReferenceById(id);
-        return streamChannelJpaMapper.toDomain(jpa);
+        Optional<StreamChannelJpa> jpa = jpaStreamChannelRepository.findById(id);
+        if (jpa.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return streamChannelJpaMapper.toDomain(jpa.get());
     }
 
     @Override
