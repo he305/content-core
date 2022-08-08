@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.shared.validators;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ class NotInFutureTimeValidatorTest {
     @Test
     void validate_notValid() {
         LocalDateTime time = LocalDateTime.now().plus(1, ChronoUnit.MINUTES);
-        assertThrows(IllegalArgumentException.class, () -> NotInFutureTimeValidator.validate(time));
+        assertThrows(ContentCoreArgumentException.class, () -> NotInFutureTimeValidator.validate(time));
     }
 
     @Test
