@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @EqualsAndHashCode
 public class JwtResponseDto {
-    private static final String TYPE = "Bearer";
+    private final String type = "Bearer";
     private final String token;
 }
