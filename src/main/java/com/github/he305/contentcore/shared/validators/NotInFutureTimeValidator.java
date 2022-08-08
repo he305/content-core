@@ -6,7 +6,7 @@ public class NotInFutureTimeValidator {
     private NotInFutureTimeValidator() {
     }
 
-    
+
     public static LocalDateTime validate(LocalDateTime time) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(time)) {
