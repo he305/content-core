@@ -2,10 +2,13 @@ package com.github.he305.contentcore.account.application.controller;
 
 import com.github.he305.contentcore.account.application.commands.LoginAccountCommand;
 import com.github.he305.contentcore.account.application.commands.RegisterAccountCommand;
+import com.github.he305.contentcore.account.application.commands.RegisterServiceCommand;
 import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.application.dto.LoginRequestDto;
+import com.github.he305.contentcore.account.application.dto.RegisterServiceDto;
 import com.github.he305.contentcore.account.application.service.LoginAccountService;
 import com.github.he305.contentcore.account.application.service.RegisterAccountService;
+import com.github.he305.contentcore.account.application.service.RegisterServiceService;
 import com.github.he305.contentcore.account.domain.exceptions.AccountAlreadyExistsException;
 import com.github.he305.contentcore.account.domain.exceptions.AccountLoginException;
 import org.junit.jupiter.api.Test;
@@ -15,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,6 +29,8 @@ class AuthControllerTest {
     private RegisterAccountService registerAccountService;
     @Mock
     private LoginAccountService loginAccountService;
+    @Mock
+    private RegisterServiceService registerServiceService;
 
     @InjectMocks
     private AuthController underTest;
@@ -72,6 +78,41 @@ class AuthControllerTest {
         ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
         ResponseEntity<JwtResponseDto> actual = underTest.register(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void registerService_notEqualSecretKey() {
+        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
+        ReflectionTestUtils.setField(underTest, "serviceRegisterKey", "test");
+
+        RegisterServiceDto dto = new RegisterServiceDto("user", "pass", "1");
+        ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void registerService_alreadyExistsException() {
+        ReflectionTestUtils.setField(underTest, "serviceRegisterKey", "test");
+        RegisterServiceDto dto = new RegisterServiceDto("user", "pass", "test");
+        RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
+        Mockito.when(registerServiceService.execute(command)).thenThrow(AccountAlreadyExistsException.class);
+        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
+
+        ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void registerService_valid() {
+        ReflectionTestUtils.setField(underTest, "serviceRegisterKey", "test");
+        RegisterServiceDto dto = new RegisterServiceDto("user", "pass", "test");
+        RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
+        JwtResponseDto res = new JwtResponseDto("test");
+        Mockito.when(registerServiceService.execute(command)).thenReturn(res);
+        ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
+
+        ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
         assertEquals(expected, actual);
     }
 }

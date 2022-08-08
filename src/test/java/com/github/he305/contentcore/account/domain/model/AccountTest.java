@@ -18,6 +18,15 @@ class AccountTest {
     }
 
     @Test
+    void registerService() {
+        String username = "user";
+        String pass = "pass";
+        Account actual = Account.registerService(username, pass);
+        Account expected = new Account(actual.getId(), username, pass, Role.SERVICE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void testEquals() {
         EqualsVerifier.simple().forClass(Account.class).verify();
     }

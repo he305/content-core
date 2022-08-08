@@ -18,12 +18,23 @@ import java.util.UUID;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public Account register(String username, String password) throws AccountAlreadyExistsException {
         if (accountRepository.findByUsername(username).isPresent()) {
             throw new AccountAlreadyExistsException();
         }
         Account account = Account.register(username, passwordEncoder.encode(password));
+        accountRepository.save(account);
+        return account;
+    }
+
+    @Override
+    public Account registerService(String username, String password) throws AccountAlreadyExistsException {
+        if (accountRepository.findByUsername(username).isPresent()) {
+            throw new AccountAlreadyExistsException();
+        }
+        Account account = Account.registerService(username, passwordEncoder.encode(password));
         accountRepository.save(account);
         return account;
     }

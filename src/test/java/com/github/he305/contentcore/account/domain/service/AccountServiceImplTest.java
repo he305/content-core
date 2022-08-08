@@ -53,6 +53,28 @@ class AccountServiceImplTest {
     }
 
     @Test
+    void registerService_accountAlreadyExists() {
+        String username = "user";
+        String password = "pass";
+        Account account = new Account(UUID.randomUUID(), username, password, Role.ADMIN);
+        Mockito.when(accountRepository.findByUsername(username)).thenReturn(Optional.of(account));
+        assertThrows(AccountAlreadyExistsException.class, () ->
+                underTest.registerService(username, password));
+    }
+
+    @Test
+    void registerService_valid() {
+        String username = "user";
+        String password = "pass";
+        Mockito.when(accountRepository.findByUsername(username)).thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.encode(password)).thenReturn(password);
+
+        Account actual = underTest.registerService(username, password);
+        Account expected = new Account(actual.getId(), username, password, Role.SERVICE);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void login_accountNotFoundException() {
         String username = "user";
         String password = "pass";

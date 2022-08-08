@@ -2,6 +2,7 @@ package com.github.he305.contentcore.account.application.service;
 
 import com.github.he305.contentcore.account.application.commands.LoginAccountCommand;
 import com.github.he305.contentcore.account.application.commands.RegisterAccountCommand;
+import com.github.he305.contentcore.account.application.commands.RegisterServiceCommand;
 import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.domain.model.Account;
 import com.github.he305.contentcore.account.domain.model.enums.Role;
@@ -47,6 +48,17 @@ class AuthServiceTest {
         RegisterAccountCommand command = new RegisterAccountCommand("user", "pass");
         JwtResponseDto expected = new JwtResponseDto("test");
         Mockito.when(accountService.register("user", "pass")).thenReturn(new Account(UUID.randomUUID(), "user", "pass", Role.ADMIN));
+        Mockito.when(tokenGenerator.generateToken(Mockito.any())).thenReturn("test");
+
+        JwtResponseDto actual = underTest.execute(command);
+        assertEquals(expected.getToken(), actual.getToken());
+    }
+
+    @Test
+    void testRegisterService() {
+        RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
+        JwtResponseDto expected = new JwtResponseDto("test");
+        Mockito.when(accountService.registerService("user", "pass")).thenReturn(new Account(UUID.randomUUID(), "user", "pass", Role.ADMIN));
         Mockito.when(tokenGenerator.generateToken(Mockito.any())).thenReturn("test");
 
         JwtResponseDto actual = underTest.execute(command);
