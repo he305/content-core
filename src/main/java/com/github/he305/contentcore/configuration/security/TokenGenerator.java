@@ -1,24 +1,32 @@
 package com.github.he305.contentcore.configuration.security;
 
-import com.github.he305.contentcore.account.application.auth.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
+import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class TokenGenerator {
-    @Autowired
-    JwtEncoder accessTokenEncoder;
 
     @Value("${jwt.expiration-min}")
     private int expirationMinutes;
@@ -26,43 +34,74 @@ public class TokenGenerator {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    public String createToken(Authentication authentication) {
-        validateAuthenticationPrincipal(authentication);
-        return createAccessToken(authentication);
+    @Value("${jwt.secret.key}")
+    public String signingKeyPlain;
+
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(signingKeyPlain);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private void validateAuthenticationPrincipal(Authentication authentication) {
-        Object obj = authentication.getPrincipal();
-        if (!(obj instanceof User)) {
-            throw new BadCredentialsException(
-                    MessageFormat.format("principal {0} is not of User type", authentication.getPrincipal().getClass())
-            );
-        }
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
     }
 
-    private String createAccessToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        Instant now = Instant.now();
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
 
-        String claims = authentication.getAuthorities()
-                .stream()
-                .map(Object::toString)
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    public String generateToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-                .issuer(issuer)
-                .issuedAt(now)
-                .expiresAt(now.plus(expirationMinutes, ChronoUnit.MINUTES))
-                .subject(user.getUsername())
-                .claim("id", user.getId().toString())
-                .claim("scope", claims)
-                .build();
-
-        return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
+        Instant time = Instant.now();
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim("role", authorities)
+                .setIssuedAt(Date.from(time))
+                .setExpiration(Date.from(time.plus(expirationMinutes, ChronoUnit.MINUTES)))
+                .signWith(getSigningKey())
+                .compact();
     }
 
-//    public User getUserFromToken(String token) {
-//        Jwts.parserBuilder().setSigningKey()
-//    }
-//}
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final UserDetails userDetails) {
+
+        final JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(getSigningKey()).build();
+
+        final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+
+        final Claims claims = claimsJws.getBody();
+
+        final Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("role").toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    }
+
 }

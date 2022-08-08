@@ -8,9 +8,9 @@ import java.util.UUID;
 public interface AccountRepository {
     void save(Account account);
 
-    Optional<Account> findByName(String name);
+    Optional<Account> findByUsername(String name);
 
-    Optional<Account> findByNameAndPassword(String name, String password);
+    Optional<Account> findByUsernameAndPassword(String name, String password);
 
     Optional<Account> findById(UUID id);
 }

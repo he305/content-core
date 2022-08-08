@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -20,10 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            Account account = accountService.loginByUsername(username);
+            Account account = accountService.loginById(UUID.fromString(username));
             return User.create(account);
         } catch (AccountNotFoundException ex) {
-            log.info(ex.getMessage());
             throw new UsernameNotFoundException(ex.getMessage());
         }
     }

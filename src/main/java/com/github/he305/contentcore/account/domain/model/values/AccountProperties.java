@@ -1,15 +1,17 @@
 package com.github.he305.contentcore.account.domain.model.values;
 
 import com.github.he305.contentcore.shared.validators.StringValidator;
-import lombok.Value;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-@Value
+@Getter
+@EqualsAndHashCode
 public class AccountProperties {
-    String name;
-    String password;
+    private final String username;
+    private final String password;
 
-    public AccountProperties(String name, String password) {
-        this.name = StringValidator.isNullOrEmpty(name);
+    public AccountProperties(String username, String password) {
+        this.username = StringValidator.isNullOrEmpty(username);
         this.password = StringValidator.isNullOrEmpty(password);
     }
 }
