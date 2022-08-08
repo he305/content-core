@@ -26,3 +26,6 @@ jwt:
   secret.key: dGhpcyBpcyBteSB2ZXJ5IHNlY3JldCBrZXkgdGhhdCBub2JvZHkga25vd3MgYWJvdXQuIGkgYW0gc3VyZSB0aGF0IG5vYm9keSB3aWxsIGV2ZXIga25vdyBhYm91dCB0aGUgY29udGVudHMgb2YgdGhpcyBrZXkuIGkgaG9wZSB0aGlzIGlzIGVub3VnaCBmb3IgMjU2IGJpdHM=
   expiration-min: 120
   issuer: content-core
+
+auth:
+  service-register-key: exampleserviceregisterkey
