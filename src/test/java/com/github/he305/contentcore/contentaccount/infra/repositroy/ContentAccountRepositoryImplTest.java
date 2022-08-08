@@ -44,11 +44,19 @@ class ContentAccountRepositoryImplTest {
         UUID id = UUID.randomUUID();
         ContentAccount expected = new ContentAccount(UUID.randomUUID(), new ContentAccountDetails("name", Platform.TWITCH));
         ContentAccountData data = new ContentAccountData();
-        Mockito.when(jpaContentAccountRepository.getReferenceById(id)).thenReturn(data);
+        Mockito.when(jpaContentAccountRepository.findById(id)).thenReturn(Optional.of(data));
         Mockito.when(contentAccountDataMapper.toDomain(data)).thenReturn(expected);
 
         ContentAccount actual = underTest.getById(id);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getById_empty() {
+        UUID id = UUID.randomUUID();
+        Mockito.when(jpaContentAccountRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> underTest.getById(id));
     }
 
     @Test
