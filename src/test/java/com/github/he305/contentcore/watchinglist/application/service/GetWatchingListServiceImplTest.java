@@ -19,10 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,14 +36,18 @@ class GetWatchingListServiceImplTest {
     private GetWatchingListServiceImpl underTest;
 
     @Test
-    void getWatchingList_watchingListNotFound_shouldThrow() {
+    void getWatchingList_watchingListNotFound_returnEmpty() {
         UUID id = UUID.randomUUID();
         MemberId memberId = new MemberId(id);
         MemberIdDto dto = new MemberIdDto(id);
 
+        GetWatchingListQuery expected = new GetWatchingListQuery(
+                Collections.emptyList()
+        );
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () ->
-                underTest.getWatchingList(dto));
+
+        GetWatchingListQuery actual = underTest.getWatchingList(dto);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -67,7 +68,6 @@ class GetWatchingListServiceImplTest {
                 new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
         ));
         GetWatchingListQuery expected = new GetWatchingListQuery(
-                id,
                 List.of(expectedDto)
         );
 

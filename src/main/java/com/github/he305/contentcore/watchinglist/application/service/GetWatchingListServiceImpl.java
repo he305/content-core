@@ -11,6 +11,7 @@ import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListR
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class GetWatchingListServiceImpl implements GetWatchingListService {
         MemberId memberId = new MemberId(dto.getMemberId());
         Optional<WatchingList> watchingListOptional = watchingListRepository.getWatchingListByMemberId(memberId);
         if (watchingListOptional.isEmpty()) {
-            throw new IllegalArgumentException();
+            return new GetWatchingListQuery(Collections.emptyList());
         }
 
         List<WatchingListEntryDto> watchingListEntryDtos = watchingListOptional.get()
@@ -38,7 +39,6 @@ public class GetWatchingListServiceImpl implements GetWatchingListService {
                 }).collect(Collectors.toList());
 
         return new GetWatchingListQuery(
-                memberId.getId(),
                 watchingListEntryDtos
         );
     }
