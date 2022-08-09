@@ -10,8 +10,10 @@ import com.github.he305.contentcore.stream.infra.data.StreamChannelJpa;
 import com.github.he305.contentcore.stream.infra.data.StreamDataJpa;
 import com.github.he305.contentcore.stream.infra.data.StreamJpa;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,12 +23,13 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// TODO: write tests for every mapper
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class StreamChannelJpaMapperImplTest {
 
-    @Autowired
-    private StreamChannelJpaMapper underTest;
+    @Mock
+    private StreamJpaMapper streamJpaMapper;
+    @InjectMocks
+    private StreamChannelJpaMapperImpl underTest;
 
     @Test
     void toJpa() {

@@ -1,14 +1,16 @@
 package com.github.he305.contentcore.account.application.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class JwtResponseDto {
     private final String type = "Bearer";
-    private final String token;
+    private String token;
 }

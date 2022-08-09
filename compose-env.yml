@@ -1,0 +1,12 @@
+version: '3'
+services:
+  db_twitch_env:
+    image: postgres
+    container_name: content_core_env
+    restart: always
+    ports:
+      - 5444:5432
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: content_core_db

@@ -6,7 +6,6 @@ spring:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
     generate-ddl: true
     hibernate:
@@ -17,10 +16,9 @@ spring:
         format_sql: true
   datasource:
     initialization-mode: always
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://127.0.0.1:5444/content_core_db
+    username: admin
+    password: admin
 
 jwt:
   secret.key: dGhpcyBpcyBteSB2ZXJ5IHNlY3JldCBrZXkgdGhhdCBub2JvZHkga25vd3MgYWJvdXQuIGkgYW0gc3VyZSB0aGF0IG5vYm9keSB3aWxsIGV2ZXIga25vdyBhYm91dCB0aGUgY29udGVudHMgb2YgdGhpcyBrZXkuIGkgaG9wZSB0aGlzIGlzIGVub3VnaCBmb3IgMjU2IGJpdHM=

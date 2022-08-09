@@ -10,19 +10,20 @@ import com.github.he305.contentcore.account.domain.service.AccountService;
 import com.github.he305.contentcore.configuration.security.TokenGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
-    @MockBean
+    @Mock
     private AccountService accountService;
-    @MockBean
+    @Mock
     private TokenGenerator tokenGenerator;
 
     private AuthService underTest;
