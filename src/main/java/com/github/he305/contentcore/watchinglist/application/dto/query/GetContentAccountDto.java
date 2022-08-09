@@ -4,8 +4,10 @@ import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAcco
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class GetContentAccountDto {
