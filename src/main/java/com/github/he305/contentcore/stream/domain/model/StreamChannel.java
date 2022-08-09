@@ -60,7 +60,7 @@ public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
         }
 
         if (liveStream.get().addStreamData(data)) {
-            registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(data.toString())));
+            registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(streamChannelContentAccountId.getId(), data.toString())));
         }
     }
 
@@ -78,7 +78,7 @@ public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
         Stream newStream = new Stream(data);
         streams.add(newStream);
         registerEvent(new StreamChannelIsLiveEvent(this.getStreamChannelContentAccountId().getId()));
-        registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(data.toString())));
+        registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(streamChannelContentAccountId.getId(), data.toString())));
     }
 
     public boolean isLive() {
