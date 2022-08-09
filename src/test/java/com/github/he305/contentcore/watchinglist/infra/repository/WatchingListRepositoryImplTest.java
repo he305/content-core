@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,6 +62,18 @@ class WatchingListRepositoryImplTest {
         Optional<WatchingList> actual = underTest.getWatchingListByMemberId(memberId);
         assertTrue(actual.isPresent());
         assertEquals(expected, actual.get());
+    }
+
+    @Test
+    void getAll() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
+        WatchingListData data = new WatchingListData();
+        Mockito.when(jpaWatchingListRepository.findAll()).thenReturn(List.of(data));
+        Mockito.when(watchingListMapper.toDomain(data)).thenReturn(watchingList);
+
+        List<WatchingList> actual = underTest.getAll();
+        assertEquals(1, actual.size());
+        assertEquals(watchingList, actual.get(0));
     }
 
 }

@@ -10,7 +10,9 @@ import com.github.he305.contentcore.watchinglist.infra.mapper.WatchingListMapper
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,5 +36,11 @@ public class WatchingListRepositoryImpl implements WatchingListRepository {
         }
 
         return Optional.ofNullable(watchingListMapper.toDomain(optionalWatchingListData.get()));
+    }
+
+    @Override
+    public List<WatchingList> getAll() {
+        List<WatchingListData> data = jpaWatchingListRepository.findAll();
+        return data.stream().map(watchingListMapper::toDomain).collect(Collectors.toList());
     }
 }

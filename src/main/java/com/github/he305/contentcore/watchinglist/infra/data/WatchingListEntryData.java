@@ -1,13 +1,11 @@
 package com.github.he305.contentcore.watchinglist.infra.data;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @NoArgsConstructor
+@Builder
 @Getter
 public class WatchingListEntryData {
     @Id
@@ -25,10 +24,14 @@ public class WatchingListEntryData {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ElementCollection
-    private Set<ContentAccountIdData> contentAccountIdDataSet;
+    @OneToMany(targetEntity = ContentAccountEntryData.class, cascade = CascadeType.ALL, mappedBy = "watchingListEntry", orphanRemoval = true)
+    private List<ContentAccountEntryData> contentAccountEntryDataSet;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "watching_list_id", referencedColumnName = "id", nullable = false)
     private WatchingListData watchingList;
+
+    public void setContentAccountEntryDataList(List<ContentAccountEntryData> list) {
+        this.contentAccountEntryDataSet = new ArrayList<>(list);
+    }
 }

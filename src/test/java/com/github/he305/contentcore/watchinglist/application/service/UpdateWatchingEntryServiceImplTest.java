@@ -89,7 +89,7 @@ class UpdateWatchingEntryServiceImplTest {
         assertEquals(1, watchingList.getWatchingListEntries().size());
         WatchingListEntry updatedEntry = watchingList.getWatchingListEntries().get(0);
         assertEquals("name", updatedEntry.getContentCreatorName());
-        assertEquals(Set.of(newContentAccountId), updatedEntry.getContentAccountSet());
+        assertEquals(Set.of(newContentAccountId), updatedEntry.getContentAccountIdSet());
     }
 
 }
