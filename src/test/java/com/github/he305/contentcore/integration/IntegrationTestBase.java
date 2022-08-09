@@ -13,9 +13,9 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("ALL")
 @SpringBootTest
 @AutoConfigureMockMvc
-@ContextConfiguration(initializers = {BaseIntegrationTest.Initializer.class})
+@ContextConfiguration(initializers = {IntegrationTestBase.Initializer.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class BaseIntegrationTest {
+public class IntegrationTestBase {
 
     private static final PostgreSQLContainer sqlContainer;
 
