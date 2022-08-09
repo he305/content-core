@@ -3,6 +3,7 @@ package com.github.he305.contentcore.watchinglist.domain.model.entities;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -11,6 +12,11 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WatchingListEntryTest {
+
+    @Test
+    void testEquals() {
+        EqualsVerifier.simple().forClass(WatchingListEntry.class).verify();
+    }
 
     @Test
     void testEquals_equals() {
