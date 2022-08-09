@@ -1,6 +1,6 @@
 package com.github.he305.contentcore.watchinglist.application.query;
 
-import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
+import com.github.he305.contentcore.watchinglist.application.dto.query.GetWatchingListEntryDto;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,5 +13,5 @@ import java.util.List;
 @EqualsAndHashCode
 @Getter
 public class GetWatchingListQuery {
-    private List<WatchingListEntryDto> watchingList;
+    private List<GetWatchingListEntryDto> watchingList;
 }

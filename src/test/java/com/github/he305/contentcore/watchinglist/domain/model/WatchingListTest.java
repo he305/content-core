@@ -53,8 +53,9 @@ class WatchingListTest {
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
         assertEquals(1, entryList.size());
 
-        WatchingListEntry entry = new WatchingListEntry(entryList.get(0).getId(), new ContentCreator(name), newSet);
-        assertEquals(entry, entryList.get(0));
+        Set<ContentAccountId> resultSet = watchingList.getWatchingListEntries().get(0).getContentAccountIdSet();
+        assertEquals(newSet, resultSet);
+        assertEquals(name, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
     }
 
     @Test
@@ -91,7 +92,16 @@ class WatchingListTest {
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
         assertEquals(1, entryList.size());
 
-        WatchingListEntry entry = new WatchingListEntry(entryList.get(0).getId(), new ContentCreator(name), set);
-        assertEquals(entry, entryList.get(0));
+        Set<ContentAccountId> newSet = watchingList.getWatchingListEntries().get(0).getContentAccountIdSet();
+        assertEquals(set, newSet);
+        assertEquals(name, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
+    }
+
+    @Test
+    void testJpaConstructor() {
+        WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"));
+        WatchingList list = new WatchingList(UUID.randomUUID(), UUID.randomUUID(), List.of(entry));
+        assertEquals(1, list.getWatchingListEntries().size());
+        assertEquals(entry.getContentCreatorName(), list.getWatchingListEntries().get(0).getContentCreatorName());
     }
 }

@@ -7,18 +7,18 @@ import com.github.he305.contentcore.watchinglist.application.dto.AddWatchingEntr
 import com.github.he305.contentcore.watchinglist.application.dto.CreateWatchingListDto;
 import com.github.he305.contentcore.watchinglist.application.dto.MemberIdDto;
 import com.github.he305.contentcore.watchinglist.application.dto.UpdateWatchingEntryDto;
+import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
+import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationForContentAccountDto;
+import com.github.he305.contentcore.watchinglist.application.query.GetNotificationForContentAccountQuery;
 import com.github.he305.contentcore.watchinglist.application.query.GetWatchingListQuery;
-import com.github.he305.contentcore.watchinglist.application.service.AddWatchingEntryService;
-import com.github.he305.contentcore.watchinglist.application.service.CreateWatchingListService;
-import com.github.he305.contentcore.watchinglist.application.service.GetWatchingListService;
-import com.github.he305.contentcore.watchinglist.application.service.UpdateWatchingEntryService;
+import com.github.he305.contentcore.watchinglist.application.service.*;
+import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 
 import java.util.UUID;
 
@@ -32,6 +32,7 @@ public class WatchingListController {
     private final GetWatchingListService getWatchingListService;
     private final AddWatchingEntryService addWatchingEntryService;
     private final UpdateWatchingEntryService updateWatchingEntryService;
+    private final GetNotificationForContentAccountService getNotificationForContentAccountService;
 
     @PostMapping
     public ResponseEntity<Void> createWatchingList(@RequestBody CreateWatchingListDto dto) {
@@ -55,12 +56,20 @@ public class WatchingListController {
         }
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping()
     public ResponseEntity<GetWatchingListQuery> getWatchingList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
         MemberIdDto dto = new MemberIdDto(id);
         return ResponseEntity.ok(getWatchingListService.getWatchingList(dto));
+    }
+
+    @PostMapping(value = "/notification")
+    public ResponseEntity<GetNotificationForContentAccountDto> getNotificationsForContentAccount(@RequestBody NotificationForContentAccountDto dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID id = UUID.fromString(authentication.getName());
+        GetNotificationForContentAccountQuery query = new GetNotificationForContentAccountQuery(new MemberId(id), dto.getContentAccountName(), dto.getPlatform());
+        return ResponseEntity.ok(getNotificationForContentAccountService.execute(query));
     }
 
     @PutMapping

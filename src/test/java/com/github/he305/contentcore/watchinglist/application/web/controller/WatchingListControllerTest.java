@@ -4,11 +4,12 @@ import com.github.he305.contentcore.watchinglist.application.dto.AddWatchingEntr
 import com.github.he305.contentcore.watchinglist.application.dto.CreateWatchingListDto;
 import com.github.he305.contentcore.watchinglist.application.dto.MemberIdDto;
 import com.github.he305.contentcore.watchinglist.application.dto.UpdateWatchingEntryDto;
+import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
+import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationForContentAccountDto;
+import com.github.he305.contentcore.watchinglist.application.query.GetNotificationForContentAccountQuery;
 import com.github.he305.contentcore.watchinglist.application.query.GetWatchingListQuery;
-import com.github.he305.contentcore.watchinglist.application.service.AddWatchingEntryService;
-import com.github.he305.contentcore.watchinglist.application.service.CreateWatchingListService;
-import com.github.he305.contentcore.watchinglist.application.service.GetWatchingListService;
-import com.github.he305.contentcore.watchinglist.application.service.UpdateWatchingEntryService;
+import com.github.he305.contentcore.watchinglist.application.service.*;
+import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,9 +22,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Collections;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +39,8 @@ class WatchingListControllerTest {
     private AddWatchingEntryService addWatchingEntryService;
     @Mock
     private UpdateWatchingEntryService updateWatchingEntryService;
+    @Mock
+    private GetNotificationForContentAccountService getNotificationForContentAccountService;
 
     @InjectMocks
     private WatchingListController underTest;
@@ -101,6 +105,32 @@ class WatchingListControllerTest {
         ResponseEntity<Void> expected = ResponseEntity.ok().build();
 
         ResponseEntity<Void> actual = underTest.updateWatchingListEntry(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getNotificationsForContentAccount() {
+        UUID id = setSecurityContext();
+        NotificationForContentAccountDto entryDto = new NotificationForContentAccountDto(
+                "name",
+                ContentAccountPlatform.TWITCH
+        );
+        GetNotificationForContentAccountDto dto = new GetNotificationForContentAccountDto(
+                Collections.emptyList()
+        );
+
+        GetNotificationForContentAccountQuery query = new GetNotificationForContentAccountQuery(
+                new MemberId(id),
+                "name",
+                ContentAccountPlatform.TWITCH
+        );
+
+        Mockito.when(getNotificationForContentAccountService.execute(query)).thenReturn(dto);
+
+        ResponseEntity<GetNotificationForContentAccountDto> expected = ResponseEntity.ok(dto);
+
+        ResponseEntity<GetNotificationForContentAccountDto> actual = underTest.getNotificationsForContentAccount(entryDto);
+
         assertEquals(expected, actual);
     }
 }

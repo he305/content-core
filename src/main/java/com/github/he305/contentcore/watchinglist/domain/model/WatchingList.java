@@ -7,6 +7,7 @@ import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingL
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -42,7 +43,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         }
 
         WatchingListEntry watchingListEntry = existingEntry.get();
-        Set<ContentAccountId> existingSet = watchingListEntry.getContentAccountSet();
+        Set<ContentAccountId> existingSet = watchingListEntry.getContentAccountIdSet();
         Set<ContentAccountId> contentAccountIdsToAdd = SetUtils.findUniqueInFirstSet(contentAccountSet, existingSet);
         Set<ContentAccountId> contentAccountIdsToDelete = SetUtils.findUniqueInFirstSet(existingSet, contentAccountSet);
 
@@ -76,6 +77,20 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
             }
         });
         watchingListEntries.add(watchingListEntry);
+    }
+
+    public void addNotificationForContentAccount(UUID contentAccountId, UUID notificationId) {
+        watchingListEntries.forEach(
+                watchingListEntry -> watchingListEntry.addNotificationForContentAccountId(new ContentAccountId(contentAccountId), notificationId)
+        );
+    }
+
+    public Set<NotificationId> getNotificationsIdForContentAccountId(ContentAccountId contentAccountId) {
+        Set<NotificationId> notificationIds = new HashSet<>();
+        watchingListEntries.forEach(entry ->
+                notificationIds.addAll(entry.getAndDeleteNotificationsForContentAccountId(contentAccountId))
+        );
+        return notificationIds;
     }
 
     public Collection<Object> getEvents() {

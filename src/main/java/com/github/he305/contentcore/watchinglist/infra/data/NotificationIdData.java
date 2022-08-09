@@ -8,16 +8,14 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Table;
 import java.util.UUID;
 
 @Embeddable
-@Table(name = "content_account_id")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @Getter
-public class ContentAccountIdData {
+@EqualsAndHashCode
+public class NotificationIdData {
     @Column(name = "id")
     @Type(type = "uuid-char")
     private UUID id;

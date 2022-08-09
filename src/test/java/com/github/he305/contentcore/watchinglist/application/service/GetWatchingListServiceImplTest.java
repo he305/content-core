@@ -1,9 +1,9 @@
 package com.github.he305.contentcore.watchinglist.application.service;
 
-import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.MemberIdDto;
-import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
-import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
+import com.github.he305.contentcore.watchinglist.application.dto.query.GetContentAccountDto;
+import com.github.he305.contentcore.watchinglist.application.dto.query.GetWatchingListEntryDto;
+import com.github.he305.contentcore.watchinglist.application.mapper.query.GetWatchingListEntryMapper;
 import com.github.he305.contentcore.watchinglist.application.query.GetWatchingListQuery;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
@@ -22,13 +22,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class GetWatchingListServiceImplTest {
 
     @Mock
-    private ListContentAccountMapper listContentAccountMapper;
+    private GetWatchingListEntryMapper getWatchingListEntryMapper;
     @Mock
     private WatchingListRepository watchingListRepository;
 
@@ -57,22 +56,22 @@ class GetWatchingListServiceImplTest {
         MemberIdDto dto = new MemberIdDto(id);
 
         ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
-        WatchingListEntry entry = new WatchingListEntry(UUID.randomUUID(), new ContentCreator("name"), Set.of(contentAccountId));
+        WatchingListEntry entry = new WatchingListEntry(UUID.randomUUID(), new ContentCreator("name"), Set.of());
         WatchingList watchingList = new WatchingList(
                 UUID.randomUUID(),
                 id,
                 List.of(entry)
         );
 
-        WatchingListEntryDto expectedDto = new WatchingListEntryDto("name", List.of(
-                new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
+        GetWatchingListEntryDto expectedDto = new GetWatchingListEntryDto("name", List.of(
+                new GetContentAccountDto("name", ContentAccountPlatform.TWITCH, 1)
         ));
         GetWatchingListQuery expected = new GetWatchingListQuery(
                 List.of(expectedDto)
         );
 
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.of(watchingList));
-        Mockito.when(listContentAccountMapper.toContentAccountDtoList(Set.of(contentAccountId))).thenReturn(List.of(new ContentAccountDto("name", ContentAccountPlatform.TWITCH)));
+        Mockito.when(getWatchingListEntryMapper.toDto(entry)).thenReturn(expectedDto);
 
         GetWatchingListQuery actual = underTest.getWatchingList(dto);
         assertEquals(expected, actual);
