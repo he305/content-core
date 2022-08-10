@@ -1,9 +1,6 @@
 package com.github.he305.contentcore.configuration.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +25,26 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TokenGenerator {
 
+    @Value("${jwt.refresh.key}")
+    public String signingKeyRefresh;
     @Value("${jwt.expiration-min}")
-    private int expirationMinutes;
+    private int expirationTokenMinutes;
 
     @Value("${jwt.issuer}")
     private String issuer;
 
     @Value("${jwt.secret.key}")
     public String signingKeyPlain;
+    @Value("${jwt.refresh.expiration-days}")
+    private int expirationRefreshTokenDays;
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(signingKeyPlain);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private Key getSigningKeyRefresh() {
+        byte[] keyBytes = Decoders.BASE64URL.decode(signingKeyRefresh);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -75,10 +81,11 @@ public class TokenGenerator {
 
         Instant time = Instant.now();
         return Jwts.builder()
+                .setIssuer(issuer)
                 .setSubject(authentication.getName())
                 .claim("role", authorities)
                 .setIssuedAt(Date.from(time))
-                .setExpiration(Date.from(time.plus(expirationMinutes, ChronoUnit.MINUTES)))
+                .setExpiration(Date.from(time.plus(expirationTokenMinutes, ChronoUnit.MINUTES)))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -104,4 +111,42 @@ public class TokenGenerator {
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
+    public boolean validateRefreshToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKeyRefresh())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException expEx) {
+            log.error("Token expired", expEx);
+        } catch (UnsupportedJwtException unsEx) {
+            log.error("Unsupported jwt", unsEx);
+        } catch (MalformedJwtException mjEx) {
+            log.error("Malformed jwt", mjEx);
+        } catch (Exception e) {
+            log.error("invalid token", e);
+        }
+        return false;
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
+        Instant time = Instant.now();
+        return Jwts.builder()
+                .setIssuer(issuer)
+                .setSubject(authentication.getName())
+                .setIssuedAt(Date.from(time))
+                .setExpiration(Date.from(time.plus(expirationRefreshTokenDays, ChronoUnit.DAYS)))
+                .signWith(getSigningKeyRefresh())
+                .compact();
+    }
+
+    public String getRefreshTokenUsername(String refreshToken) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKeyRefresh())
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody()
+                .getSubject();
+    }
 }

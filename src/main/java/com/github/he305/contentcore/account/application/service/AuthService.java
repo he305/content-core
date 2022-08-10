@@ -42,7 +42,7 @@ public class AuthService implements RegisterAccountService, LoginAccountService,
         User user = User.create(account);
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new JwtResponseDto(tokenGenerator.generateToken(authentication));
+        return new JwtResponseDto(tokenGenerator.generateToken(authentication), tokenGenerator.generateRefreshToken(authentication));
     }
 
 }

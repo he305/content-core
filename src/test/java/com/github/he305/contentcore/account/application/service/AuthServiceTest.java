@@ -36,9 +36,10 @@ class AuthServiceTest {
     @Test
     void testLogin() {
         LoginAccountCommand command = new LoginAccountCommand("user", "pass");
-        JwtResponseDto expected = new JwtResponseDto("test");
+        JwtResponseDto expected = new JwtResponseDto("test", "refresh");
         Mockito.when(accountService.login("user", "pass")).thenReturn(new Account(UUID.randomUUID(), "user", "pass", Role.ADMIN));
         Mockito.when(tokenGenerator.generateToken(Mockito.any())).thenReturn("test");
+        Mockito.when(tokenGenerator.generateRefreshToken(Mockito.any())).thenReturn("refresh");
 
         JwtResponseDto actual = underTest.execute(command);
         assertEquals(expected.getToken(), actual.getToken());
@@ -47,9 +48,10 @@ class AuthServiceTest {
     @Test
     void testRegister() {
         RegisterAccountCommand command = new RegisterAccountCommand("user", "pass");
-        JwtResponseDto expected = new JwtResponseDto("test");
+        JwtResponseDto expected = new JwtResponseDto("test", "refresh");
         Mockito.when(accountService.register("user", "pass")).thenReturn(new Account(UUID.randomUUID(), "user", "pass", Role.ADMIN));
         Mockito.when(tokenGenerator.generateToken(Mockito.any())).thenReturn("test");
+        Mockito.when(tokenGenerator.generateRefreshToken(Mockito.any())).thenReturn("refresh");
 
         JwtResponseDto actual = underTest.execute(command);
         assertEquals(expected.getToken(), actual.getToken());
@@ -58,9 +60,10 @@ class AuthServiceTest {
     @Test
     void testRegisterService() {
         RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
-        JwtResponseDto expected = new JwtResponseDto("test");
+        JwtResponseDto expected = new JwtResponseDto("test", "refresh");
         Mockito.when(accountService.registerService("user", "pass")).thenReturn(new Account(UUID.randomUUID(), "user", "pass", Role.ADMIN));
         Mockito.when(tokenGenerator.generateToken(Mockito.any())).thenReturn("test");
+        Mockito.when(tokenGenerator.generateRefreshToken(Mockito.any())).thenReturn("refresh");
 
         JwtResponseDto actual = underTest.execute(command);
         assertEquals(expected.getToken(), actual.getToken());
