@@ -3,10 +3,13 @@ package com.github.he305.contentcore.account.application.controller;
 import com.github.he305.contentcore.account.application.commands.LoginAccountCommand;
 import com.github.he305.contentcore.account.application.commands.RegisterAccountCommand;
 import com.github.he305.contentcore.account.application.commands.RegisterServiceCommand;
+import com.github.he305.contentcore.account.application.dto.JwtRefreshTokenDto;
 import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.application.dto.LoginRequestDto;
 import com.github.he305.contentcore.account.application.dto.RegisterServiceDto;
+import com.github.he305.contentcore.account.application.exceptions.JwtRefreshTokenNotValidException;
 import com.github.he305.contentcore.account.application.service.LoginAccountService;
+import com.github.he305.contentcore.account.application.service.RefreshTokenService;
 import com.github.he305.contentcore.account.application.service.RegisterAccountService;
 import com.github.he305.contentcore.account.application.service.RegisterServiceService;
 import com.github.he305.contentcore.account.domain.exceptions.AccountAlreadyExistsException;
@@ -29,6 +32,7 @@ public class AuthController {
     private final RegisterServiceService registerServiceService;
     private final RegisterAccountService registerAccountService;
     private final LoginAccountService loginAccountService;
+    private final RefreshTokenService refreshTokenService;
     @Value("${auth.service-register-key}")
     private String serviceRegisterKey;
 
@@ -62,6 +66,15 @@ public class AuthController {
             RegisterServiceCommand command = new RegisterServiceCommand(dto.getUsername(), dto.getPassword());
             return ResponseEntity.ok(registerServiceService.execute(command));
         } catch (AccountAlreadyExistsException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtResponseDto> refreshToken(@RequestBody JwtRefreshTokenDto refreshTokenDto) {
+        try {
+            return ResponseEntity.ok(refreshTokenService.refreshToken(refreshTokenDto));
+        } catch (JwtRefreshTokenNotValidException ex) {
             return ResponseEntity.badRequest().build();
         }
     }

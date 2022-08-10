@@ -1,6 +1,7 @@
 package com.github.he305.contentcore.integration;
 
 
+import com.github.he305.contentcore.account.application.dto.JwtRefreshTokenDto;
 import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.application.dto.LoginRequestDto;
 import com.github.he305.contentcore.account.application.dto.RegisterServiceDto;
@@ -101,5 +102,49 @@ class AuthIntegrationTest extends IntegrationTestBase {
         JwtResponseDto resDto = objectMapper.readValue(content, JwtResponseDto.class);
         assertFalse(resDto.getToken().isBlank());
         assertEquals("Bearer", resDto.getType());
+    }
+
+    @SneakyThrows
+    @Test
+    void testRefreshToken() {
+        String username = "refresh";
+        String password = "password";
+
+        LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
+        String json = objectMapper.writeValueAsString(loginRequestDto);
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+        MvcResult result = mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        JwtResponseDto dto = objectMapper.readValue(content, JwtResponseDto.class);
+        assertFalse(dto.getToken().isBlank());
+        assertEquals("Bearer", dto.getType());
+        assertFalse(dto.getRefreshToken().isBlank());
+
+        JwtRefreshTokenDto refreshTokenDto = new JwtRefreshTokenDto(dto.getRefreshToken());
+        json = objectMapper.writeValueAsString(refreshTokenDto);
+        MvcResult refreshResult = mockMvc.perform(post("/api/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        content = result.getResponse().getContentAsString();
+        dto = objectMapper.readValue(content, JwtResponseDto.class);
+        assertFalse(dto.getToken().isBlank());
+        assertEquals("Bearer", dto.getType());
+        assertFalse(dto.getRefreshToken().isBlank());
     }
 }

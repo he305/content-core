@@ -3,10 +3,13 @@ package com.github.he305.contentcore.account.application.controller;
 import com.github.he305.contentcore.account.application.commands.LoginAccountCommand;
 import com.github.he305.contentcore.account.application.commands.RegisterAccountCommand;
 import com.github.he305.contentcore.account.application.commands.RegisterServiceCommand;
+import com.github.he305.contentcore.account.application.dto.JwtRefreshTokenDto;
 import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.application.dto.LoginRequestDto;
 import com.github.he305.contentcore.account.application.dto.RegisterServiceDto;
+import com.github.he305.contentcore.account.application.exceptions.JwtRefreshTokenNotValidException;
 import com.github.he305.contentcore.account.application.service.LoginAccountService;
+import com.github.he305.contentcore.account.application.service.RefreshTokenService;
 import com.github.he305.contentcore.account.application.service.RegisterAccountService;
 import com.github.he305.contentcore.account.application.service.RegisterServiceService;
 import com.github.he305.contentcore.account.domain.exceptions.AccountAlreadyExistsException;
@@ -31,6 +34,8 @@ class AuthControllerTest {
     private LoginAccountService loginAccountService;
     @Mock
     private RegisterServiceService registerServiceService;
+    @Mock
+    private RefreshTokenService refreshTokenService;
 
     @InjectMocks
     private AuthController underTest;
@@ -50,7 +55,7 @@ class AuthControllerTest {
     void login_valid() {
         LoginRequestDto dto = new LoginRequestDto("user", "pass");
         LoginAccountCommand command = new LoginAccountCommand("user", "pass");
-        JwtResponseDto res = new JwtResponseDto("test");
+        JwtResponseDto res = new JwtResponseDto("test", "refresh");
         Mockito.when(loginAccountService.execute(command)).thenReturn(res);
         ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
@@ -73,7 +78,7 @@ class AuthControllerTest {
     void register_valid() {
         LoginRequestDto dto = new LoginRequestDto("user", "pass");
         RegisterAccountCommand command = new RegisterAccountCommand("user", "pass");
-        JwtResponseDto res = new JwtResponseDto("test");
+        JwtResponseDto res = new JwtResponseDto("test", "refresh");
         Mockito.when(registerAccountService.execute(command)).thenReturn(res);
         ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
@@ -108,11 +113,32 @@ class AuthControllerTest {
         ReflectionTestUtils.setField(underTest, "serviceRegisterKey", "test");
         RegisterServiceDto dto = new RegisterServiceDto("user", "pass", "test");
         RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
-        JwtResponseDto res = new JwtResponseDto("test");
+        JwtResponseDto res = new JwtResponseDto("test", "refresh");
         Mockito.when(registerServiceService.execute(command)).thenReturn(res);
         ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
         ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void refreshToken_notValid() {
+        JwtRefreshTokenDto dto = new JwtRefreshTokenDto("token");
+        Mockito.when(refreshTokenService.refreshToken(dto)).thenThrow(JwtRefreshTokenNotValidException.class);
+        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
+
+        ResponseEntity<JwtResponseDto> actual = underTest.refreshToken(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void refreshToken_valid() {
+        JwtRefreshTokenDto dto = new JwtRefreshTokenDto("token");
+        JwtResponseDto res = new JwtResponseDto("token", "refresh");
+        Mockito.when(refreshTokenService.refreshToken(dto)).thenReturn(res);
+        ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
+
+        ResponseEntity<JwtResponseDto> actual = underTest.refreshToken(dto);
         assertEquals(expected, actual);
     }
 }
