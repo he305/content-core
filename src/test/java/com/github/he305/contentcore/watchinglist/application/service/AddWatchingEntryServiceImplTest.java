@@ -1,10 +1,9 @@
-package com.github.he305.contentcore.watchinglist.application.service.impl;
+package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.commands.AddWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
-import com.github.he305.contentcore.watchinglist.application.service.AddWatchingEntryServiceImpl;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
@@ -38,7 +37,7 @@ class AddWatchingEntryServiceImplTest {
     private AddWatchingEntryServiceImpl underTest;
 
     @Test
-    void addWatchingEntry_noWatchingList_shouldThrow() {
+    void addWatchingEntry_noWatchingList_createNew() {
         UUID memberId = UUID.randomUUID();
         List<ContentAccountDto> contentAccountDtos = List.of(
                 new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
@@ -52,7 +51,9 @@ class AddWatchingEntryServiceImplTest {
         MemberId idNotFound = new MemberId(memberId);
 
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idNotFound)).thenReturn(Optional.empty());
-        assertThrows(IllegalStateException.class, () ->
+        Mockito.when(listContentAccountMapper.toContentAccountIdSet(contentAccountDtos)).thenReturn(Set.of(new ContentAccountId(UUID.randomUUID())));
+
+        assertDoesNotThrow(() ->
                 underTest.addWatchingEntry(command));
     }
 

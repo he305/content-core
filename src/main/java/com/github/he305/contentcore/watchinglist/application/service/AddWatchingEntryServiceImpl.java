@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,14 @@ public class AddWatchingEntryServiceImpl implements AddWatchingEntryService {
     public void addWatchingEntry(AddWatchingEntryCommand command) {
         MemberId memberId = new MemberId(command.getMemberId());
         Optional<WatchingList> optionalWatchingList = watchingListRepository.getWatchingListByMemberId(memberId);
+
+        WatchingList watchingList;
         if (optionalWatchingList.isEmpty()) {
-            throw new IllegalStateException();
+            watchingList = new WatchingList(UUID.randomUUID(), memberId.getId());
+        } else {
+            watchingList = optionalWatchingList.get();
         }
 
-        WatchingList watchingList = optionalWatchingList.get();
         String name = command.getDto().getName();
         Set<ContentAccountId> contentAccountIdSet = listContentAccountMapper.toContentAccountIdSet(command.getDto().getAccounts());
 
