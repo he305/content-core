@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class CreateWatchingListDto {
-    private List<WatchingListEntryDto> watchingList;
+    private List<WatchingListEntryDto> data;
 }

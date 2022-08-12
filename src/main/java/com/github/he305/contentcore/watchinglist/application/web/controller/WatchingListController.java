@@ -38,7 +38,7 @@ public class WatchingListController {
     public ResponseEntity<Void> createWatchingList(@RequestBody CreateWatchingListDto dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
-        CreateWatchingListCommand command = new CreateWatchingListCommand(id, dto.getWatchingList());
+        CreateWatchingListCommand command = new CreateWatchingListCommand(id, dto.getData());
         createWatchingListService.execute(command);
         return ResponseEntity.ok().build();
     }
@@ -47,7 +47,7 @@ public class WatchingListController {
     public ResponseEntity<Void> addWatchingEntry(@RequestBody AddWatchingEntryDto dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
-        AddWatchingEntryCommand command = new AddWatchingEntryCommand(id, dto.getEntry());
+        AddWatchingEntryCommand command = new AddWatchingEntryCommand(id, dto.getData());
         try {
             addWatchingEntryService.addWatchingEntry(command);
             return ResponseEntity.ok().build();
@@ -76,7 +76,7 @@ public class WatchingListController {
     public ResponseEntity<Void> updateWatchingListEntry(@RequestBody UpdateWatchingEntryDto dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
-        UpdateWatchingEntryCommand command = new UpdateWatchingEntryCommand(id, dto.getDto());
+        UpdateWatchingEntryCommand command = new UpdateWatchingEntryCommand(id, dto.getData());
         updateWatchingEntryService.updateWatchingEntry(command);
         return ResponseEntity.ok().build();
     }

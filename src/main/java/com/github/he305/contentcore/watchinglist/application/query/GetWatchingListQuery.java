@@ -13,5 +13,5 @@ import java.util.List;
 @EqualsAndHashCode
 @Getter
 public class GetWatchingListQuery {
-    private List<GetWatchingListEntryDto> watchingList;
+    private List<GetWatchingListEntryDto> data;
 }
