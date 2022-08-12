@@ -87,9 +87,9 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
         String strResult = getResult.getResponse().getContentAsString();
         GetWatchingListQuery actual = objectMapper.readValue(strResult, GetWatchingListQuery.class);
 
-        assertEquals(1, actual.getWatchingList().size());
-        assertEquals(entryDto.getWatchingList().size(), actual.getWatchingList().size());
-        GetWatchingListEntryDto entryResult = actual.getWatchingList().get(0);
+        assertEquals(1, actual.getData().size());
+        assertEquals(entryDto.getData().size(), actual.getData().size());
+        GetWatchingListEntryDto entryResult = actual.getData().get(0);
         assertEquals(watchingListEntry.getName(), entryResult.getName());
         assertEquals(watchingListEntry.getAccounts().size(), entryResult.getAccounts().size());
         assertEquals(watchingListEntry.getAccounts().get(0).getName(), entryResult.getAccounts().get(0).getName());

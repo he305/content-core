@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class UpdateWatchingEntryDto {
-    private WatchingListEntryDto dto;
+    private WatchingListEntryDto data;
 }
