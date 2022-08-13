@@ -5,13 +5,11 @@ import com.github.he305.contentcore.shared.validators.PositiveOrZeroNumberValida
 import com.github.he305.contentcore.shared.validators.StringValidator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@ToString
 @EqualsAndHashCode(of = "id")
 public final class StreamData {
     private final UUID id;
@@ -34,5 +32,13 @@ public final class StreamData {
         this.title = StringValidator.isNullOrEmpty(title);
         this.viewerCount = PositiveOrZeroNumberValidator.validate(viewerCount);
         this.streamDataTime = NotInFutureTimeValidator.validate(streamDataTime);
+    }
+
+    @Override
+    public String toString() {
+        return streamDataTime.toString() + ": " +
+                "title: " + title +
+                ", game name: " + gameName +
+                ", viewers: " + viewerCount;
     }
 }
