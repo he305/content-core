@@ -74,6 +74,16 @@ class AuthControllerTest {
         assertEquals(expected, actual);
     }
 
+
+    @Test
+    void register_blankPassword() {
+        LoginRequestDto dto = new LoginRequestDto("asd", "");
+
+        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
+        ResponseEntity<JwtResponseDto> actual = underTest.register(dto);
+        assertEquals(expected, actual);
+    }
+
     @Test
     void register_valid() {
         LoginRequestDto dto = new LoginRequestDto("user", "pass");

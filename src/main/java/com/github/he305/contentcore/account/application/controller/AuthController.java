@@ -14,6 +14,7 @@ import com.github.he305.contentcore.account.application.service.RegisterAccountS
 import com.github.he305.contentcore.account.application.service.RegisterServiceService;
 import com.github.he305.contentcore.account.domain.exceptions.AccountAlreadyExistsException;
 import com.github.he305.contentcore.account.domain.exceptions.AccountLoginException;
+import com.github.he305.contentcore.shared.validators.StringValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,9 +50,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<JwtResponseDto> register(@RequestBody LoginRequestDto dto) {
         try {
-            RegisterAccountCommand command = new RegisterAccountCommand(dto.getUsername(), dto.getPassword());
+            String username = StringValidator.isNullOrEmpty(dto.getUsername());
+            String password = StringValidator.isNullOrEmpty(dto.getPassword());
+            RegisterAccountCommand command = new RegisterAccountCommand(username, password);
             return ResponseEntity.ok(registerAccountService.execute(command));
-        } catch (AccountAlreadyExistsException ex) {
+        } catch (AccountAlreadyExistsException | IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -63,9 +66,11 @@ public class AuthController {
         }
 
         try {
-            RegisterServiceCommand command = new RegisterServiceCommand(dto.getUsername(), dto.getPassword());
+            String username = StringValidator.isNullOrEmpty(dto.getUsername());
+            String password = StringValidator.isNullOrEmpty(dto.getPassword());
+            RegisterServiceCommand command = new RegisterServiceCommand(username, password);
             return ResponseEntity.ok(registerServiceService.execute(command));
-        } catch (AccountAlreadyExistsException ex) {
+        } catch (AccountAlreadyExistsException | IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
