@@ -1,11 +1,13 @@
 package com.github.he305.contentcore.stream.domain.model.entities;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,6 +66,11 @@ public final class Stream {
     public void endStream(LocalDateTime time) {
         this.endedAt = time;
         this.isLive = false;
+    }
+
+    public StreamData getLastData() {
+        return streamDataList.stream().max(Comparator.comparing(StreamData::getStreamDataTime))
+                .orElseThrow(() -> new ContentCoreException("Error, stream exists without stream data"));
     }
 
     public boolean isLive() {

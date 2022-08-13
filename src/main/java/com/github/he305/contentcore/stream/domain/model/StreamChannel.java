@@ -42,6 +42,10 @@ public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
         if (status.equals(StreamChannelStatus.OBSERVABLE)) {
             throw new StreamChannelIsAlreadyObservableException();
         }
+
+        Optional<Stream> liveStream = streams.stream().filter(Stream::isLive).findAny();
+        liveStream.ifPresent(stream -> endStream(stream.getLastData().getStreamDataTime()));
+
         this.status = StreamChannelStatus.OBSERVABLE;
     }
 
@@ -72,12 +76,14 @@ public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
 
         liveStream.get().endStream(time);
         registerEvent(new StreamChannelGoneOfflineEvent(this.getStreamChannelContentAccountId().getId()));
+        registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(streamChannelContentAccountId.getId(), "Channel is offline")));
     }
 
     private void createNewStream(StreamData data) {
         Stream newStream = new Stream(data);
         streams.add(newStream);
         registerEvent(new StreamChannelIsLiveEvent(this.getStreamChannelContentAccountId().getId()));
+        registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(streamChannelContentAccountId.getId(), "Channel is online")));
         registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(streamChannelContentAccountId.getId(), data.toString())));
     }
 

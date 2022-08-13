@@ -51,6 +51,26 @@ class StreamChannelTest {
     }
 
     @Test
+    void startObserving_endExistingStream() {
+        UUID id = UUID.randomUUID();
+        StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
+        StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
+        assertEquals(StreamChannelStatus.FROZEN, streamChannel.getStatus());
+        assertDoesNotThrow(streamChannel::startObserving);
+
+        StreamData data = new StreamData("game", "title", 0, LocalDateTime.now());
+        streamChannel.addStreamData(data);
+        assertTrue(streamChannel.isLive());
+        assertDoesNotThrow(streamChannel::freeze);
+        assertEquals(StreamChannelStatus.FROZEN, streamChannel.getStatus());
+        assertTrue(streamChannel.isLive());
+
+        streamChannel.startObserving();
+        assertEquals(StreamChannelStatus.OBSERVABLE, streamChannel.getStatus());
+        assertFalse(streamChannel.isLive());
+    }
+
+    @Test
     void freeze_alreadyFrozen() {
         UUID id = UUID.randomUUID();
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
@@ -88,7 +108,7 @@ class StreamChannelTest {
         assertEquals(data.getStreamDataTime(), savedData.getStreamDataTime());
 
         Collection<Object> events = streamChannel.getEvents();
-        assertEquals(2, events.size());
+        assertEquals(3, events.size());
     }
 
     @Test
