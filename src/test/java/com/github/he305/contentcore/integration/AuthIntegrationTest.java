@@ -56,6 +56,38 @@ class AuthIntegrationTest extends IntegrationTestBase {
 
     @SneakyThrows
     @Test
+    void register_blankPassword() {
+        String username = "user";
+        String password = "";
+
+        LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
+        String json = objectMapper.writeValueAsString(loginRequestDto);
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @SneakyThrows
+    @Test
+    void register_blankUsername() {
+        String username = "";
+        String password = "pass";
+
+        LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
+        String json = objectMapper.writeValueAsString(loginRequestDto);
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @SneakyThrows
+    @Test
     void registerServiceTest() {
         String username = "service";
         String password = "pass";
