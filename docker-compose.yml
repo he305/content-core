@@ -11,8 +11,6 @@ services:
   content_core:
     image: 'he305/content-core:latest'
     restart: always
-    build:
-      context: .
     container_name: content_core
     ports:
       - 8081:8081

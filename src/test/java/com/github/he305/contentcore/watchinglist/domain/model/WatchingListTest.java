@@ -104,4 +104,61 @@ class WatchingListTest {
         assertEquals(1, list.getWatchingListEntries().size());
         assertEquals(entry.getContentCreatorName(), list.getWatchingListEntries().get(0).getContentCreatorName());
     }
+
+    @Test
+    void deleteWatchingListEntry_noExistingEntry_shouldThrow() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
+
+        String name = "testName";
+        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+
+        assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
+        List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
+        assertEquals(1, entryList.size());
+
+        assertThrows(IllegalArgumentException.class, () ->
+                watchingList.deleteWatchingListEntry("another name"));
+    }
+
+    @Test
+    void deleteWatchingListEntry_valid_noEntries_remained() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
+
+        String name = "testName";
+        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+
+        assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
+        List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
+        assertEquals(1, entryList.size());
+
+        assertDoesNotThrow(() ->
+                watchingList.deleteWatchingListEntry(name));
+
+        assertTrue(watchingList.getWatchingListEntries().isEmpty());
+    }
+
+    @Test
+    void deleteWatchingListEntry_valid() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
+
+        String name = "testName";
+        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+
+        String anotherName = "test";
+
+        assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
+        List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
+        assertEquals(1, entryList.size());
+
+        assertDoesNotThrow(() -> watchingList.addWatchingListEntry(anotherName, set));
+        entryList = watchingList.getWatchingListEntries();
+        assertEquals(2, entryList.size());
+
+        assertDoesNotThrow(() ->
+                watchingList.deleteWatchingListEntry(name));
+
+        assertEquals(1, watchingList.getWatchingListEntries().size());
+        assertEquals(anotherName, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
+        assertEquals(set, watchingList.getWatchingListEntries().get(0).getContentAccountIdSet());
+    }
 }

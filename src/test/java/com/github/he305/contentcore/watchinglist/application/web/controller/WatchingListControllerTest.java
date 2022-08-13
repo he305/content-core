@@ -1,9 +1,7 @@
 package com.github.he305.contentcore.watchinglist.application.web.controller;
 
-import com.github.he305.contentcore.watchinglist.application.dto.AddWatchingEntryDto;
-import com.github.he305.contentcore.watchinglist.application.dto.CreateWatchingListDto;
-import com.github.he305.contentcore.watchinglist.application.dto.MemberIdDto;
-import com.github.he305.contentcore.watchinglist.application.dto.UpdateWatchingEntryDto;
+import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
+import com.github.he305.contentcore.watchinglist.application.dto.*;
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.query.GetNotificationForContentAccountQuery;
@@ -41,7 +39,8 @@ class WatchingListControllerTest {
     private UpdateWatchingEntryService updateWatchingEntryService;
     @Mock
     private GetNotificationForContentAccountService getNotificationForContentAccountService;
-
+    @Mock
+    private DeleteWatchingEntryService deleteWatchingEntryService;
     @InjectMocks
     private WatchingListController underTest;
 
@@ -131,6 +130,29 @@ class WatchingListControllerTest {
 
         ResponseEntity<GetNotificationForContentAccountDto> actual = underTest.getNotificationsForContentAccount(entryDto);
 
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void deleteWatchingListEntry_exception() {
+        UUID id = setSecurityContext();
+        DeleteWatchingEntryDto dto = new DeleteWatchingEntryDto("name");
+        DeleteWatchingEntryCommand command = new DeleteWatchingEntryCommand(id, "name");
+        doThrow(IllegalArgumentException.class).when(deleteWatchingEntryService).execute(command);
+
+        ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
+        ResponseEntity<Void> actual = underTest.deleteWatchingListEntry(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void deleteWatchingListEntry_valid() {
+        UUID id = setSecurityContext();
+        DeleteWatchingEntryDto dto = new DeleteWatchingEntryDto("name");
+        DeleteWatchingEntryCommand command = new DeleteWatchingEntryCommand(id, "name");
+
+        ResponseEntity<Void> expected = ResponseEntity.ok().build();
+        ResponseEntity<Void> actual = underTest.deleteWatchingListEntry(dto);
         assertEquals(expected, actual);
     }
 }
