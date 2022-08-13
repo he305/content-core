@@ -4,6 +4,7 @@ import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.application.dto.LoginRequestDto;
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.CreateWatchingListDto;
+import com.github.he305.contentcore.watchinglist.application.dto.DeleteWatchingEntryDto;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetWatchingListEntryDto;
 import com.github.he305.contentcore.watchinglist.application.query.GetWatchingListQuery;
@@ -19,8 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +32,7 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
     @SneakyThrows
     String register() {
         String username = "user" + LocalDateTime.now();
-        String password = "";
+        String password = "pass";
 
         LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
         String json = objectMapper.writeValueAsString(loginRequestDto);
@@ -95,5 +95,57 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
         assertEquals(watchingListEntry.getAccounts().get(0).getName(), entryResult.getAccounts().get(0).getName());
         assertEquals(watchingListEntry.getAccounts().get(0).getPlatform(), entryResult.getAccounts().get(0).getPlatform());
         assertEquals(0, entryResult.getAccounts().get(0).getNotificationSize());
+    }
+
+    @Test
+    @SneakyThrows
+    void deleteWatchingListEntry() {
+        String token = register();
+        String entryName = "createListAndCompare";
+        String accountName = "account";
+        ContentAccountPlatform platform = ContentAccountPlatform.TWITCH;
+
+        ContentAccountDto contentAccountDto = new ContentAccountDto(accountName, platform);
+        WatchingListEntryDto watchingListEntry = new WatchingListEntryDto(entryName, List.of(contentAccountDto));
+        CreateWatchingListDto entryDto = new CreateWatchingListDto(
+                List.of(watchingListEntry)
+        );
+
+        String json = objectMapper.writeValueAsString(entryDto);
+
+        mockMvc.perform(post("/watchingList")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+        DeleteWatchingEntryDto dto = new DeleteWatchingEntryDto(entryName);
+        json = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(delete("/watchingList")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+        MvcResult getResult = mockMvc.perform(get("/watchingList")
+                        .header("Authorization", "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        String strResult = getResult.getResponse().getContentAsString();
+        GetWatchingListQuery actual = objectMapper.readValue(strResult, GetWatchingListQuery.class);
+
+        assertEquals(0, actual.getData().size());
+
+        // Trying to delete again
+        mockMvc.perform(delete("/watchingList")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 }

@@ -79,6 +79,21 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         watchingListEntries.add(watchingListEntry);
     }
 
+    public void deleteWatchingListEntry(String entryName) {
+        WatchingListEntry existingEntry = watchingListEntries.stream()
+                .filter(entry -> entry.getContentCreatorName().equals(entryName))
+                .findAny().orElseThrow(IllegalArgumentException::new);
+
+        Set<ContentAccountId> entryIds = existingEntry.getContentAccountIdSet();
+
+        entryIds.forEach(entry -> {
+            existingEntry.removeContentAccount(entry);
+            registerEvent(new ContentAccountRemovedEvent(entry.getId()));
+        });
+
+        watchingListEntries.remove(existingEntry);
+    }
+
     public void addNotificationForContentAccount(UUID contentAccountId, UUID notificationId) {
         watchingListEntries.forEach(
                 watchingListEntry -> watchingListEntry.addNotificationForContentAccountId(new ContentAccountId(contentAccountId), notificationId)

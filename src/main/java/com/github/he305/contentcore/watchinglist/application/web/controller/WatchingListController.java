@@ -2,11 +2,9 @@ package com.github.he305.contentcore.watchinglist.application.web.controller;
 
 import com.github.he305.contentcore.watchinglist.application.commands.AddWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
+import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.commands.UpdateWatchingEntryCommand;
-import com.github.he305.contentcore.watchinglist.application.dto.AddWatchingEntryDto;
-import com.github.he305.contentcore.watchinglist.application.dto.CreateWatchingListDto;
-import com.github.he305.contentcore.watchinglist.application.dto.MemberIdDto;
-import com.github.he305.contentcore.watchinglist.application.dto.UpdateWatchingEntryDto;
+import com.github.he305.contentcore.watchinglist.application.dto.*;
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.query.GetNotificationForContentAccountQuery;
@@ -33,6 +31,7 @@ public class WatchingListController {
     private final AddWatchingEntryService addWatchingEntryService;
     private final UpdateWatchingEntryService updateWatchingEntryService;
     private final GetNotificationForContentAccountService getNotificationForContentAccountService;
+    private final DeleteWatchingEntryService deleteWatchingEntryService;
 
     @PostMapping
     public ResponseEntity<Void> createWatchingList(@RequestBody CreateWatchingListDto dto) {
@@ -79,5 +78,18 @@ public class WatchingListController {
         UpdateWatchingEntryCommand command = new UpdateWatchingEntryCommand(id, dto.getData());
         updateWatchingEntryService.updateWatchingEntry(command);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteWatchingListEntry(@RequestBody DeleteWatchingEntryDto dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UUID id = UUID.fromString(authentication.getName());
+        DeleteWatchingEntryCommand command = new DeleteWatchingEntryCommand(id, dto.getEntryName());
+        try {
+            deleteWatchingEntryService.execute(command);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
