@@ -22,7 +22,7 @@ public final class StreamData {
 
     public StreamData(String gameName, String title, int viewerCount, LocalDateTime streamDataTime) {
         this.id = UUID.randomUUID();
-        this.gameName = StringValidator.isNullOrEmpty(gameName);
+        this.gameName = gameName;
         this.title = StringValidator.isNullOrEmpty(title);
         this.viewerCount = PositiveOrZeroNumberValidator.validate(viewerCount);
         this.streamDataTime = NotInFutureTimeValidator.validate(streamDataTime);

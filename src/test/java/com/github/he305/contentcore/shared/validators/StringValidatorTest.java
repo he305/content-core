@@ -34,4 +34,11 @@ class StringValidatorTest {
 
         assertEquals(valid, actual);
     }
+
+    @Test
+    void isNullOrEmpty_japanese_valid() {
+        String valid = "ヴェノム２ 同時視聴\uD83C\uDFA5";
+        String actual = StringValidator.isNullOrEmpty(valid);
+        assertEquals(valid, actual);
+    }
 }

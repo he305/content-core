@@ -22,7 +22,7 @@ public class StreamDataJpa {
     @Type(type = "uuid-char")
     private UUID id;
 
-    @Column(name = "game_name", nullable = false)
+    @Column(name = "game_name")
     private String gameName;
 
     @Column(name = "title", nullable = false)
