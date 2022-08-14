@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.watchinglist.application.mapper.query;
 
+import com.github.he305.contentcore.notification.domain.model.values.NotificationData;
 import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationDto;
 import com.github.he305.contentcore.watchinglist.application.exchange.ExternalNotificationExchangeService;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
@@ -13,7 +14,7 @@ public class NotificationDtoMapperImpl implements NotificationDtoMapper {
 
     @Override
     public NotificationDto toDto(NotificationId id) {
-        String data = externalNotificationExchangeService.getNotificationDataById(id);
-        return new NotificationDto(data);
+        NotificationData data = externalNotificationExchangeService.getNotificationDataById(id);
+        return new NotificationDto(data.getTime(), data.getMessage());
     }
 }

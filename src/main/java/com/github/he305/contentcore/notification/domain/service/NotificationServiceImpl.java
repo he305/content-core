@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -23,8 +22,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @EventListener
     public void onNewContentAccountDataEvent(NewContentAccountDataEvent<ContentAccountData> event) {
-        LocalDateTime time = LocalDateTime.now();
-        Notification notification = new Notification(event.getData().getStringData(), event.getData().getContentAccountId(), time);
+        Notification notification = new Notification(event.getData().getStringData(), event.getData().getContentAccountId(), event.getTime());
         notificationRepository.save(notification);
     }
 }
