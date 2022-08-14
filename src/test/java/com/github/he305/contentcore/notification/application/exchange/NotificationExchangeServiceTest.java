@@ -2,6 +2,8 @@ package com.github.he305.contentcore.notification.application.exchange;
 
 import com.github.he305.contentcore.notification.domain.exceptions.NotificationNotFoundException;
 import com.github.he305.contentcore.notification.domain.model.Notification;
+import com.github.he305.contentcore.notification.domain.model.values.ContentAccountId;
+import com.github.he305.contentcore.notification.domain.model.values.NotificationData;
 import com.github.he305.contentcore.notification.domain.repository.NotificationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 class NotificationExchangeServiceTest {
@@ -29,18 +32,19 @@ class NotificationExchangeServiceTest {
         UUID id = UUID.randomUUID();
         Mockito.when(notificationRepository.findById(id)).thenThrow(NotificationNotFoundException.class);
 
-        String actual = underTest.getNotificationDataById(id);
-        assertEquals("", actual);
+        NotificationData actual = underTest.getNotificationDataById(id);
+        assertNull(actual);
     }
 
     @Test
     void getNotificationDataById_valid() {
         UUID id = UUID.randomUUID();
-        String expected = "expected";
-        Notification notification = new Notification(expected, UUID.randomUUID(), LocalDateTime.now());
+        LocalDateTime time = LocalDateTime.now();
+        NotificationData expected = new NotificationData(time, "mess");
+        Notification notification = new Notification(UUID.randomUUID(), new ContentAccountId(UUID.randomUUID()), expected);
         Mockito.when(notificationRepository.findById(id)).thenReturn(notification);
 
-        String actual = underTest.getNotificationDataById(id);
+        NotificationData actual = underTest.getNotificationDataById(id);
         assertEquals(expected, actual);
     }
 }

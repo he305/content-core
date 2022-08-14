@@ -36,8 +36,7 @@ public final class StreamData {
 
     @Override
     public String toString() {
-        return streamDataTime.toString() + ": " +
-                "title: " + title +
+        return "Title: " + title +
                 ", game name: " + gameName +
                 ", viewers: " + viewerCount;
     }

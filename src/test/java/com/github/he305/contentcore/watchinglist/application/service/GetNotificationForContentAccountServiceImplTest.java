@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,10 +70,11 @@ class GetNotificationForContentAccountServiceImplTest {
         Mockito.when(watchingListRepository.getWatchingListByMemberId(id)).thenReturn(Optional.of(watchingList));
         ContentAccount account = new ContentAccount(query.getContentAccountName(), query.getPlatform());
         Mockito.when(contentAccountExchangeService.getContentAccountId(account)).thenReturn(new ContentAccountId(contentAccountId));
+        LocalDateTime time = LocalDateTime.now();
         List<NotificationDto> notificationDtoList = List.of(
-                new NotificationDto("data")
+                new NotificationDto(time, "data")
         );
-        Mockito.when(notificationDtoMapper.toDto(new NotificationId(notificationId))).thenReturn(new NotificationDto("data"));
+        Mockito.when(notificationDtoMapper.toDto(new NotificationId(notificationId))).thenReturn(new NotificationDto(time, "data"));
 
         GetNotificationForContentAccountDto expected = new GetNotificationForContentAccountDto(
                 notificationDtoList

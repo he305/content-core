@@ -20,7 +20,7 @@ class StreamDataTest {
         LocalDateTime time = LocalDateTime.now();
         StreamData data = new StreamData("long game name", "long title", 322, time);
 
-        String expected = time + ": title: long title, game name: long game name, viewers: 322";
+        String expected = "Title: long title, game name: long game name, viewers: 322";
         String actual = data.toString();
         assertEquals(expected, actual);
     }

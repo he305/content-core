@@ -1,6 +1,7 @@
 package com.github.he305.contentcore.notification.application.exchange;
 
 import com.github.he305.contentcore.notification.domain.exceptions.NotificationNotFoundException;
+import com.github.he305.contentcore.notification.domain.model.values.NotificationData;
 import com.github.he305.contentcore.notification.domain.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,12 @@ import java.util.UUID;
 public class NotificationExchangeService {
     private final NotificationRepository notificationRepository;
 
-    public String getNotificationDataById(UUID id) {
+    public NotificationData getNotificationDataById(UUID id) {
         try {
-            return notificationRepository.findById(id).getData().getMessage();
+            return notificationRepository.findById(id).getData();
         } catch (NotificationNotFoundException ex) {
             log.error(ex.getMessage());
-            return "";
+            return null;
         }
     }
 }
