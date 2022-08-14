@@ -78,7 +78,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (IllegalArgumentException e) {
             logger.error("An error occurred while fetching Username from Token", e);
         } catch (ExpiredJwtException e) {
-            logger.warn("The token has expired", e);
+            logger.info("The token has expired");
         } catch (SignatureException e) {
             logger.error("Signature exception: " + e.getMessage());
         }
