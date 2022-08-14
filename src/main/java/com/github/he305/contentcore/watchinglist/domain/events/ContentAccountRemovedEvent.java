@@ -9,4 +9,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ContentAccountRemovedEvent {
     private final UUID id;
+    private final UUID memberId;
 }

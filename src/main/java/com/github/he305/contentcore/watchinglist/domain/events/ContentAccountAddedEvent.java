@@ -10,4 +10,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ContentAccountAddedEvent {
     private final UUID id;
+    private final UUID memberId;
 }

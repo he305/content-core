@@ -49,12 +49,12 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
 
         contentAccountIdsToDelete.forEach(entry -> {
             if (watchingListEntry.removeContentAccount(entry)) {
-                registerEvent(new ContentAccountRemovedEvent(entry.getId()));
+                registerEvent(new ContentAccountRemovedEvent(entry.getId(), this.memberId.getId()));
             }
         });
         contentAccountIdsToAdd.forEach(entry -> {
             if (watchingListEntry.addContentAccount(entry)) {
-                registerEvent(new ContentAccountAddedEvent(entry.getId()));
+                registerEvent(new ContentAccountAddedEvent(entry.getId(), this.memberId.getId()));
             }
         });
     }
@@ -73,7 +73,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
 
         contentAccountSet.forEach(entry -> {
             if (watchingListEntry.addContentAccount(entry)) {
-                registerEvent(new ContentAccountAddedEvent(entry.getId()));
+                registerEvent(new ContentAccountAddedEvent(entry.getId(), this.memberId.getId()));
             }
         });
         watchingListEntries.add(watchingListEntry);
@@ -88,7 +88,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
 
         entryIds.forEach(entry -> {
             existingEntry.removeContentAccount(entry);
-            registerEvent(new ContentAccountRemovedEvent(entry.getId()));
+            registerEvent(new ContentAccountRemovedEvent(entry.getId(), this.memberId.getId()));
         });
 
         watchingListEntries.remove(existingEntry);
