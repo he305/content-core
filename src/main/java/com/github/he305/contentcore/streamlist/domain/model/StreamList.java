@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -38,5 +39,9 @@ public class StreamList extends AbstractAggregateRoot<StreamList> {
     public void removeStreamChannelId(UUID streamChannelId) {
         StreamChannelId toDelete = new StreamChannelId(streamChannelId);
         streamChannelIdList.remove(toDelete);
+    }
+
+    public Collection<Object> getEvents() {
+        return domainEvents();
     }
 }
