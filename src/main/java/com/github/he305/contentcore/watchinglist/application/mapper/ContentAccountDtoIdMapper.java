@@ -1,10 +1,10 @@
 package com.github.he305.contentcore.watchinglist.application.mapper;
 
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 
 public interface ContentAccountDtoIdMapper {
-    ContentAccountId toContentAccountId(ContentAccountDto dto);
+    ContentAccountEntry toContentAccountEntry(ContentAccountDto dto);
 
-    ContentAccountDto toContentAccountDto(ContentAccountId id);
+    ContentAccountDto toContentAccountDto(ContentAccountEntry entry);
 }

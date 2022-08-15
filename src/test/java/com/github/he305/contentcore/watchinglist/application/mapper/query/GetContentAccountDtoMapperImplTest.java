@@ -33,6 +33,7 @@ class GetContentAccountDtoMapperImplTest {
         ContentAccountId id = new ContentAccountId(UUID.randomUUID());
         ContentAccountEntry entry = new ContentAccountEntry(
                 UUID.randomUUID(),
+                "test",
                 id,
                 Set.of(
                         new NotificationId(UUID.randomUUID()),

@@ -23,7 +23,7 @@ class WatchingListEntryTest {
         UUID id = UUID.randomUUID();
         UUID contentEntryId = UUID.randomUUID();
         UUID contentAccountId = UUID.randomUUID();
-        ContentAccountEntry contentAccountEntry = new ContentAccountEntry(contentEntryId, new ContentAccountId(contentAccountId), Set.of());
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry(contentEntryId, "some", new ContentAccountId(contentAccountId), Set.of());
         WatchingListEntry first = new WatchingListEntry(id, new ContentCreator("name"), Set.of(contentAccountEntry));
         WatchingListEntry second = new WatchingListEntry(id, new ContentCreator("name"), Set.of(contentAccountEntry));
         assertEquals(first, second);
@@ -32,8 +32,9 @@ class WatchingListEntryTest {
     @Test
     void testEquals_notEquals() {
         UUID id = UUID.randomUUID();
-        WatchingListEntry first = new WatchingListEntry(new ContentCreator("name"), Set.of(new ContentAccountId(id)));
-        WatchingListEntry second = new WatchingListEntry(new ContentCreator("name"), Set.of(new ContentAccountId(id)));
+        ContentAccountId contentAccountId = new ContentAccountId(id);
+        WatchingListEntry first = new WatchingListEntry(new ContentCreator("name"), Set.of(new ContentAccountEntry("name", contentAccountId)));
+        WatchingListEntry second = new WatchingListEntry(new ContentCreator("name"), Set.of(new ContentAccountEntry("name", contentAccountId)));
         assertNotEquals(first, second);
     }
 
@@ -42,7 +43,7 @@ class WatchingListEntryTest {
         UUID id = UUID.randomUUID();
         UUID contentEntryId = UUID.randomUUID();
         UUID contentAccountId = UUID.randomUUID();
-        ContentAccountEntry contentAccountEntry = new ContentAccountEntry(contentEntryId, new ContentAccountId(contentAccountId), Set.of());
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry(contentEntryId, "test", new ContentAccountId(contentAccountId), Set.of());
         WatchingListEntry first = new WatchingListEntry(id, new ContentCreator("name"), Set.of(contentAccountEntry));
         WatchingListEntry second = new WatchingListEntry(id, new ContentCreator("name"), Set.of(contentAccountEntry));
         assertEquals(first.hashCode(), second.hashCode());
@@ -51,58 +52,69 @@ class WatchingListEntryTest {
     @Test
     void addContentAccount() {
         WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"));
-        ContentAccountId id = new ContentAccountId(UUID.randomUUID());
+        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", contentAccountId);
 
-        assertTrue(entry.addContentAccount(id));
-        assertFalse(entry.addContentAccount(id));
+        assertTrue(entry.addContentAccount(contentAccountEntry));
+        assertFalse(entry.addContentAccount(contentAccountEntry));
+
+        ContentAccountEntry sameIdAnotherAlias = new ContentAccountEntry("another alias", contentAccountId);
+        assertFalse(entry.addContentAccount(sameIdAnotherAlias));
     }
 
     @Test
     void removeContentAccount() {
         WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"));
-        ContentAccountId id = new ContentAccountId(UUID.randomUUID());
+        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", contentAccountId);
 
-        assertFalse(entry.removeContentAccount(id));
-        assertTrue(entry.addContentAccount(id));
-        assertTrue(entry.removeContentAccount(id));
-        assertFalse(entry.removeContentAccount(id));
+        assertFalse(entry.removeContentAccount(contentAccountEntry));
+        assertTrue(entry.addContentAccount(contentAccountEntry));
+        assertTrue(entry.removeContentAccount(contentAccountEntry));
+        assertFalse(entry.removeContentAccount(contentAccountEntry));
+
+        assertTrue(entry.addContentAccount(contentAccountEntry));
+        ContentAccountEntry sameIdAnotherAlias = new ContentAccountEntry("another alias", contentAccountId);
+        assertTrue(entry.removeContentAccount(sameIdAnotherAlias));
     }
 
     @Test
     void addNotificationForContentAccountId() {
         WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"));
-        ContentAccountId id = new ContentAccountId(UUID.randomUUID());
+        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", contentAccountId);
         UUID notificationId = UUID.randomUUID();
 
-        entry.addNotificationForContentAccountId(id, notificationId);
+        entry.addNotificationForContentAccountId(contentAccountId, notificationId);
         assertTrue(entry.getContentAccountSet().isEmpty());
-        entry.addContentAccount(id);
+        entry.addContentAccount(contentAccountEntry);
         assertEquals(1, entry.getContentAccountIdSet().size());
-        entry.addNotificationForContentAccountId(id, notificationId);
+        entry.addNotificationForContentAccountId(contentAccountId, notificationId);
         assertEquals(1, entry.getContentAccountIdSet().size());
     }
 
     @Test
     void getAndDeleteNotificationsForContentAccountId() {
         WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"));
-        ContentAccountId id = new ContentAccountId(UUID.randomUUID());
+        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", contentAccountId);
         UUID notificationId = UUID.randomUUID();
 
-        Set<NotificationId> empty = entry.getAndDeleteNotificationsForContentAccountId(id);
+        Set<NotificationId> empty = entry.getAndDeleteNotificationsForContentAccountId(contentAccountId);
         assertTrue(empty.isEmpty());
 
-        entry.addNotificationForContentAccountId(id, notificationId);
+        entry.addNotificationForContentAccountId(contentAccountId, notificationId);
         assertTrue(entry.getContentAccountSet().isEmpty());
-        entry.addContentAccount(id);
+        entry.addContentAccount(contentAccountEntry);
         assertEquals(1, entry.getContentAccountIdSet().size());
-        entry.addNotificationForContentAccountId(id, notificationId);
+        entry.addNotificationForContentAccountId(contentAccountId, notificationId);
         assertEquals(1, entry.getContentAccountIdSet().size());
 
-        Set<NotificationId> actual = entry.getAndDeleteNotificationsForContentAccountId(id);
+        Set<NotificationId> actual = entry.getAndDeleteNotificationsForContentAccountId(contentAccountId);
         assertEquals(1, actual.size());
         assertTrue(actual.contains(new NotificationId(notificationId)));
 
-        Set<NotificationId> actual2 = entry.getAndDeleteNotificationsForContentAccountId(id);
+        Set<NotificationId> actual2 = entry.getAndDeleteNotificationsForContentAccountId(contentAccountId);
         assertEquals(0, actual2.size());
     }
 }

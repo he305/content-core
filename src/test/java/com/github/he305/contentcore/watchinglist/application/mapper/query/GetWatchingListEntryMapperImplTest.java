@@ -34,6 +34,7 @@ class GetWatchingListEntryMapperImplTest {
     void toDto() {
         ContentAccountEntry contentAccountEntry = new ContentAccountEntry(
                 UUID.randomUUID(),
+                "test",
                 new ContentAccountId(UUID.randomUUID()),
                 Set.of(
                         new NotificationId(UUID.randomUUID())

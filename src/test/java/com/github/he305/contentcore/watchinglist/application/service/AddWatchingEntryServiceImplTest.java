@@ -5,6 +5,7 @@ import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountD
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
@@ -40,7 +41,7 @@ class AddWatchingEntryServiceImplTest {
     void addWatchingEntry_noWatchingList_createNew() {
         UUID memberId = UUID.randomUUID();
         List<ContentAccountDto> contentAccountDtos = List.of(
-                new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
+                new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH)
         );
         AddWatchingEntryCommand command = AddWatchingEntryCommand
                 .builder()
@@ -51,7 +52,7 @@ class AddWatchingEntryServiceImplTest {
         MemberId idNotFound = new MemberId(memberId);
 
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idNotFound)).thenReturn(Optional.empty());
-        Mockito.when(listContentAccountMapper.toContentAccountIdSet(contentAccountDtos)).thenReturn(Set.of(new ContentAccountId(UUID.randomUUID())));
+        Mockito.when(listContentAccountMapper.toContentAccountEntry(contentAccountDtos)).thenReturn(Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))));
 
         assertDoesNotThrow(() ->
                 underTest.addWatchingEntry(command));
@@ -61,7 +62,7 @@ class AddWatchingEntryServiceImplTest {
     void addWatchingEntry_emptyContentAccountIdSet_shouldThrow() {
         UUID memberId = UUID.randomUUID();
         List<ContentAccountDto> contentAccountDtos = List.of(
-                new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
+                new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH)
         );
         AddWatchingEntryCommand command = AddWatchingEntryCommand
                 .builder()
@@ -72,10 +73,10 @@ class AddWatchingEntryServiceImplTest {
         MemberId idFound = new MemberId(memberId);
 
         WatchingList existingWatchingList = new WatchingList(UUID.randomUUID(), memberId, List.of(
-                new WatchingListEntry(new ContentCreator("existing"), Set.of(new ContentAccountId(UUID.randomUUID())))
+                new WatchingListEntry(new ContentCreator("existing"), Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))))
         ));
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idFound)).thenReturn(Optional.of(existingWatchingList));
-        Mockito.when(listContentAccountMapper.toContentAccountIdSet(contentAccountDtos)).thenReturn(Set.of());
+        Mockito.when(listContentAccountMapper.toContentAccountEntry(contentAccountDtos)).thenReturn(Set.of());
 
         assertThrows(IllegalArgumentException.class, () ->
                 underTest.addWatchingEntry(command));
@@ -85,7 +86,7 @@ class AddWatchingEntryServiceImplTest {
     void addWatchingEntry_existingWatchingListEntry_shouldThrow() {
         UUID memberId = UUID.randomUUID();
         List<ContentAccountDto> contentAccountDtos = List.of(
-                new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
+                new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH)
         );
         AddWatchingEntryCommand command = AddWatchingEntryCommand
                 .builder()
@@ -96,10 +97,10 @@ class AddWatchingEntryServiceImplTest {
         MemberId idFound = new MemberId(memberId);
 
         WatchingList existingWatchingList = new WatchingList(UUID.randomUUID(), memberId, List.of(
-                new WatchingListEntry(new ContentCreator("name"), Set.of(new ContentAccountId(UUID.randomUUID())))
+                new WatchingListEntry(new ContentCreator("name"), Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))))
         ));
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idFound)).thenReturn(Optional.of(existingWatchingList));
-        Mockito.when(listContentAccountMapper.toContentAccountIdSet(contentAccountDtos)).thenReturn(Set.of(new ContentAccountId(UUID.randomUUID())));
+        Mockito.when(listContentAccountMapper.toContentAccountEntry(contentAccountDtos)).thenReturn(Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))));
 
         assertThrows(IllegalArgumentException.class, () ->
                 underTest.addWatchingEntry(command));
@@ -109,7 +110,7 @@ class AddWatchingEntryServiceImplTest {
     void addWatchingEntry_existingWatchingListEntry_valid() {
         UUID memberId = UUID.randomUUID();
         List<ContentAccountDto> contentAccountDtos = List.of(
-                new ContentAccountDto("name", ContentAccountPlatform.TWITCH)
+                new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH)
         );
         AddWatchingEntryCommand command = AddWatchingEntryCommand
                 .builder()
@@ -121,11 +122,11 @@ class AddWatchingEntryServiceImplTest {
         MemberId idFound = new MemberId(memberId);
 
         WatchingList existingWatchingList = new WatchingList(UUID.randomUUID(), memberId, List.of(
-                new WatchingListEntry(new ContentCreator("existing"), Set.of(new ContentAccountId(UUID.randomUUID())))
+                new WatchingListEntry(new ContentCreator("existing"), Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))))
         ));
         assertEquals(1, existingWatchingList.getWatchingListEntries().size());
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idFound)).thenReturn(Optional.of(existingWatchingList));
-        Mockito.when(listContentAccountMapper.toContentAccountIdSet(contentAccountDtos)).thenReturn(Set.of(new ContentAccountId(UUID.randomUUID())));
+        Mockito.when(listContentAccountMapper.toContentAccountEntry(contentAccountDtos)).thenReturn(Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))));
 
         assertDoesNotThrow(() ->
                 underTest.addWatchingEntry(command));

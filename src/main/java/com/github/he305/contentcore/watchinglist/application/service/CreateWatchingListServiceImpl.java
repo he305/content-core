@@ -3,7 +3,7 @@ package com.github.he305.contentcore.watchinglist.application.service;
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +33,8 @@ public class CreateWatchingListServiceImpl implements CreateWatchingListService 
 
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), command.getMemberId());
         command.getWatchingList().forEach(watchingListEntryDto -> {
-            Set<ContentAccountId> contentAccountIds = listContentAccountMapper.toContentAccountIdSet(watchingListEntryDto.getAccounts());
-            watchingList.addWatchingListEntry(watchingListEntryDto.getName(), contentAccountIds);
+            Set<ContentAccountEntry> contentAccountEntries = listContentAccountMapper.toContentAccountEntry(watchingListEntryDto.getAccounts());
+            watchingList.addWatchingListEntry(watchingListEntryDto.getName(), contentAccountEntries);
         });
 
         watchingListRepository.save(watchingList);

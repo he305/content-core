@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.watchinglist.domain.model;
 
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
@@ -18,7 +19,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID())));
 
         assertThrows(IllegalArgumentException.class, () ->
                 watchingList.updateWatchingListEntry(name, set));
@@ -29,7 +30,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of();
+        Set<ContentAccountEntry> set = Set.of();
 
         assertThrows(IllegalArgumentException.class, () ->
                 watchingList.updateWatchingListEntry(name, set));
@@ -41,19 +42,27 @@ class WatchingListTest {
         ContentAccountId intersects = new ContentAccountId(UUID.randomUUID());
         ContentAccountId newId = new ContentAccountId(UUID.randomUUID());
 
+
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> oldSet = Set.of(existing, intersects);
+        Set<ContentAccountEntry> oldSet = Set.of(
+                new ContentAccountEntry("test", existing),
+                new ContentAccountEntry("test", intersects)
+        );
+
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, oldSet));
 
-        Set<ContentAccountId> newSet = Set.of(intersects, newId);
+        Set<ContentAccountEntry> newSet = Set.of(
+                new ContentAccountEntry("test", intersects),
+                new ContentAccountEntry("test", newId)
+        );
 
         assertDoesNotThrow(() -> watchingList.updateWatchingListEntry(name, newSet));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
         assertEquals(1, entryList.size());
 
-        Set<ContentAccountId> resultSet = watchingList.getWatchingListEntries().get(0).getContentAccountIdSet();
+        Set<ContentAccountEntry> resultSet = watchingList.getWatchingListEntries().get(0).getContentAccountSet();
         assertEquals(newSet, resultSet);
         assertEquals(name, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
     }
@@ -63,7 +72,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of();
+        Set<ContentAccountEntry> set = Set.of();
 
         assertThrows(IllegalArgumentException.class, () ->
                 watchingList.addWatchingListEntry(name, set));
@@ -74,7 +83,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID())));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         assertThrows(IllegalArgumentException.class, () ->
@@ -86,13 +95,13 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID())));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
         assertEquals(1, entryList.size());
 
-        Set<ContentAccountId> newSet = watchingList.getWatchingListEntries().get(0).getContentAccountIdSet();
+        Set<ContentAccountEntry> newSet = watchingList.getWatchingListEntries().get(0).getContentAccountSet();
         assertEquals(set, newSet);
         assertEquals(name, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
     }
@@ -110,7 +119,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID())));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
@@ -125,7 +134,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID())));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
@@ -142,7 +151,7 @@ class WatchingListTest {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID())));
 
         String anotherName = "test";
 
@@ -159,6 +168,6 @@ class WatchingListTest {
 
         assertEquals(1, watchingList.getWatchingListEntries().size());
         assertEquals(anotherName, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
-        assertEquals(set, watchingList.getWatchingListEntries().get(0).getContentAccountIdSet());
+        assertEquals(set, watchingList.getWatchingListEntries().get(0).getContentAccountSet());
     }
 }

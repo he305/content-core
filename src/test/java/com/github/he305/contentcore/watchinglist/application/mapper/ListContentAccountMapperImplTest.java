@@ -1,6 +1,7 @@
 package com.github.he305.contentcore.watchinglist.application.mapper;
 
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import org.junit.jupiter.api.Test;
@@ -27,23 +28,25 @@ class ListContentAccountMapperImplTest {
 
     @Test
     void toContentAccountIdSet() {
-        ContentAccountDto data = new ContentAccountDto("name", ContentAccountPlatform.TWITCH);
+        ContentAccountDto data = new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH);
         ContentAccountId mocked = new ContentAccountId(UUID.randomUUID());
-        Set<ContentAccountId> expected = Set.of(mocked);
-        Mockito.when(contentAccountDtoIdMapper.toContentAccountId(data)).thenReturn(mocked);
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", mocked);
+        Set<ContentAccountEntry> expected = Set.of(contentAccountEntry);
+        Mockito.when(contentAccountDtoIdMapper.toContentAccountEntry(data)).thenReturn(contentAccountEntry);
 
-        Set<ContentAccountId> actual = underTest.toContentAccountIdSet(List.of(data));
+        Set<ContentAccountEntry> actual = underTest.toContentAccountEntry(List.of(data));
         assertEquals(expected, actual);
     }
 
     @Test
     void toContentAccountDtoList() {
         ContentAccountId data = new ContentAccountId(UUID.randomUUID());
-        ContentAccountDto mocked = new ContentAccountDto("name", ContentAccountPlatform.TWITCH);
+        ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", data);
+        ContentAccountDto mocked = new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH);
         List<ContentAccountDto> expected = List.of(mocked);
-        Mockito.when(contentAccountDtoIdMapper.toContentAccountDto(data)).thenReturn(mocked);
+        Mockito.when(contentAccountDtoIdMapper.toContentAccountDto(contentAccountEntry)).thenReturn(mocked);
 
-        List<ContentAccountDto> actual = underTest.toContentAccountDtoList(Set.of(data));
+        List<ContentAccountDto> actual = underTest.toContentAccountDtoList(Set.of(contentAccountEntry));
         assertEquals(expected, actual);
     }
 }

@@ -5,6 +5,7 @@ import com.github.he305.contentcore.watchinglist.domain.events.ContentAccountAdd
 import com.github.he305.contentcore.watchinglist.domain.events.ContentAccountRemovedEvent;
 import com.github.he305.contentcore.watchinglist.domain.events.WatchingListContentAccountAddedEvent;
 import com.github.he305.contentcore.watchinglist.domain.events.WatchingListContentAccountRemovedEvent;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
@@ -34,7 +35,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         watchingListEntries.addAll(entries);
     }
 
-    public void updateWatchingListEntry(String name, Set<ContentAccountId> contentAccountSet) {
+    public void updateWatchingListEntry(String name, Set<ContentAccountEntry> contentAccountSet) {
         if (contentAccountSet.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -45,25 +46,25 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         }
 
         WatchingListEntry watchingListEntry = existingEntry.get();
-        Set<ContentAccountId> existingSet = watchingListEntry.getContentAccountIdSet();
-        Set<ContentAccountId> contentAccountIdsToAdd = SetUtils.findUniqueInFirstSet(contentAccountSet, existingSet);
-        Set<ContentAccountId> contentAccountIdsToDelete = SetUtils.findUniqueInFirstSet(existingSet, contentAccountSet);
+        Set<ContentAccountEntry> existingSet = watchingListEntry.getContentAccountSet();
+        Set<ContentAccountEntry> contentAccountIdsToAdd = SetUtils.findUniqueInFirstSet(contentAccountSet, existingSet);
+        Set<ContentAccountEntry> contentAccountIdsToDelete = SetUtils.findUniqueInFirstSet(existingSet, contentAccountSet);
 
         contentAccountIdsToDelete.forEach(entry -> {
             if (watchingListEntry.removeContentAccount(entry)) {
-                registerEvent(new ContentAccountRemovedEvent(entry.getId()));
-                registerEvent(new WatchingListContentAccountRemovedEvent(entry.getId(), memberId.getId()));
+                registerEvent(new ContentAccountRemovedEvent(entry.getContentAccountId().getId()));
+                registerEvent(new WatchingListContentAccountRemovedEvent(entry.getContentAccountId().getId(), memberId.getId()));
             }
         });
         contentAccountIdsToAdd.forEach(entry -> {
             if (watchingListEntry.addContentAccount(entry)) {
-                registerEvent(new ContentAccountAddedEvent(entry.getId()));
-                registerEvent(new WatchingListContentAccountAddedEvent(entry.getId(), memberId.getId()));
+                registerEvent(new ContentAccountAddedEvent(entry.getContentAccountId().getId()));
+                registerEvent(new WatchingListContentAccountAddedEvent(entry.getContentAccountId().getId(), memberId.getId()));
             }
         });
     }
 
-    public void addWatchingListEntry(String name, Set<ContentAccountId> contentAccountSet) {
+    public void addWatchingListEntry(String name, Set<ContentAccountEntry> contentAccountSet) {
         if (contentAccountSet.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -77,8 +78,8 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
 
         contentAccountSet.forEach(entry -> {
             if (watchingListEntry.addContentAccount(entry)) {
-                registerEvent(new ContentAccountAddedEvent(entry.getId()));
-                registerEvent(new WatchingListContentAccountAddedEvent(entry.getId(), memberId.getId()));
+                registerEvent(new ContentAccountAddedEvent(entry.getContentAccountId().getId()));
+                registerEvent(new WatchingListContentAccountAddedEvent(entry.getContentAccountId().getId(), memberId.getId()));
             }
         });
         watchingListEntries.add(watchingListEntry);
@@ -89,12 +90,12 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
                 .filter(entry -> entry.getContentCreatorName().equals(entryName))
                 .findAny().orElseThrow(IllegalArgumentException::new);
 
-        Set<ContentAccountId> entryIds = existingEntry.getContentAccountIdSet();
+        Set<ContentAccountEntry> entries = existingEntry.getContentAccountSet();
 
-        entryIds.forEach(entry -> {
+        entries.forEach(entry -> {
             existingEntry.removeContentAccount(entry);
-            registerEvent(new ContentAccountRemovedEvent(entry.getId()));
-            registerEvent(new WatchingListContentAccountRemovedEvent(entry.getId(), memberId.getId()));
+            registerEvent(new ContentAccountRemovedEvent(entry.getContentAccountId().getId()));
+            registerEvent(new WatchingListContentAccountRemovedEvent(entry.getContentAccountId().getId(), memberId.getId()));
         });
 
         watchingListEntries.remove(existingEntry);
