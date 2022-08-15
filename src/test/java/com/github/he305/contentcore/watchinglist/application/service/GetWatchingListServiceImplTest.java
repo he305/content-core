@@ -64,7 +64,7 @@ class GetWatchingListServiceImplTest {
         );
 
         GetWatchingListEntryDto expectedDto = new GetWatchingListEntryDto("name", List.of(
-                new GetContentAccountDto("name", ContentAccountPlatform.TWITCH, 1)
+                new GetContentAccountDto("alias", "name", ContentAccountPlatform.TWITCH, 1)
         ));
         GetWatchingListQuery expected = new GetWatchingListQuery(
                 List.of(expectedDto)

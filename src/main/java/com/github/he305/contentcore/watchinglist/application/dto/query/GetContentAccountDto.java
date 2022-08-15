@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @EqualsAndHashCode
 public class GetContentAccountDto {
+    private String alias;
     private String name;
     private ContentAccountPlatform platform;
     private int notificationSize;

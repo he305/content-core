@@ -45,6 +45,7 @@ class GetContentAccountDtoMapperImplTest {
         ContentAccount account = new ContentAccount("name", ContentAccountPlatform.TWITCH);
         Mockito.when(contentAccountExchangeService.getContentAccount(id)).thenReturn(account);
         GetContentAccountDto expected = new GetContentAccountDto(
+                "test",
                 "name",
                 ContentAccountPlatform.TWITCH,
                 3

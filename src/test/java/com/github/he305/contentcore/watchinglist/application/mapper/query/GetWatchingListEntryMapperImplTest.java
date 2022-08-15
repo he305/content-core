@@ -47,6 +47,7 @@ class GetWatchingListEntryMapperImplTest {
         );
 
         GetContentAccountDto getContentAccountDto = new GetContentAccountDto(
+                "test",
                 "name",
                 ContentAccountPlatform.TWITCH,
                 1
