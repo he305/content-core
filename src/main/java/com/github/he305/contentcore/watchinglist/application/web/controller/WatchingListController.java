@@ -32,6 +32,7 @@ public class WatchingListController {
     private final UpdateWatchingEntryService updateWatchingEntryService;
     private final GetNotificationForContentAccountService getNotificationForContentAccountService;
     private final DeleteWatchingEntryService deleteWatchingEntryService;
+    private final GetPlatformsService getPlatformsService;
 
     @PostMapping
     public ResponseEntity<Void> createWatchingList(@RequestBody CreateWatchingListDto dto) {
@@ -91,5 +92,10 @@ public class WatchingListController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping(value = "/platforms")
+    public ResponseEntity<PlatformsDto> getPlatforms() {
+        return ResponseEntity.ok(getPlatformsService.execute());
     }
 }
