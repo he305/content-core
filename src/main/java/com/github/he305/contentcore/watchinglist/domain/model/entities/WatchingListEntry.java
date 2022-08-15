@@ -24,7 +24,7 @@ public class WatchingListEntry {
         this.contentCreator = contentCreator;
     }
 
-    public WatchingListEntry(ContentCreator contentCreator, Set<ContentAccountId> set) {
+    public WatchingListEntry(ContentCreator contentCreator, Set<ContentAccountEntry> set) {
         this.id = UUID.randomUUID();
         this.contentCreator = contentCreator;
         set.forEach(this::addContentAccount);
@@ -40,21 +40,21 @@ public class WatchingListEntry {
         return contentCreator.getName();
     }
 
-    public boolean addContentAccount(ContentAccountId account) {
+    public boolean addContentAccount(ContentAccountEntry newEntry) {
         Optional<ContentAccountEntry> entry = contentAccountSet
                 .stream()
-                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(account))
+                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(newEntry.getContentAccountId()))
                 .findAny();
         if (entry.isPresent()) {
             return false;
         }
-        return contentAccountSet.add(new ContentAccountEntry(account));
+        return contentAccountSet.add(newEntry);
     }
 
-    public boolean removeContentAccount(ContentAccountId accountId) {
+    public boolean removeContentAccount(ContentAccountEntry newEntry) {
         Optional<ContentAccountEntry> entry = contentAccountSet
                 .stream()
-                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(accountId))
+                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(newEntry.getContentAccountId()))
                 .findAny();
         if (entry.isEmpty()) {
             return false;

@@ -23,6 +23,9 @@ public class ContentAccountEntryData {
     @Type(type = "uuid-char")
     private UUID id;
 
+    @Column(name = "alias")
+    private String alias;
+
     @Column(name = "content_account_id")
     @Type(type = "uuid-char")
     private UUID contentAccountId;

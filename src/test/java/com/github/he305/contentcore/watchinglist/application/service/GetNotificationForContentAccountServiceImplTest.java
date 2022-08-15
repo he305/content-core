@@ -5,6 +5,7 @@ import com.github.he305.contentcore.watchinglist.application.dto.query.Notificat
 import com.github.he305.contentcore.watchinglist.application.mapper.query.NotificationDtoMapper;
 import com.github.he305.contentcore.watchinglist.application.query.GetNotificationForContentAccountQuery;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.*;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
@@ -63,7 +64,7 @@ class GetNotificationForContentAccountServiceImplTest {
         UUID notificationId = UUID.randomUUID();
 
         WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"),
-                Set.of(new ContentAccountId(contentAccountId)));
+                Set.of(new ContentAccountEntry("test", new ContentAccountId(contentAccountId))));
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), id.getId(), List.of(entry));
         watchingList.addNotificationForContentAccount(contentAccountId, notificationId);
 

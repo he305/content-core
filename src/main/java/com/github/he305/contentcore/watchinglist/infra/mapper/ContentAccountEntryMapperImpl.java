@@ -22,6 +22,7 @@ public class ContentAccountEntryMapperImpl implements ContentAccountEntryMapper 
 
         return new ContentAccountEntryData(
                 entry.getId(),
+                entry.getAlias(),
                 entry.getContentAccountId().getId(),
                 notificationIdData,
                 watchingListEntryData
@@ -37,6 +38,7 @@ public class ContentAccountEntryMapperImpl implements ContentAccountEntryMapper 
 
         return new ContentAccountEntry(
                 jpa.getId(),
+                jpa.getAlias(),
                 new ContentAccountId(jpa.getContentAccountId()),
                 notificationIds
         );

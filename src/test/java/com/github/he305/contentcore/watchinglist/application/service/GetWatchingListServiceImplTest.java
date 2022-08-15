@@ -7,7 +7,6 @@ import com.github.he305.contentcore.watchinglist.application.mapper.query.GetWat
 import com.github.he305.contentcore.watchinglist.application.query.GetWatchingListQuery;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
@@ -55,7 +54,6 @@ class GetWatchingListServiceImplTest {
         MemberId memberId = new MemberId(id);
         MemberIdDto dto = new MemberIdDto(id);
 
-        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
         WatchingListEntry entry = new WatchingListEntry(UUID.randomUUID(), new ContentCreator("name"), Set.of());
         WatchingList watchingList = new WatchingList(
                 UUID.randomUUID(),
@@ -64,7 +62,7 @@ class GetWatchingListServiceImplTest {
         );
 
         GetWatchingListEntryDto expectedDto = new GetWatchingListEntryDto("name", List.of(
-                new GetContentAccountDto("name", ContentAccountPlatform.TWITCH, 1)
+                new GetContentAccountDto("alias", "name", ContentAccountPlatform.TWITCH, 1)
         ));
         GetWatchingListQuery expected = new GetWatchingListQuery(
                 List.of(expectedDto)

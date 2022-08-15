@@ -59,11 +59,12 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
     @SneakyThrows
     void createListAndCompare() {
         String token = register();
+        String alias = "test";
         String entryName = "createListAndCompare";
         String accountName = "accoont";
         ContentAccountPlatform platform = ContentAccountPlatform.TWITCH;
 
-        ContentAccountDto contentAccountDto = new ContentAccountDto(accountName, platform);
+        ContentAccountDto contentAccountDto = new ContentAccountDto(alias, accountName, platform);
         WatchingListEntryDto watchingListEntry = new WatchingListEntryDto(entryName, List.of(contentAccountDto));
         CreateWatchingListDto entryDto = new CreateWatchingListDto(
                 List.of(watchingListEntry)
@@ -101,11 +102,12 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
     @SneakyThrows
     void deleteWatchingListEntry() {
         String token = register();
+        String alias = "test";
         String entryName = "createListAndCompare";
         String accountName = "account";
         ContentAccountPlatform platform = ContentAccountPlatform.TWITCH;
 
-        ContentAccountDto contentAccountDto = new ContentAccountDto(accountName, platform);
+        ContentAccountDto contentAccountDto = new ContentAccountDto(alias, accountName, platform);
         WatchingListEntryDto watchingListEntry = new WatchingListEntryDto(entryName, List.of(contentAccountDto));
         CreateWatchingListDto entryDto = new CreateWatchingListDto(
                 List.of(watchingListEntry)

@@ -4,6 +4,7 @@ import com.github.he305.contentcore.notification.domain.events.NewNotificationEv
 import com.github.he305.contentcore.shared.events.EventPublisher;
 import com.github.he305.contentcore.streamlist.domain.events.RequestUpdateStreamListEvent;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
@@ -40,7 +41,7 @@ class WatchingListServiceTest {
         UUID contentCreatorId = UUID.randomUUID();
         WatchingListEntry entry = new WatchingListEntry(
                 new ContentCreator("name"),
-                Set.of(new ContentAccountId(contentCreatorId))
+                Set.of(new ContentAccountEntry("test", new ContentAccountId(contentCreatorId)))
         );
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID(),
                 List.of(entry));
@@ -69,7 +70,7 @@ class WatchingListServiceTest {
         RequestUpdateStreamListEvent event = new RequestUpdateStreamListEvent(id);
 
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
-        watchingList.addWatchingListEntry("name", Set.of(new ContentAccountId(UUID.randomUUID())));
+        watchingList.addWatchingListEntry("name", Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))));
         Mockito.when(watchingListRepository.getWatchingListByMemberId(new MemberId(id))).thenReturn(Optional.of(watchingList));
         assertDoesNotThrow(() -> underTest.onRequestUpdateStreamListEvent(event));
     }

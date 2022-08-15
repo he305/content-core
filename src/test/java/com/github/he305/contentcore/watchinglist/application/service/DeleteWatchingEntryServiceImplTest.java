@@ -2,6 +2,7 @@ package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
@@ -47,7 +48,8 @@ class DeleteWatchingEntryServiceImplTest {
     void execute_notEntryFound() {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", contentAccountId));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
@@ -72,7 +74,8 @@ class DeleteWatchingEntryServiceImplTest {
     void execute_valid() {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
         String name = "testName";
-        Set<ContentAccountId> set = Set.of(new ContentAccountId(UUID.randomUUID()));
+        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", contentAccountId));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();

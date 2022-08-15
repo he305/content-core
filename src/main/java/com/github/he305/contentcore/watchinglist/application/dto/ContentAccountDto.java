@@ -9,6 +9,7 @@ import lombok.Getter;
 @EqualsAndHashCode
 @Getter
 public class ContentAccountDto {
+    private String alias;
     private String name;
     private ContentAccountPlatform platform;
 }

@@ -17,6 +17,7 @@ public class GetContentAccountDtoMapperImpl implements GetContentAccountDtoMappe
     public GetContentAccountDto toDto(ContentAccountEntry entry) {
         ContentAccount contentAccount = contentAccountExchangeService.getContentAccount(entry.getContentAccountId());
         return new GetContentAccountDto(
+                entry.getAlias(),
                 contentAccount.getName(),
                 contentAccount.getPlatform(),
                 entry.getNotificationSize()

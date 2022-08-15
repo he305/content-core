@@ -34,11 +34,13 @@ class ContentAccountEntryMapperImplTest {
         UUID notificationId = UUID.randomUUID();
         ContentAccountEntry entry = new ContentAccountEntry(
                 id,
+                "test",
                 new ContentAccountId(contentAccountId),
                 Set.of(new NotificationId(notificationId))
         );
         ContentAccountEntryData expected = new ContentAccountEntryData(
                 id,
+                "test",
                 contentAccountId,
                 Set.of(new NotificationIdData(notificationId)),
                 data
@@ -59,11 +61,13 @@ class ContentAccountEntryMapperImplTest {
         UUID notificationId = UUID.randomUUID();
         ContentAccountEntry expected = new ContentAccountEntry(
                 id,
+                "test",
                 new ContentAccountId(contentAccountId),
                 Set.of(new NotificationId(notificationId))
         );
         ContentAccountEntryData jpa = new ContentAccountEntryData(
                 id,
+                "test",
                 contentAccountId,
                 Set.of(new NotificationIdData(notificationId)),
                 data

@@ -13,17 +13,20 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class ContentAccountEntry {
     private final UUID id;
+    private final String alias;
     private final ContentAccountId contentAccountId;
     private final Set<NotificationId> notificationIds;
 
-    public ContentAccountEntry(ContentAccountId contentAccountId) {
+    public ContentAccountEntry(String alias, ContentAccountId contentAccountId) {
         this.id = UUID.randomUUID();
+        this.alias = alias;
         this.contentAccountId = contentAccountId;
         this.notificationIds = new HashSet<>();
     }
 
-    public ContentAccountEntry(UUID id, ContentAccountId contentAccountId, Set<NotificationId> notificationIds) {
+    public ContentAccountEntry(UUID id, String alias, ContentAccountId contentAccountId, Set<NotificationId> notificationIds) {
         this.id = id;
+        this.alias = alias;
         this.contentAccountId = contentAccountId;
         this.notificationIds = notificationIds;
     }

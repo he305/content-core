@@ -3,7 +3,7 @@ package com.github.he305.contentcore.watchinglist.application.service;
 import com.github.he305.contentcore.watchinglist.application.commands.AddWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,9 @@ public class AddWatchingEntryServiceImpl implements AddWatchingEntryService {
         }
 
         String name = command.getDto().getName();
-        Set<ContentAccountId> contentAccountIdSet = listContentAccountMapper.toContentAccountIdSet(command.getDto().getAccounts());
+        Set<ContentAccountEntry> contentAccountEntries = listContentAccountMapper.toContentAccountEntry(command.getDto().getAccounts());
 
-        watchingList.addWatchingListEntry(name, contentAccountIdSet);
+        watchingList.addWatchingListEntry(name, contentAccountEntries);
         watchingListRepository.save(watchingList);
     }
 }

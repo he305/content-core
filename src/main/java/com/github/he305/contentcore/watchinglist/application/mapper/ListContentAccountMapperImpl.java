@@ -1,7 +1,7 @@
 package com.github.he305.contentcore.watchinglist.application.mapper;
 
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
+import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +15,14 @@ public class ListContentAccountMapperImpl implements ListContentAccountMapper {
     private final ContentAccountDtoIdMapper contentAccountDtoIdMapper;
 
     @Override
-    public Set<ContentAccountId> toContentAccountIdSet(List<ContentAccountDto> list) {
+    public Set<ContentAccountEntry> toContentAccountEntry(List<ContentAccountDto> list) {
         return list.stream()
-                .map(contentAccountDtoIdMapper::toContentAccountId)
+                .map(contentAccountDtoIdMapper::toContentAccountEntry)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public List<ContentAccountDto> toContentAccountDtoList(Set<ContentAccountId> set) {
+    public List<ContentAccountDto> toContentAccountDtoList(Set<ContentAccountEntry> set) {
         return set.stream()
                 .map(contentAccountDtoIdMapper::toContentAccountDto)
                 .collect(Collectors.toList());
