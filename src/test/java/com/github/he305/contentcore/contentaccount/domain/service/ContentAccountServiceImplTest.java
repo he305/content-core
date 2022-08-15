@@ -63,8 +63,7 @@ class ContentAccountServiceImplTest {
     @Test
     void handleContentAccountAddedEvent() {
         UUID id = UUID.randomUUID();
-        UUID memberId = UUID.randomUUID();
-        ContentAccountAddedEvent event = new ContentAccountAddedEvent(id, memberId);
+        ContentAccountAddedEvent event = new ContentAccountAddedEvent(id);
         ContentAccount account = new ContentAccount(id, new ContentAccountDetails("name", Platform.TWITCH));
         assertEquals(Status.FROZEN, account.getStatus());
         assertEquals(0, account.getUseCounter().getCounter());
@@ -78,8 +77,7 @@ class ContentAccountServiceImplTest {
     @Test
     void handleContentAccountRemovedEvent() {
         UUID id = UUID.randomUUID();
-        UUID memberId = UUID.randomUUID();
-        ContentAccountRemovedEvent event = new ContentAccountRemovedEvent(id, memberId);
+        ContentAccountRemovedEvent event = new ContentAccountRemovedEvent(id);
         ContentAccount account = new ContentAccount(id, new ContentAccountDetails("name", Platform.TWITCH), new UseCounter(1), Status.ACTIVE);
         assertEquals(Status.ACTIVE, account.getStatus());
         assertEquals(1, account.getUseCounter().getCounter());

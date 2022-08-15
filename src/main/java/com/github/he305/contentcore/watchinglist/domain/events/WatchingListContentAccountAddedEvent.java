@@ -5,8 +5,9 @@ import lombok.Getter;
 
 import java.util.UUID;
 
-@Getter
 @AllArgsConstructor
-public class ContentAccountRemovedEvent {
-    private final UUID id;
+@Getter
+public class WatchingListContentAccountAddedEvent {
+    private final UUID contentAccountId;
+    private final UUID memberId;
 }
