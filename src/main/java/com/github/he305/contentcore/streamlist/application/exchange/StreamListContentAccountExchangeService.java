@@ -4,6 +4,6 @@ import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAc
 
 import java.util.UUID;
 
-public interface ContentAccountExchangeService {
+public interface StreamListContentAccountExchangeService {
     ContentAccountDetails getContentAccount(UUID contentAccountId);
 }

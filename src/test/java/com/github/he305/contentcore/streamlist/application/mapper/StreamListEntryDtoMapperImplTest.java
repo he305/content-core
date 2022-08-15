@@ -5,7 +5,7 @@ import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAc
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
 import com.github.he305.contentcore.streamlist.application.dto.StreamListEntryDto;
 import com.github.he305.contentcore.streamlist.application.dto.StreamListEntryLastDataDto;
-import com.github.he305.contentcore.streamlist.application.exchange.ContentAccountExchangeService;
+import com.github.he305.contentcore.streamlist.application.exchange.StreamListContentAccountExchangeService;
 import com.github.he305.contentcore.streamlist.application.exchange.StreamListStreamExchangeService;
 import com.github.he305.contentcore.streamlist.domain.model.values.StreamChannelId;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class StreamListEntryDtoMapperImplTest {
 
     @Mock
-    private ContentAccountExchangeService contentAccountExchangeService;
+    private StreamListContentAccountExchangeService contentAccountExchangeService;
     @Mock
     private StreamListStreamExchangeService streamListStreamExchangeService;
 

@@ -4,7 +4,7 @@ import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAc
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
 import com.github.he305.contentcore.streamlist.application.dto.StreamListEntryDto;
 import com.github.he305.contentcore.streamlist.application.dto.StreamListEntryLastDataDto;
-import com.github.he305.contentcore.streamlist.application.exchange.ContentAccountExchangeService;
+import com.github.he305.contentcore.streamlist.application.exchange.StreamListContentAccountExchangeService;
 import com.github.he305.contentcore.streamlist.application.exchange.StreamListStreamExchangeService;
 import com.github.he305.contentcore.streamlist.domain.model.values.StreamChannelId;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class StreamListEntryDtoMapperImpl implements StreamListEntryDtoMapper {
 
-    private final ContentAccountExchangeService contentAccountExchangeService;
+    private final StreamListContentAccountExchangeService contentAccountExchangeService;
     private final StreamListStreamExchangeService streamListStreamExchangeService;
 
     @Override
