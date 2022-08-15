@@ -168,6 +168,34 @@ class StreamChannelTest {
     }
 
     @Test
+    void getLastLiveStreamData_valid() {
+        UUID id = UUID.randomUUID();
+        StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
+        StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
+        assertTrue(streamChannel.getStreams().isEmpty());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        streamChannel.addStreamData(data);
+
+        StreamData actual = streamChannel.getLastLiveStreamData();
+        assertEquals(data, actual);
+    }
+
+    @Test
+    void getLastLiveStreamData_noLiveStream() {
+        UUID id = UUID.randomUUID();
+        StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
+        StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
+        assertTrue(streamChannel.getStreams().isEmpty());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        streamChannel.addStreamData(data);
+        LocalDateTime now = LocalDateTime.now();
+        assertDoesNotThrow(() -> streamChannel.endStream(now));
+        assertTrue(streamChannel.getStreams().stream().noneMatch(Stream::isLive));
+
+        assertThrows(NoLiveStreamFoundException.class, streamChannel::getLastLiveStreamData);
+    }
+
+    @Test
     void equals() {
         EqualsVerifier.forClass(StreamChannel.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }

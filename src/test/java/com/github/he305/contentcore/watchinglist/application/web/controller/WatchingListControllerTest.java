@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +42,8 @@ class WatchingListControllerTest {
     private GetNotificationForContentAccountService getNotificationForContentAccountService;
     @Mock
     private DeleteWatchingEntryService deleteWatchingEntryService;
+    @Mock
+    private GetPlatformsService getPlatformsService;
     @InjectMocks
     private WatchingListController underTest;
 
@@ -153,6 +156,15 @@ class WatchingListControllerTest {
 
         ResponseEntity<Void> expected = ResponseEntity.ok().build();
         ResponseEntity<Void> actual = underTest.deleteWatchingListEntry(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getPlatforms() {
+        PlatformsDto dto = new PlatformsDto(List.of(ContentAccountPlatform.values()));
+        Mockito.when(getPlatformsService.execute()).thenReturn(dto);
+        ResponseEntity<PlatformsDto> expected = ResponseEntity.ok(dto);
+        ResponseEntity<PlatformsDto> actual = underTest.getPlatforms();
         assertEquals(expected, actual);
     }
 }

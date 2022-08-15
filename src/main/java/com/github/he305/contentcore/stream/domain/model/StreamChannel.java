@@ -87,6 +87,15 @@ public final class StreamChannel extends AbstractAggregateRoot<StreamChannel> {
         registerEvent(new NewContentAccountDataEvent<>(new ContentAccountData(streamChannelContentAccountId.getId(), data.toString())));
     }
 
+    public StreamData getLastLiveStreamData() {
+        Optional<Stream> liveStream = streams.stream().filter(Stream::isLive).findAny();
+        if (liveStream.isEmpty()) {
+            throw new NoLiveStreamFoundException();
+        }
+
+        return liveStream.get().getLastData();
+    }
+
     public boolean isLive() {
         return streams.stream().anyMatch(Stream::isLive);
     }

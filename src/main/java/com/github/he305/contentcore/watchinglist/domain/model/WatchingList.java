@@ -3,6 +3,8 @@ package com.github.he305.contentcore.watchinglist.domain.model;
 import com.github.he305.contentcore.shared.util.SetUtils;
 import com.github.he305.contentcore.watchinglist.domain.events.ContentAccountAddedEvent;
 import com.github.he305.contentcore.watchinglist.domain.events.ContentAccountRemovedEvent;
+import com.github.he305.contentcore.watchinglist.domain.events.WatchingListContentAccountAddedEvent;
+import com.github.he305.contentcore.watchinglist.domain.events.WatchingListContentAccountRemovedEvent;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
@@ -50,11 +52,13 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         contentAccountIdsToDelete.forEach(entry -> {
             if (watchingListEntry.removeContentAccount(entry)) {
                 registerEvent(new ContentAccountRemovedEvent(entry.getId()));
+                registerEvent(new WatchingListContentAccountRemovedEvent(entry.getId(), memberId.getId()));
             }
         });
         contentAccountIdsToAdd.forEach(entry -> {
             if (watchingListEntry.addContentAccount(entry)) {
                 registerEvent(new ContentAccountAddedEvent(entry.getId()));
+                registerEvent(new WatchingListContentAccountAddedEvent(entry.getId(), memberId.getId()));
             }
         });
     }
@@ -74,6 +78,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         contentAccountSet.forEach(entry -> {
             if (watchingListEntry.addContentAccount(entry)) {
                 registerEvent(new ContentAccountAddedEvent(entry.getId()));
+                registerEvent(new WatchingListContentAccountAddedEvent(entry.getId(), memberId.getId()));
             }
         });
         watchingListEntries.add(watchingListEntry);
@@ -89,6 +94,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         entryIds.forEach(entry -> {
             existingEntry.removeContentAccount(entry);
             registerEvent(new ContentAccountRemovedEvent(entry.getId()));
+            registerEvent(new WatchingListContentAccountRemovedEvent(entry.getId(), memberId.getId()));
         });
 
         watchingListEntries.remove(existingEntry);
