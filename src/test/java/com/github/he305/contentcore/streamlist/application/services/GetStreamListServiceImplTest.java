@@ -46,11 +46,24 @@ class GetStreamListServiceImplTest {
     }
 
     @Test
+    void execute_streamListEmpty() {
+        UUID id = UUID.randomUUID();
+        GetStreamListQuery query = new GetStreamListQuery(id);
+        MemberId memberId = new MemberId(id);
+        StreamList streamList = new StreamList(id);
+        Mockito.when(streamListRepository.getByMemberId(memberId)).thenReturn(Optional.of(streamList));
+
+        assertThrows(StreamListNotFoundException.class, () ->
+                underTest.execute(query));
+    }
+
+    @Test
     void execute_valid() {
         UUID id = UUID.randomUUID();
         GetStreamListQuery query = new GetStreamListQuery(id);
         MemberId memberId = new MemberId(id);
         StreamList streamList = new StreamList(id);
+        streamList.addStreamChannelId(UUID.randomUUID());
         Mockito.when(streamListRepository.getByMemberId(memberId)).thenReturn(Optional.of(streamList));
 
         StreamListDto expected = new StreamListDto(Collections.emptyList());

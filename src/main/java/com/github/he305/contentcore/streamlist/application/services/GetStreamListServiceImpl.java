@@ -25,7 +25,7 @@ public class GetStreamListServiceImpl implements GetStreamListService {
     @Override
     public StreamListDto execute(GetStreamListQuery query) {
         Optional<StreamList> optionalStreamList = streamListRepository.getByMemberId(new MemberId(query.getMemberId()));
-        if (optionalStreamList.isEmpty()) {
+        if (optionalStreamList.isEmpty() || optionalStreamList.get().getStreamChannelIdList().isEmpty()) {
             eventPublisher.publishEvent(List.of(new RequestUpdateStreamListEvent(query.getMemberId())));
             throw new StreamListNotFoundException("Stream list is not found, updating job is in progress");
         }
