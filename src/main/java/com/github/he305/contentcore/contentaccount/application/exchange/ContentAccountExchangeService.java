@@ -6,9 +6,7 @@ import com.github.he305.contentcore.contentaccount.application.services.GetConte
 import com.github.he305.contentcore.contentaccount.application.services.GetContentAccountIdService;
 import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
 import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
+import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +18,14 @@ public class ContentAccountExchangeService {
     private final GetContentAccountIdService getContentAccountIdService;
     private final GetContentAccountDetailsService getContentAccountDetailsService;
 
-    public ContentAccountId getContentAccountId(ContentAccount account) {
+    public UUID getContentAccountId(WatchingListContentAccount account) {
         Platform platform = Platform.valueOf(account.getPlatform().name());
         GetContentAccountIdQuery query = new GetContentAccountIdQuery(account.getName(), platform);
-        UUID idToReturn = getContentAccountIdService.execute(query);
-        return new ContentAccountId(idToReturn);
+        return getContentAccountIdService.execute(query);
     }
 
-    public ContentAccount getContentAccountById(UUID id) {
+    public ContentAccountDetails getContentAccountById(UUID id) {
         GetContentAccountDetailsQuery query = new GetContentAccountDetailsQuery(id);
-        ContentAccountDetails details = getContentAccountDetailsService.execute(query);
-        ContentAccountPlatform platform = ContentAccountPlatform.valueOf(details.getPlatform().name());
-        return new ContentAccount(details.getName(), platform);
+        return getContentAccountDetailsService.execute(query);
     }
 }

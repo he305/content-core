@@ -6,9 +6,9 @@ import com.github.he305.contentcore.streamlist.domain.events.RequestUpdateStream
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ class WatchingListServiceTest {
         UUID contentCreatorId = UUID.randomUUID();
         WatchingListEntry entry = new WatchingListEntry(
                 new ContentCreator("name"),
-                Set.of(new ContentAccountEntry("test", new ContentAccountId(contentCreatorId)))
+                Set.of(new ContentAccountEntry("test", new WatchingListContentAccountId(contentCreatorId)))
         );
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID(),
                 List.of(entry));
@@ -70,7 +70,7 @@ class WatchingListServiceTest {
         RequestUpdateStreamListEvent event = new RequestUpdateStreamListEvent(id);
 
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
-        watchingList.addWatchingListEntry("name", Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))));
+        watchingList.addWatchingListEntry("name", Set.of(new ContentAccountEntry("test", new WatchingListContentAccountId(UUID.randomUUID()))));
         Mockito.when(watchingListRepository.getWatchingListByMemberId(new MemberId(id))).thenReturn(Optional.of(watchingList));
         assertDoesNotThrow(() -> underTest.onRequestUpdateStreamListEvent(event));
     }

@@ -4,10 +4,10 @@ import com.github.he305.contentcore.watchinglist.application.dto.query.GetConten
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetWatchingListEntryDto;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ class GetWatchingListEntryMapperImplTest {
         ContentAccountEntry contentAccountEntry = new ContentAccountEntry(
                 UUID.randomUUID(),
                 "test",
-                new ContentAccountId(UUID.randomUUID()),
+                new WatchingListContentAccountId(UUID.randomUUID()),
                 Set.of(
                         new NotificationId(UUID.randomUUID())
                 )

@@ -1,8 +1,8 @@
 package com.github.he305.contentcore.watchinglist.infra.mapper;
 
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import com.github.he305.contentcore.watchinglist.infra.data.ContentAccountEntryData;
 import com.github.he305.contentcore.watchinglist.infra.data.NotificationIdData;
 import com.github.he305.contentcore.watchinglist.infra.data.WatchingListEntryData;
@@ -23,7 +23,7 @@ public class ContentAccountEntryMapperImpl implements ContentAccountEntryMapper 
         return new ContentAccountEntryData(
                 entry.getId(),
                 entry.getAlias(),
-                entry.getContentAccountId().getId(),
+                entry.getWatchingListContentAccountId().getId(),
                 notificationIdData,
                 watchingListEntryData
         );
@@ -39,7 +39,7 @@ public class ContentAccountEntryMapperImpl implements ContentAccountEntryMapper 
         return new ContentAccountEntry(
                 jpa.getId(),
                 jpa.getAlias(),
-                new ContentAccountId(jpa.getContentAccountId()),
+                new WatchingListContentAccountId(jpa.getContentAccountId()),
                 notificationIds
         );
     }

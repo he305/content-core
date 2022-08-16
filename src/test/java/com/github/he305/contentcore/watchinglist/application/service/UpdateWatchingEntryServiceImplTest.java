@@ -7,10 +7,10 @@ import com.github.he305.contentcore.watchinglist.application.mapper.ListContentA
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,8 +58,8 @@ class UpdateWatchingEntryServiceImplTest {
         UUID id = UUID.randomUUID();
         MemberId memberId = new MemberId(id);
 
-        ContentAccountId newContentAccountId = new ContentAccountId(UUID.randomUUID());
-        ContentAccountEntry newContentAccountEntry = new ContentAccountEntry("name", newContentAccountId);
+        WatchingListContentAccountId newWatchingListContentAccountId = new WatchingListContentAccountId(UUID.randomUUID());
+        ContentAccountEntry newContentAccountEntry = new ContentAccountEntry("name", newWatchingListContentAccountId);
         ContentAccountDto contentAccountDto = new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH);
         WatchingListEntryDto dto = new WatchingListEntryDto(
                 "name",
@@ -72,10 +72,10 @@ class UpdateWatchingEntryServiceImplTest {
                 .memberId(id)
                 .build();
 
-        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
+        WatchingListContentAccountId watchingListContentAccountId = new WatchingListContentAccountId(UUID.randomUUID());
         WatchingListEntry entry = new WatchingListEntry(
                 new ContentCreator("name"),
-                Set.of(new ContentAccountEntry("test", contentAccountId))
+                Set.of(new ContentAccountEntry("test", watchingListContentAccountId))
         );
 
         WatchingList watchingList = new WatchingList(
@@ -92,7 +92,7 @@ class UpdateWatchingEntryServiceImplTest {
         assertEquals(1, watchingList.getWatchingListEntries().size());
         WatchingListEntry updatedEntry = watchingList.getWatchingListEntries().get(0);
         assertEquals("name", updatedEntry.getContentCreatorName());
-        assertEquals(Set.of(newContentAccountId), updatedEntry.getContentAccountIdSet());
+        assertEquals(Set.of(newWatchingListContentAccountId), updatedEntry.getContentAccountIdSet());
     }
 
 }

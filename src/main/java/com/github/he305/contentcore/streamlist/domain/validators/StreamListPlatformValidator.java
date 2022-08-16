@@ -1,7 +1,7 @@
 package com.github.he305.contentcore.streamlist.domain.validators;
 
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
+import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
 
 public interface StreamListPlatformValidator {
-    boolean isStreamChannel(ContentAccountPlatform contentAccountPlatform);
+    boolean isStreamChannel(Platform contentAccountPlatform);
 }

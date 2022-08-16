@@ -6,9 +6,9 @@ import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEnt
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -104,7 +104,7 @@ class CreateWatchingListServiceImplTest {
         MemberId memberId = new MemberId(id);
 
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.empty());
-        Mockito.when(listContentAccountMapper.toContentAccountEntry(accountDtos)).thenReturn(Set.of(new ContentAccountEntry("test", new ContentAccountId(UUID.randomUUID()))));
+        Mockito.when(listContentAccountMapper.toContentAccountEntry(accountDtos)).thenReturn(Set.of(new ContentAccountEntry("test", new WatchingListContentAccountId(UUID.randomUUID()))));
 
         assertDoesNotThrow(() ->
                 underTest.execute(command));

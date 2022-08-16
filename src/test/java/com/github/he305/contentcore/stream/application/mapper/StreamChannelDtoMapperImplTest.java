@@ -1,12 +1,12 @@
 package com.github.he305.contentcore.stream.application.mapper;
 
 import com.github.he305.contentcore.contentaccount.application.exchange.ContentAccountExchangeService;
+import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
+import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
 import com.github.he305.contentcore.stream.application.dto.StreamChannelDto;
 import com.github.he305.contentcore.stream.domain.model.StreamChannel;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
 import com.github.he305.contentcore.stream.domain.model.values.StreamChannelContentAccountId;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,8 +31,8 @@ class StreamChannelDtoMapperImplTest {
     void toDto() {
         UUID id = UUID.randomUUID();
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), StreamChannelPlatform.TWITCH);
-        ContentAccount contentAccount = new ContentAccount("name", ContentAccountPlatform.TWITCH);
-        Mockito.when(contentAccountExchangeService.getContentAccountById(id)).thenReturn(contentAccount);
+        ContentAccountDetails contentAccountDetails = new ContentAccountDetails("name", Platform.TWITCH);
+        Mockito.when(contentAccountExchangeService.getContentAccountById(id)).thenReturn(contentAccountDetails);
 
         StreamChannelDto expected = new StreamChannelDto(
                 UUID.randomUUID(),
