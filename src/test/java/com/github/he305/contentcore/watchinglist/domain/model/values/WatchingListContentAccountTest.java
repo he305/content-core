@@ -1,12 +1,18 @@
 package com.github.he305.contentcore.watchinglist.domain.model.values;
 
 import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccount;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class WatchingListContentAccountTest {
+
+    @Test
+    void testEquals_verifier() {
+        EqualsVerifier.simple().forClass(WatchingListContentAccount.class).verify();
+    }
 
     @Test
     void testEquals_equals() {
