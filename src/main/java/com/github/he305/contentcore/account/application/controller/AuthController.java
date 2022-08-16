@@ -12,8 +12,8 @@ import com.github.he305.contentcore.account.application.service.LoginAccountServ
 import com.github.he305.contentcore.account.application.service.RefreshTokenService;
 import com.github.he305.contentcore.account.application.service.RegisterAccountService;
 import com.github.he305.contentcore.account.application.service.RegisterServiceService;
-import com.github.he305.contentcore.account.domain.exceptions.AccountAlreadyExistsException;
 import com.github.he305.contentcore.account.domain.exceptions.AccountLoginException;
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.shared.validators.StringValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class AuthController {
             String password = StringValidator.isNullOrEmpty(dto.getPassword());
             RegisterAccountCommand command = new RegisterAccountCommand(username, password);
             return ResponseEntity.ok(registerAccountService.execute(command));
-        } catch (AccountAlreadyExistsException | IllegalArgumentException ex) {
+        } catch (ContentCoreException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -70,7 +70,7 @@ public class AuthController {
             String password = StringValidator.isNullOrEmpty(dto.getPassword());
             RegisterServiceCommand command = new RegisterServiceCommand(username, password);
             return ResponseEntity.ok(registerServiceService.execute(command));
-        } catch (AccountAlreadyExistsException | IllegalArgumentException ex) {
+        } catch (ContentCoreException ex) {
             return ResponseEntity.badRequest().build();
         }
     }

@@ -1,6 +1,7 @@
 package com.github.he305.contentcore.stream.infra.repository;
 
 import com.github.he305.contentcore.shared.events.EventPublisher;
+import com.github.he305.contentcore.stream.domain.exceptions.StreamChannelNotFoundException;
 import com.github.he305.contentcore.stream.domain.exceptions.StreamChannelWithContentAccountIdNotFoundException;
 import com.github.he305.contentcore.stream.domain.model.StreamChannel;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelStatus;
@@ -36,7 +37,7 @@ public class StreamChannelRepositoryImpl implements StreamChannelRepository {
     public StreamChannel getById(UUID id) {
         Optional<StreamChannelJpa> jpa = jpaStreamChannelRepository.findById(id);
         if (jpa.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new StreamChannelNotFoundException();
         }
         return streamChannelJpaMapper.toDomain(jpa.get());
     }

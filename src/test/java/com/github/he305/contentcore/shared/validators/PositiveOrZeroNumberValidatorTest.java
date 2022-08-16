@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.shared.validators;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreArgumentException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,6 +25,6 @@ class PositiveOrZeroNumberValidatorTest {
     @Test
     void validate_notValid() {
         int number = -1;
-        assertThrows(IllegalArgumentException.class, () -> PositiveOrZeroNumberValidator.validate(number));
+        assertThrows(ContentCoreArgumentException.class, () -> PositiveOrZeroNumberValidator.validate(number));
     }
 }

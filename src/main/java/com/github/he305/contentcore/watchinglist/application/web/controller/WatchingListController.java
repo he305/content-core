@@ -40,8 +40,12 @@ public class WatchingListController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
         CreateWatchingListCommand command = new CreateWatchingListCommand(id, dto.getData());
-        createWatchingListService.execute(command);
-        return ResponseEntity.ok().build();
+        try {
+            createWatchingListService.execute(command);
+            return ResponseEntity.ok().build();
+        } catch (ContentCoreException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping(value = "/add")
@@ -62,7 +66,11 @@ public class WatchingListController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
         MemberIdDto dto = new MemberIdDto(id);
-        return ResponseEntity.ok(getWatchingListService.getWatchingList(dto));
+        try {
+            return ResponseEntity.ok(getWatchingListService.getWatchingList(dto));
+        } catch (ContentCoreException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping(value = "/notification")
@@ -70,7 +78,11 @@ public class WatchingListController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
         GetNotificationForContentAccountQuery query = new GetNotificationForContentAccountQuery(new MemberId(id), dto.getContentAccountName(), dto.getPlatform());
-        return ResponseEntity.ok(getNotificationForContentAccountService.execute(query));
+        try {
+            return ResponseEntity.ok(getNotificationForContentAccountService.execute(query));
+        } catch (ContentCoreException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping
@@ -78,8 +90,12 @@ public class WatchingListController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UUID id = UUID.fromString(authentication.getName());
         UpdateWatchingEntryCommand command = new UpdateWatchingEntryCommand(id, dto.getData());
-        updateWatchingEntryService.updateWatchingEntry(command);
-        return ResponseEntity.ok().build();
+        try {
+            updateWatchingEntryService.updateWatchingEntry(command);
+            return ResponseEntity.ok().build();
+        } catch (ContentCoreException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping

@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.shared.validators;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreArgumentException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,21 +10,21 @@ class StringValidatorTest {
 
     @Test
     void isNullOrEmpty_nullString() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentCoreArgumentException.class, () ->
                 StringValidator.isNullOrEmpty(null));
     }
 
     @Test
     void isNullOrEmpty_blank() {
         String blank = "";
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentCoreArgumentException.class, () ->
                 StringValidator.isNullOrEmpty(blank));
     }
 
     @Test
     void isNullOrEmpty_whitespace() {
         String whitespace = " ";
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentCoreArgumentException.class, () ->
                 StringValidator.isNullOrEmpty(whitespace));
     }
 

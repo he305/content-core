@@ -1,6 +1,7 @@
 package com.github.he305.contentcore.contentaccount.infra.repositroy;
 
 import com.github.he305.contentcore.contentaccount.domain.model.ContentAccount;
+import com.github.he305.contentcore.contentaccount.domain.model.exceptions.ContentAccountNotFoundException;
 import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
 import com.github.he305.contentcore.contentaccount.domain.repository.ContentAccountRepository;
 import com.github.he305.contentcore.contentaccount.infra.data.ContentAccountData;
@@ -31,7 +32,7 @@ public class ContentAccountRepositoryImpl implements ContentAccountRepository {
     public ContentAccount getById(UUID id) {
         Optional<ContentAccountData> data = jpaContentAccountRepository.findById(id);
         if (data.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new ContentAccountNotFoundException();
         }
         return contentAccountDataMapper.toDomain(data.get());
     }
