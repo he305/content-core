@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.watchinglist.application.web.controller;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.dto.*;
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
@@ -83,7 +84,7 @@ class WatchingListControllerTest {
         AddWatchingEntryDto dto = new AddWatchingEntryDto();
         ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
 
-        doThrow(IllegalArgumentException.class).when(addWatchingEntryService).addWatchingEntry(Mockito.any());
+        doThrow(ContentCoreException.class).when(addWatchingEntryService).addWatchingEntry(Mockito.any());
 
         ResponseEntity<Void> actual = underTest.addWatchingEntry(dto);
         assertEquals(expected, actual);
@@ -141,7 +142,7 @@ class WatchingListControllerTest {
         UUID id = setSecurityContext();
         DeleteWatchingEntryDto dto = new DeleteWatchingEntryDto("name");
         DeleteWatchingEntryCommand command = new DeleteWatchingEntryCommand(id, "name");
-        doThrow(IllegalArgumentException.class).when(deleteWatchingEntryService).execute(command);
+        doThrow(ContentCoreException.class).when(deleteWatchingEntryService).execute(command);
 
         ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
         ResponseEntity<Void> actual = underTest.deleteWatchingListEntry(dto);

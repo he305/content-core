@@ -1,8 +1,11 @@
 package com.github.he305.contentcore.watchinglist.application.service;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
+import com.github.he305.contentcore.watchinglist.application.exceptions.ContentAccountSetEmptyException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListAlreadyExistsException;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
@@ -47,7 +50,7 @@ class CreateWatchingListServiceImplTest {
         MemberId memberId = new MemberId(id);
 
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.of(new WatchingList(UUID.randomUUID(), id)));
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListAlreadyExistsException.class, () ->
                 underTest.execute(command));
     }
 
@@ -70,7 +73,7 @@ class CreateWatchingListServiceImplTest {
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.empty());
         Mockito.when(listContentAccountMapper.toContentAccountEntry(accountDtos)).thenReturn(Set.of());
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentAccountSetEmptyException.class, () ->
                 underTest.execute(command));
     }
 
@@ -83,7 +86,7 @@ class CreateWatchingListServiceImplTest {
                 .watchingList(List.of())
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentCoreException.class, () ->
                 underTest.execute(command));
     }
 

@@ -1,6 +1,9 @@
 package com.github.he305.contentcore.watchinglist.domain.model;
 
 import com.github.he305.contentcore.shared.util.SetUtils;
+import com.github.he305.contentcore.watchinglist.application.exceptions.ContentAccountSetEmptyException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryAlreadyExistException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryNotExistsException;
 import com.github.he305.contentcore.watchinglist.domain.events.ContentAccountAddedEvent;
 import com.github.he305.contentcore.watchinglist.domain.events.ContentAccountRemovedEvent;
 import com.github.he305.contentcore.watchinglist.domain.events.WatchingListContentAccountAddedEvent;
@@ -37,12 +40,12 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
 
     public void updateWatchingListEntry(String name, Set<ContentAccountEntry> contentAccountSet) {
         if (contentAccountSet.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new ContentAccountSetEmptyException();
         }
 
         Optional<WatchingListEntry> existingEntry = watchingListEntries.stream().filter(entry -> entry.getContentCreatorName().equals(name)).findAny();
         if (existingEntry.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new WatchingListEntryNotExistsException(name);
         }
 
         WatchingListEntry watchingListEntry = existingEntry.get();
@@ -66,12 +69,12 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
 
     public void addWatchingListEntry(String name, Set<ContentAccountEntry> contentAccountSet) {
         if (contentAccountSet.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new ContentAccountSetEmptyException();
         }
 
         Optional<WatchingListEntry> existingEntry = watchingListEntries.stream().filter(entry -> entry.getContentCreatorName().equals(name)).findAny();
         if (existingEntry.isPresent()) {
-            throw new IllegalArgumentException();
+            throw new WatchingListEntryAlreadyExistException(name);
         }
 
         WatchingListEntry watchingListEntry = new WatchingListEntry(new ContentCreator(name));
@@ -88,7 +91,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
     public void deleteWatchingListEntry(String entryName) {
         WatchingListEntry existingEntry = watchingListEntries.stream()
                 .filter(entry -> entry.getContentCreatorName().equals(entryName))
-                .findAny().orElseThrow(IllegalArgumentException::new);
+                .findAny().orElseThrow(() -> new WatchingListEntryNotExistsException(entryName));
 
         Set<ContentAccountEntry> entries = existingEntry.getContentAccountSet();
 

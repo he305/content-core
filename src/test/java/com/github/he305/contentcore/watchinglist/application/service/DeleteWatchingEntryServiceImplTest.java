@@ -1,6 +1,8 @@
 package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryNotExistsException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListNotExistsException;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
@@ -40,7 +42,7 @@ class DeleteWatchingEntryServiceImplTest {
         MemberId memberId = new MemberId(id);
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListNotExistsException.class, () ->
                 underTest.execute(command));
     }
 
@@ -66,7 +68,7 @@ class DeleteWatchingEntryServiceImplTest {
         MemberId memberId = new MemberId(id);
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.of(watchingList));
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListEntryNotExistsException.class, () ->
                 underTest.execute(command));
     }
 
