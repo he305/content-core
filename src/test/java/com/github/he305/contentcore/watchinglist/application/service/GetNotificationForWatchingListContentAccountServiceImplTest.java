@@ -2,6 +2,7 @@ package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationDto;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListNotExistsException;
 import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccount;
 import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccountExchangeService;
 import com.github.he305.contentcore.watchinglist.application.mapper.query.NotificationDtoMapper;
@@ -49,7 +50,7 @@ class GetNotificationForWatchingListContentAccountServiceImplTest {
                 ContentAccountPlatform.TWITCH
         );
         Mockito.when(watchingListRepository.getWatchingListByMemberId(id)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> underTest.execute(query));
+        assertThrows(WatchingListNotExistsException.class, () -> underTest.execute(query));
     }
 
     @Test

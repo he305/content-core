@@ -3,6 +3,7 @@ package com.github.he305.contentcore.watchinglist.application.service;
 import com.github.he305.contentcore.watchinglist.application.commands.UpdateWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListNotExistsException;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
@@ -48,7 +49,7 @@ class UpdateWatchingEntryServiceImplTest {
 
         Mockito.when(watchingListRepository.getWatchingListByMemberId(memberId)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalStateException.class, () ->
+        assertThrows(WatchingListNotExistsException.class, () ->
                 underTest.updateWatchingEntry(command));
     }
 

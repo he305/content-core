@@ -1,5 +1,8 @@
 package com.github.he305.contentcore.watchinglist.domain.model;
 
+import com.github.he305.contentcore.watchinglist.application.exceptions.ContentAccountSetEmptyException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryAlreadyExistException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryNotExistsException;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
@@ -21,7 +24,7 @@ class WatchingListTest {
         String name = "testName";
         Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new WatchingListContentAccountId(UUID.randomUUID())));
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListEntryNotExistsException.class, () ->
                 watchingList.updateWatchingListEntry(name, set));
     }
 
@@ -32,7 +35,7 @@ class WatchingListTest {
         String name = "testName";
         Set<ContentAccountEntry> set = Set.of();
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentAccountSetEmptyException.class, () ->
                 watchingList.updateWatchingListEntry(name, set));
     }
 
@@ -74,7 +77,7 @@ class WatchingListTest {
         String name = "testName";
         Set<ContentAccountEntry> set = Set.of();
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentAccountSetEmptyException.class, () ->
                 watchingList.addWatchingListEntry(name, set));
     }
 
@@ -86,7 +89,7 @@ class WatchingListTest {
         Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", new WatchingListContentAccountId(UUID.randomUUID())));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListEntryAlreadyExistException.class, () ->
                 watchingList.addWatchingListEntry(name, set));
     }
 
@@ -125,7 +128,7 @@ class WatchingListTest {
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
         assertEquals(1, entryList.size());
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListEntryNotExistsException.class, () ->
                 watchingList.deleteWatchingListEntry("another name"));
     }
 

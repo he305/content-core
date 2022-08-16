@@ -2,6 +2,7 @@ package com.github.he305.contentcore.watchinglist.application.service;
 
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationDto;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListNotExistsException;
 import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccount;
 import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccountExchangeService;
 import com.github.he305.contentcore.watchinglist.application.mapper.query.NotificationDtoMapper;
@@ -30,7 +31,7 @@ public class GetNotificationForContentAccountServiceImpl implements GetNotificat
     public GetNotificationForContentAccountDto execute(GetNotificationForContentAccountQuery query) {
         Optional<WatchingList> optionalWatchingList = watchingListRepository.getWatchingListByMemberId(query.getMemberId());
         if (optionalWatchingList.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new WatchingListNotExistsException();
         }
 
         WatchingListContentAccount watchingListContentAccount = new WatchingListContentAccount(query.getContentAccountName(), query.getPlatform());

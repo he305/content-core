@@ -1,6 +1,8 @@
 package com.github.he305.contentcore.watchinglist.application.service;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListAlreadyExistsException;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
@@ -22,13 +24,13 @@ public class CreateWatchingListServiceImpl implements CreateWatchingListService 
     @Override
     public void execute(CreateWatchingListCommand command) {
         if (command.getWatchingList().isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new ContentCoreException("Invalid command structure");
         }
 
         MemberId memberId = new MemberId(command.getMemberId());
         Optional<WatchingList> optionalWatchingList = watchingListRepository.getWatchingListByMemberId(memberId);
         if (optionalWatchingList.isPresent()) {
-            throw new IllegalArgumentException();
+            throw new WatchingListAlreadyExistsException();
         }
 
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), command.getMemberId());

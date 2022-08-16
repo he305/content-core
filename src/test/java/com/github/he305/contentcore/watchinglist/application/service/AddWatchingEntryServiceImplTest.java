@@ -3,6 +3,8 @@ package com.github.he305.contentcore.watchinglist.application.service;
 import com.github.he305.contentcore.watchinglist.application.commands.AddWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.WatchingListEntryDto;
+import com.github.he305.contentcore.watchinglist.application.exceptions.ContentAccountSetEmptyException;
+import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryAlreadyExistException;
 import com.github.he305.contentcore.watchinglist.application.mapper.ListContentAccountMapper;
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
@@ -78,7 +80,7 @@ class AddWatchingEntryServiceImplTest {
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idFound)).thenReturn(Optional.of(existingWatchingList));
         Mockito.when(listContentAccountMapper.toContentAccountEntry(contentAccountDtos)).thenReturn(Set.of());
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(ContentAccountSetEmptyException.class, () ->
                 underTest.addWatchingEntry(command));
     }
 
@@ -102,7 +104,7 @@ class AddWatchingEntryServiceImplTest {
         Mockito.when(watchingListRepository.getWatchingListByMemberId(idFound)).thenReturn(Optional.of(existingWatchingList));
         Mockito.when(listContentAccountMapper.toContentAccountEntry(contentAccountDtos)).thenReturn(Set.of(new ContentAccountEntry("test", new WatchingListContentAccountId(UUID.randomUUID()))));
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(WatchingListEntryAlreadyExistException.class, () ->
                 underTest.addWatchingEntry(command));
     }
 

@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.watchinglist.application.web.controller;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.watchinglist.application.commands.AddWatchingEntryCommand;
 import com.github.he305.contentcore.watchinglist.application.commands.CreateWatchingListCommand;
 import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
@@ -51,7 +52,7 @@ public class WatchingListController {
         try {
             addWatchingEntryService.addWatchingEntry(command);
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException ex) {
+        } catch (ContentCoreException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -89,7 +90,7 @@ public class WatchingListController {
         try {
             deleteWatchingEntryService.execute(command);
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException ex) {
+        } catch (ContentCoreException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
