@@ -69,6 +69,17 @@ class WatchingListControllerTest {
     }
 
     @Test
+    void createWatchingList_exception() {
+        setSecurityContext();
+        CreateWatchingListDto dto = new CreateWatchingListDto();
+        doThrow(ContentCoreException.class).when(createWatchingListService).execute(Mockito.any());
+
+        ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
+        ResponseEntity<Void> actual = underTest.createWatchingList(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void addWatchingEntry_valid() {
         setSecurityContext();
         AddWatchingEntryDto dto = new AddWatchingEntryDto();
@@ -102,11 +113,34 @@ class WatchingListControllerTest {
     }
 
     @Test
+    void getWatchingList_exception() {
+        UUID id = setSecurityContext();
+        MemberIdDto dto = new MemberIdDto(id);
+        Mockito.when(getWatchingListService.getWatchingList(dto)).thenThrow(ContentCoreException.class);
+
+        ResponseEntity<GetWatchingListQuery> expected = ResponseEntity.badRequest().build();
+        ResponseEntity<GetWatchingListQuery> actual = underTest.getWatchingList();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void updateWatchingListEntry() {
         setSecurityContext();
         UpdateWatchingEntryDto dto = new UpdateWatchingEntryDto();
         ResponseEntity<Void> expected = ResponseEntity.ok().build();
 
+        ResponseEntity<Void> actual = underTest.updateWatchingListEntry(dto);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateWatchingListEntry_exception() {
+        setSecurityContext();
+        UpdateWatchingEntryDto dto = new UpdateWatchingEntryDto();
+
+        doThrow(ContentCoreException.class).when(updateWatchingEntryService).updateWatchingEntry(Mockito.any());
+
+        ResponseEntity<Void> expected = ResponseEntity.badRequest().build();
         ResponseEntity<Void> actual = underTest.updateWatchingListEntry(dto);
         assertEquals(expected, actual);
     }
@@ -131,9 +165,29 @@ class WatchingListControllerTest {
         Mockito.when(getNotificationForContentAccountService.execute(query)).thenReturn(dto);
 
         ResponseEntity<GetNotificationForContentAccountDto> expected = ResponseEntity.ok(dto);
-
         ResponseEntity<GetNotificationForContentAccountDto> actual = underTest.getNotificationsForContentAccount(entryDto);
 
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getNotificationsForContentAccount_exception() {
+        UUID id = setSecurityContext();
+        NotificationForContentAccountDto entryDto = new NotificationForContentAccountDto(
+                "name",
+                ContentAccountPlatform.TWITCH
+        );
+
+        GetNotificationForContentAccountQuery query = new GetNotificationForContentAccountQuery(
+                new MemberId(id),
+                "name",
+                ContentAccountPlatform.TWITCH
+        );
+
+        Mockito.when(getNotificationForContentAccountService.execute(query)).thenThrow(ContentCoreException.class);
+
+        ResponseEntity<GetNotificationForContentAccountDto> expected = ResponseEntity.badRequest().build();
+        ResponseEntity<GetNotificationForContentAccountDto> actual = underTest.getNotificationsForContentAccount(entryDto);
         assertEquals(expected, actual);
     }
 
@@ -151,9 +205,8 @@ class WatchingListControllerTest {
 
     @Test
     void deleteWatchingListEntry_valid() {
-        UUID id = setSecurityContext();
+        setSecurityContext();
         DeleteWatchingEntryDto dto = new DeleteWatchingEntryDto("name");
-        DeleteWatchingEntryCommand command = new DeleteWatchingEntryCommand(id, "name");
 
         ResponseEntity<Void> expected = ResponseEntity.ok().build();
         ResponseEntity<Void> actual = underTest.deleteWatchingListEntry(dto);

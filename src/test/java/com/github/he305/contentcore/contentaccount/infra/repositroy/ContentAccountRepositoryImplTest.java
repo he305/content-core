@@ -2,6 +2,7 @@ package com.github.he305.contentcore.contentaccount.infra.repositroy;
 
 import com.github.he305.contentcore.contentaccount.domain.model.ContentAccount;
 import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
+import com.github.he305.contentcore.contentaccount.domain.model.exceptions.ContentAccountNotFoundException;
 import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
 import com.github.he305.contentcore.contentaccount.infra.data.ContentAccountData;
 import com.github.he305.contentcore.contentaccount.infra.jpa.JpaContentAccountRepository;
@@ -56,7 +57,7 @@ class ContentAccountRepositoryImplTest {
         UUID id = UUID.randomUUID();
         Mockito.when(jpaContentAccountRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> underTest.getById(id));
+        assertThrows(ContentAccountNotFoundException.class, () -> underTest.getById(id));
     }
 
     @Test

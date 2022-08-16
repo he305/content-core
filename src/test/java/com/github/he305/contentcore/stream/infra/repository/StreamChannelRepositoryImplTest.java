@@ -1,6 +1,7 @@
 package com.github.he305.contentcore.stream.infra.repository;
 
 import com.github.he305.contentcore.shared.events.EventPublisher;
+import com.github.he305.contentcore.stream.domain.exceptions.StreamChannelNotFoundException;
 import com.github.he305.contentcore.stream.domain.exceptions.StreamChannelWithContentAccountIdNotFoundException;
 import com.github.he305.contentcore.stream.domain.model.StreamChannel;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
@@ -77,7 +78,7 @@ class StreamChannelRepositoryImplTest {
     void getById_empty() {
         UUID id = UUID.randomUUID();
         Mockito.when(jpaStreamChannelRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> underTest.getById(id));
+        assertThrows(StreamChannelNotFoundException.class, () -> underTest.getById(id));
     }
 
     @Test

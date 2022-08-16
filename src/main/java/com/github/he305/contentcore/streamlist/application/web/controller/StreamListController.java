@@ -1,9 +1,9 @@
 package com.github.he305.contentcore.streamlist.application.web.controller;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.streamlist.application.dto.StreamListDto;
 import com.github.he305.contentcore.streamlist.application.query.GetStreamListQuery;
 import com.github.he305.contentcore.streamlist.application.services.GetStreamListService;
-import com.github.he305.contentcore.streamlist.domain.exceptions.StreamListNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,7 +28,7 @@ public class StreamListController {
         GetStreamListQuery query = new GetStreamListQuery(id);
         try {
             return ResponseEntity.ok(getStreamListService.execute(query));
-        } catch (StreamListNotFoundException ex) {
+        } catch (ContentCoreException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
