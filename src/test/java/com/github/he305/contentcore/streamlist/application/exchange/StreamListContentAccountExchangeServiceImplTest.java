@@ -3,8 +3,6 @@ package com.github.he305.contentcore.streamlist.application.exchange;
 import com.github.he305.contentcore.contentaccount.application.exchange.ContentAccountExchangeService;
 import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
 import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,9 +26,8 @@ class StreamListContentAccountExchangeServiceImplTest {
     @Test
     void getContentAccount() {
         UUID id = UUID.randomUUID();
-        ContentAccount contentAccount = new ContentAccount("name", ContentAccountPlatform.TWITCH);
         ContentAccountDetails expected = new ContentAccountDetails("name", Platform.TWITCH);
-        Mockito.when(contentAccountExchangeService.getContentAccountById(id)).thenReturn(contentAccount);
+        Mockito.when(contentAccountExchangeService.getContentAccountById(id)).thenReturn(expected);
         ContentAccountDetails actual = underTest.getContentAccount(id);
         assertEquals(expected, actual);
     }

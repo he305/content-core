@@ -1,7 +1,7 @@
 package com.github.he305.contentcore.watchinglist.domain.model.entities;
 
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -14,20 +14,20 @@ import java.util.UUID;
 public class ContentAccountEntry {
     private final UUID id;
     private final String alias;
-    private final ContentAccountId contentAccountId;
+    private final WatchingListContentAccountId watchingListContentAccountId;
     private final Set<NotificationId> notificationIds;
 
-    public ContentAccountEntry(String alias, ContentAccountId contentAccountId) {
+    public ContentAccountEntry(String alias, WatchingListContentAccountId watchingListContentAccountId) {
         this.id = UUID.randomUUID();
         this.alias = alias;
-        this.contentAccountId = contentAccountId;
+        this.watchingListContentAccountId = watchingListContentAccountId;
         this.notificationIds = new HashSet<>();
     }
 
-    public ContentAccountEntry(UUID id, String alias, ContentAccountId contentAccountId, Set<NotificationId> notificationIds) {
+    public ContentAccountEntry(UUID id, String alias, WatchingListContentAccountId watchingListContentAccountId, Set<NotificationId> notificationIds) {
         this.id = id;
         this.alias = alias;
-        this.contentAccountId = contentAccountId;
+        this.watchingListContentAccountId = watchingListContentAccountId;
         this.notificationIds = notificationIds;
     }
 

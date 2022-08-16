@@ -1,8 +1,8 @@
 package com.github.he305.contentcore.watchinglist.domain.model.entities;
 
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -43,7 +43,7 @@ public class WatchingListEntry {
     public boolean addContentAccount(ContentAccountEntry newEntry) {
         Optional<ContentAccountEntry> entry = contentAccountSet
                 .stream()
-                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(newEntry.getContentAccountId()))
+                .filter(contentAccountEntry -> contentAccountEntry.getWatchingListContentAccountId().equals(newEntry.getWatchingListContentAccountId()))
                 .findAny();
         if (entry.isPresent()) {
             return false;
@@ -54,7 +54,7 @@ public class WatchingListEntry {
     public boolean removeContentAccount(ContentAccountEntry newEntry) {
         Optional<ContentAccountEntry> entry = contentAccountSet
                 .stream()
-                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(newEntry.getContentAccountId()))
+                .filter(contentAccountEntry -> contentAccountEntry.getWatchingListContentAccountId().equals(newEntry.getWatchingListContentAccountId()))
                 .findAny();
         if (entry.isEmpty()) {
             return false;
@@ -63,10 +63,10 @@ public class WatchingListEntry {
         return contentAccountSet.remove(entry.get());
     }
 
-    public void addNotificationForContentAccountId(ContentAccountId contentAccountId, UUID notificationId) {
+    public void addNotificationForContentAccountId(WatchingListContentAccountId watchingListContentAccountId, UUID notificationId) {
         Optional<ContentAccountEntry> entry = contentAccountSet
                 .stream()
-                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(contentAccountId))
+                .filter(contentAccountEntry -> contentAccountEntry.getWatchingListContentAccountId().equals(watchingListContentAccountId))
                 .findAny();
         if (entry.isEmpty()) {
             return;
@@ -74,10 +74,10 @@ public class WatchingListEntry {
         entry.get().addNotificationId(new NotificationId(notificationId));
     }
 
-    public Set<NotificationId> getAndDeleteNotificationsForContentAccountId(ContentAccountId contentAccountId) {
+    public Set<NotificationId> getAndDeleteNotificationsForContentAccountId(WatchingListContentAccountId watchingListContentAccountId) {
         Optional<ContentAccountEntry> entry = contentAccountSet
                 .stream()
-                .filter(contentAccountEntry -> contentAccountEntry.getContentAccountId().equals(contentAccountId))
+                .filter(contentAccountEntry -> contentAccountEntry.getWatchingListContentAccountId().equals(watchingListContentAccountId))
                 .findAny();
         if (entry.isEmpty()) {
             return Set.of();
@@ -88,9 +88,9 @@ public class WatchingListEntry {
         return set;
     }
 
-    public Set<ContentAccountId> getContentAccountIdSet() {
+    public Set<WatchingListContentAccountId> getContentAccountIdSet() {
         return contentAccountSet.stream()
-                .map(contentAccountEntry -> new ContentAccountId(contentAccountEntry.getContentAccountId().getId()))
+                .map(contentAccountEntry -> new WatchingListContentAccountId(contentAccountEntry.getWatchingListContentAccountId().getId()))
                 .collect(Collectors.toSet());
     }
 }

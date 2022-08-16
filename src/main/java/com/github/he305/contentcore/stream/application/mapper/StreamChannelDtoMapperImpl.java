@@ -1,9 +1,9 @@
 package com.github.he305.contentcore.stream.application.mapper;
 
 import com.github.he305.contentcore.contentaccount.application.exchange.ContentAccountExchangeService;
+import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
 import com.github.he305.contentcore.stream.application.dto.StreamChannelDto;
 import com.github.he305.contentcore.stream.domain.model.StreamChannel;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +14,11 @@ public class StreamChannelDtoMapperImpl implements StreamChannelDtoMapper {
 
     @Override
     public StreamChannelDto toDto(StreamChannel streamChannel) {
-        ContentAccount contentAccount = contentAccountExchangeService.getContentAccountById(streamChannel.getStreamChannelContentAccountId().getId());
+        ContentAccountDetails details = contentAccountExchangeService.getContentAccountById(streamChannel.getStreamChannelContentAccountId().getId());
 
         return new StreamChannelDto(
                 streamChannel.getId(),
-                contentAccount.getName(),
+                details.getName(),
                 streamChannel.getPlatform(),
                 streamChannel.isLive()
         );

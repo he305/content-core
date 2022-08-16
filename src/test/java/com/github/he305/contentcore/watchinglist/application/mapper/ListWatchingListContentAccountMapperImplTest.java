@@ -2,8 +2,8 @@ package com.github.he305.contentcore.watchinglist.application.mapper;
 
 import com.github.he305.contentcore.watchinglist.application.dto.ContentAccountDto;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class ListContentAccountMapperImplTest {
+class ListWatchingListContentAccountMapperImplTest {
 
     @Mock
     private ContentAccountDtoIdMapper contentAccountDtoIdMapper;
@@ -29,7 +29,7 @@ class ListContentAccountMapperImplTest {
     @Test
     void toContentAccountIdSet() {
         ContentAccountDto data = new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH);
-        ContentAccountId mocked = new ContentAccountId(UUID.randomUUID());
+        WatchingListContentAccountId mocked = new WatchingListContentAccountId(UUID.randomUUID());
         ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", mocked);
         Set<ContentAccountEntry> expected = Set.of(contentAccountEntry);
         Mockito.when(contentAccountDtoIdMapper.toContentAccountEntry(data)).thenReturn(contentAccountEntry);
@@ -40,7 +40,7 @@ class ListContentAccountMapperImplTest {
 
     @Test
     void toContentAccountDtoList() {
-        ContentAccountId data = new ContentAccountId(UUID.randomUUID());
+        WatchingListContentAccountId data = new WatchingListContentAccountId(UUID.randomUUID());
         ContentAccountEntry contentAccountEntry = new ContentAccountEntry("test", data);
         ContentAccountDto mocked = new ContentAccountDto("test", "name", ContentAccountPlatform.TWITCH);
         List<ContentAccountDto> expected = List.of(mocked);

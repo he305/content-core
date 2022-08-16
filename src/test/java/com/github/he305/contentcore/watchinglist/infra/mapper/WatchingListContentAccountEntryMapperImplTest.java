@@ -1,8 +1,8 @@
 package com.github.he305.contentcore.watchinglist.infra.mapper;
 
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import com.github.he305.contentcore.watchinglist.infra.data.ContentAccountEntryData;
 import com.github.he305.contentcore.watchinglist.infra.data.NotificationIdData;
 import com.github.he305.contentcore.watchinglist.infra.data.WatchingListEntryData;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ContentAccountEntryMapperImplTest {
+class WatchingListContentAccountEntryMapperImplTest {
 
     private ContentAccountEntryMapperImpl underTest;
 
@@ -35,7 +35,7 @@ class ContentAccountEntryMapperImplTest {
         ContentAccountEntry entry = new ContentAccountEntry(
                 id,
                 "test",
-                new ContentAccountId(contentAccountId),
+                new WatchingListContentAccountId(contentAccountId),
                 Set.of(new NotificationId(notificationId))
         );
         ContentAccountEntryData expected = new ContentAccountEntryData(
@@ -62,7 +62,7 @@ class ContentAccountEntryMapperImplTest {
         ContentAccountEntry expected = new ContentAccountEntry(
                 id,
                 "test",
-                new ContentAccountId(contentAccountId),
+                new WatchingListContentAccountId(contentAccountId),
                 Set.of(new NotificationId(notificationId))
         );
         ContentAccountEntryData jpa = new ContentAccountEntryData(

@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Value
 @Getter
-public class ContentAccountId {
+public class WatchingListContentAccountId {
     UUID id;
 }

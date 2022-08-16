@@ -1,12 +1,13 @@
 package com.github.he305.contentcore.watchinglist.application.mapper.query;
 
+import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
+import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetContentAccountDto;
+import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccountExchangeService;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccount;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountPlatform;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
-import com.github.he305.contentcore.watchinglist.domain.service.ContentAccountExchangeService;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,17 +21,17 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class GetContentAccountDtoMapperImplTest {
+class GetWatchingListContentAccountDtoMapperImplTest {
 
     @Mock
-    private ContentAccountExchangeService contentAccountExchangeService;
+    private WatchingListContentAccountExchangeService watchingListContentAccountExchangeService;
 
     @InjectMocks
     private GetContentAccountDtoMapperImpl underTest;
 
     @Test
     void toDto() {
-        ContentAccountId id = new ContentAccountId(UUID.randomUUID());
+        WatchingListContentAccountId id = new WatchingListContentAccountId(UUID.randomUUID());
         ContentAccountEntry entry = new ContentAccountEntry(
                 UUID.randomUUID(),
                 "test",
@@ -42,8 +43,8 @@ class GetContentAccountDtoMapperImplTest {
                 )
         );
 
-        ContentAccount account = new ContentAccount("name", ContentAccountPlatform.TWITCH);
-        Mockito.when(contentAccountExchangeService.getContentAccount(id)).thenReturn(account);
+        ContentAccountDetails account = new ContentAccountDetails("name", Platform.TWITCH);
+        Mockito.when(watchingListContentAccountExchangeService.getContentAccount(id.getId())).thenReturn(account);
         GetContentAccountDto expected = new GetContentAccountDto(
                 "test",
                 "name",

@@ -4,8 +4,8 @@ import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatc
 import com.github.he305.contentcore.watchinglist.domain.model.WatchingList;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
-import com.github.he305.contentcore.watchinglist.domain.model.values.ContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
+import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import com.github.he305.contentcore.watchinglist.domain.repository.WatchingListRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,8 +48,8 @@ class DeleteWatchingEntryServiceImplTest {
     void execute_notEntryFound() {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
         String name = "testName";
-        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
-        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", contentAccountId));
+        WatchingListContentAccountId watchingListContentAccountId = new WatchingListContentAccountId(UUID.randomUUID());
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", watchingListContentAccountId));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
@@ -74,8 +74,8 @@ class DeleteWatchingEntryServiceImplTest {
     void execute_valid() {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
         String name = "testName";
-        ContentAccountId contentAccountId = new ContentAccountId(UUID.randomUUID());
-        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", contentAccountId));
+        WatchingListContentAccountId watchingListContentAccountId = new WatchingListContentAccountId(UUID.randomUUID());
+        Set<ContentAccountEntry> set = Set.of(new ContentAccountEntry("test", watchingListContentAccountId));
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
         List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
