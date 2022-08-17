@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -30,7 +31,7 @@ class NotificationServiceImplTest {
     @Test
     void findById() {
         UUID id = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         Notification notification = new Notification("mess", id, time);
         Mockito.when(notificationRepository.findById(id)).thenReturn(notification);
         Notification actual = underTest.findById(id);

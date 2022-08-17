@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ class StreamChannelTest {
         assertEquals(StreamChannelStatus.FROZEN, streamChannel.getStatus());
         assertDoesNotThrow(streamChannel::startObserving);
 
-        StreamData data = new StreamData("game", "title", 0, LocalDateTime.now());
+        StreamData data = new StreamData("game", "title", 0, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
         assertTrue(streamChannel.isLive());
         assertDoesNotThrow(streamChannel::freeze);
@@ -95,7 +96,7 @@ class StreamChannelTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
 
         streamChannel.addStreamData(data);
 
@@ -117,10 +118,10 @@ class StreamChannelTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
 
-        StreamData newData = new StreamData("game", "title", 11, LocalDateTime.now());
+        StreamData newData = new StreamData("game", "title", 11, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(newData);
 
         assertEquals(1, streamChannel.getStreams().size());
@@ -131,7 +132,7 @@ class StreamChannelTest {
         assertEquals(newData.getViewerCount(), savedData.getViewerCount());
         assertEquals(newData.getStreamDataTime(), savedData.getStreamDataTime());
 
-        StreamData lastData = new StreamData("game", "title1", 11, LocalDateTime.now());
+        StreamData lastData = new StreamData("game", "title1", 11, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(lastData);
         assertEquals(3, streamChannel.getStreams().get(0).getStreamDataList().size());
     }
@@ -142,10 +143,10 @@ class StreamChannelTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         assertDoesNotThrow(() -> streamChannel.endStream(now));
         assertTrue(streamChannel.getStreams().stream().noneMatch(Stream::isLive));
     }
@@ -156,10 +157,10 @@ class StreamChannelTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         assertDoesNotThrow(() -> streamChannel.endStream(now));
         assertTrue(streamChannel.getStreams().stream().noneMatch(Stream::isLive));
 
@@ -173,7 +174,7 @@ class StreamChannelTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
 
         StreamData actual = streamChannel.getLastLiveStreamData();
@@ -186,9 +187,9 @@ class StreamChannelTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         assertDoesNotThrow(() -> streamChannel.endStream(now));
         assertTrue(streamChannel.getStreams().stream().noneMatch(Stream::isLive));
 

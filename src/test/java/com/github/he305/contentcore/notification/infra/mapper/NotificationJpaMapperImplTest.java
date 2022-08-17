@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +26,7 @@ class NotificationJpaMapperImplTest {
     void toJpa() {
         UUID id = UUID.randomUUID();
         UUID contentAccountId = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         Notification notification = new Notification(
                 id,
                 new ContentAccountId(contentAccountId),
@@ -46,7 +47,7 @@ class NotificationJpaMapperImplTest {
     void toDomain() {
         UUID id = UUID.randomUUID();
         UUID contentAccountId = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         Notification expected = new Notification(
                 id,
                 new ContentAccountId(contentAccountId),

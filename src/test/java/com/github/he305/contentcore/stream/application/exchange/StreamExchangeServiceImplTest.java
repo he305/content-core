@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +33,7 @@ class StreamExchangeServiceImplTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
 
         Mockito.when(streamChannelRepository.getByContentAccountId(new StreamChannelContentAccountId(id))).thenReturn(streamChannel);
@@ -59,7 +60,7 @@ class StreamExchangeServiceImplTest {
         StreamChannelPlatform platform = StreamChannelPlatform.TWITCH;
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(id), platform);
         assertTrue(streamChannel.getStreams().isEmpty());
-        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now());
+        StreamData data = new StreamData("name", "title", 10, LocalDateTime.now(ZoneOffset.UTC));
         streamChannel.addStreamData(data);
 
         Mockito.when(streamChannelRepository.getByContentAccountId(new StreamChannelContentAccountId(id))).thenReturn(streamChannel);

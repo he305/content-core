@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +33,7 @@ class EndStreamServiceImplTest {
         UUID id = UUID.randomUUID();
         EndStreamCommand command = new EndStreamCommand(id, LocalDateTime.now());
         StreamChannel channel = new StreamChannel(new StreamChannelContentAccountId(UUID.randomUUID()), StreamChannelPlatform.TWITCH);
-        channel.addStreamData(new StreamData("name", "title", 0, LocalDateTime.now()));
+        channel.addStreamData(new StreamData("name", "title", 0, LocalDateTime.now(ZoneOffset.UTC)));
         assertTrue(channel.isLive());
 
         Mockito.when(streamChannelRepository.getById(id)).thenReturn(channel);

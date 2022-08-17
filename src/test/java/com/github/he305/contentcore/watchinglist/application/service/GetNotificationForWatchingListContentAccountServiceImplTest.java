@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -73,7 +74,7 @@ class GetNotificationForWatchingListContentAccountServiceImplTest {
         Mockito.when(watchingListRepository.getWatchingListByMemberId(id)).thenReturn(Optional.of(watchingList));
         WatchingListContentAccount account = new WatchingListContentAccount(query.getContentAccountName(), query.getPlatform());
         Mockito.when(watchingListContentAccountExchangeService.getContentAccountId(account)).thenReturn(contentAccountId);
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         List<NotificationDto> notificationDtoList = List.of(
                 new NotificationDto(time, "data")
         );
