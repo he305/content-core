@@ -110,7 +110,7 @@ class AuthIntegrationTest extends IntegrationTestBase {
                 wrongServiceKey
         );
         json = objectMapper.writeValueAsString(dto);
-        mockMvc.perform(post("/api/auth/registerService")
+        mockMvc.perform(post("/api/auth/register-service")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
@@ -123,7 +123,7 @@ class AuthIntegrationTest extends IntegrationTestBase {
         );
         json = objectMapper.writeValueAsString(dto);
 
-        MvcResult result = mockMvc.perform(post("/api/auth/registerService")
+        MvcResult result = mockMvc.perform(post("/api/auth/register-service")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())

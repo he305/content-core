@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/watchingList")
+@RequestMapping("/api/watching-list")
 @RequiredArgsConstructor
 @Slf4j
 public class WatchingListController {
