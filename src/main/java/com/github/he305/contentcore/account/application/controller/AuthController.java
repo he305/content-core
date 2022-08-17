@@ -46,7 +46,7 @@ public class AuthController {
         return registerAccountService.execute(command);
     }
 
-    @PostMapping("/registerService")
+    @PostMapping("/register-service")
     public JwtResponseDto registerService(@RequestBody RegisterServiceDto dto) {
         if (!dto.getServiceRegisterKey().equals(serviceRegisterKey)) {
             throw new ContentCoreException("Service register key is invalid");

@@ -86,7 +86,7 @@ class StreamIntegrationTest extends IntegrationTestBase {
         );
         json = objectMapper.writeValueAsString(dto);
 
-        MvcResult result = mockMvc.perform(post("/api/auth/registerService")
+        MvcResult result = mockMvc.perform(post("/api/auth/register-service")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
@@ -103,7 +103,7 @@ class StreamIntegrationTest extends IntegrationTestBase {
     void getListAsSimpleUser_shouldFail() {
         String token = registerUser();
 
-        mockMvc.perform(get("/stream")
+        mockMvc.perform(get("/api/stream")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isForbidden());
@@ -114,7 +114,7 @@ class StreamIntegrationTest extends IntegrationTestBase {
     void getListAsService_valid() {
         String token = registerService();
 
-        mockMvc.perform(get("/stream")
+        mockMvc.perform(get("/api/stream")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
@@ -137,14 +137,14 @@ class StreamIntegrationTest extends IntegrationTestBase {
 
         String json = objectMapper.writeValueAsString(entryDto);
 
-        mockMvc.perform(post("/watchingList")
+        mockMvc.perform(post("/api/watching-list")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        MvcResult result = mockMvc.perform(get("/stream")
+        MvcResult result = mockMvc.perform(get("/api/stream")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
@@ -166,14 +166,14 @@ class StreamIntegrationTest extends IntegrationTestBase {
         );
 
         json = objectMapper.writeValueAsString(dataDto);
-        mockMvc.perform(post("/stream/data")
+        mockMvc.perform(post("/api/stream/data")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        result = mockMvc.perform(get("/stream")
+        result = mockMvc.perform(get("/api/stream")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
@@ -190,14 +190,14 @@ class StreamIntegrationTest extends IntegrationTestBase {
                 LocalDateTime.now(ZoneOffset.UTC)
         );
         json = objectMapper.writeValueAsString(streamEndDto);
-        mockMvc.perform(post("/stream/end")
+        mockMvc.perform(post("/api/stream/end")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        result = mockMvc.perform(get("/stream")
+        result = mockMvc.perform(get("/api/stream")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())

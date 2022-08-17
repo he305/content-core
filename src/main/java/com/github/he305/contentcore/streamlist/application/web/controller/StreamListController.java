@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/streamList")
+@RequestMapping("/api/stream-list")
 @RequiredArgsConstructor
 public class StreamListController {
     private final GetStreamListService getStreamListService;

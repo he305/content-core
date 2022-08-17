@@ -73,14 +73,14 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
 
         String json = objectMapper.writeValueAsString(entryDto);
 
-        mockMvc.perform(post("/watchingList")
+        mockMvc.perform(post("/api/watching-list")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        MvcResult getResult = mockMvc.perform(get("/watchingList")
+        MvcResult getResult = mockMvc.perform(get("/api/watching-list")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
@@ -116,7 +116,7 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
 
         String json = objectMapper.writeValueAsString(entryDto);
 
-        mockMvc.perform(post("/watchingList")
+        mockMvc.perform(post("/api/watching-list")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
@@ -125,14 +125,14 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
 
         DeleteWatchingEntryDto dto = new DeleteWatchingEntryDto(entryName);
         json = objectMapper.writeValueAsString(dto);
-        mockMvc.perform(delete("/watchingList")
+        mockMvc.perform(delete("/api/watching-list")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        MvcResult getResult = mockMvc.perform(get("/watchingList")
+        MvcResult getResult = mockMvc.perform(get("/api/watching-list")
                         .header("Authorization", "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
@@ -144,7 +144,7 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
         assertEquals(0, actual.getData().size());
 
         // Trying to delete again
-        mockMvc.perform(delete("/watchingList")
+        mockMvc.perform(delete("/api/watching-list")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))

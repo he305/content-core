@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/stream")
+@RequestMapping("/api/stream")
 @RequiredArgsConstructor
 public class StreamChannelController {
     private final GetStreamChannelByStatusService getStreamChannelByStatusService;

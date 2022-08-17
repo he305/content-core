@@ -1,12 +1,23 @@
 version: '3'
 services:
-  db_twitch_env:
+  content_core_db-dev:
     image: postgres
-    container_name: content_core_env
+    container_name: container_core_db-dev
     restart: always
-    ports:
-      - 5444:5432
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
-      POSTGRES_DB: content_core_db
+      POSTGRES_DB: container_core_db-dev
+  content_core-dev:
+    build:
+      context: .
+    restart: always
+    container_name: content_core-dev
+    ports:
+      - 8082:8082
+    depends_on:
+      - content_core_db-dev
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://content_core_db-dev:5432/container_core_db-dev
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
