@@ -11,6 +11,7 @@ import com.github.he305.contentcore.stream.application.services.GetStreamChannel
 import com.github.he305.contentcore.stream.application.services.PostStreamerDataService;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,12 +23,14 @@ public class StreamChannelController {
     private final EndStreamService endStreamService;
 
     @GetMapping()
+    @PreAuthorize("hasRole('SERVICE')")
     public StreamChannelList getObservableStreamChannels() {
         GetStreamChannelByStatusQuery query = new GetStreamChannelByStatusQuery(StreamChannelStatus.OBSERVABLE);
         return getStreamChannelByStatusService.execute(query);
     }
 
     @PostMapping("/data")
+    @PreAuthorize("hasRole('SERVICE')")
     public void postStreamData(@RequestBody StreamDataDto dto) {
         PostStreamerDataCommand command = new PostStreamerDataCommand(
                 dto.getStreamChannelId(),
@@ -40,6 +43,7 @@ public class StreamChannelController {
     }
 
     @PostMapping("/end")
+    @PreAuthorize("hasRole('SERVICE')")
     public void endStream(@RequestBody StreamEndDto dto) {
         EndStreamCommand command = new EndStreamCommand(dto.getStreamerChannelId(), dto.getEndTime());
         endStreamService.execute(command);
