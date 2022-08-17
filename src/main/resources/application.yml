@@ -5,17 +5,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
-  jpa:
-    defer-datasource-initialization: true
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        use_sql_comment: true
-        format_sql: true
   datasource:
-    initialization-mode: always
     url: jdbc:postgresql://127.0.0.1:5444/content_core_db
     username: admin
     password: admin
