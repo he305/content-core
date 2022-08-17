@@ -19,15 +19,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,25 +43,21 @@ class StreamChannelControllerTest {
 
     @Test
     void getStreamChannelsByStatus_error() {
-        ResponseEntity<StreamChannelList> expected = ResponseEntity.internalServerError().build();
         StreamChannelStatus status = StreamChannelStatus.OBSERVABLE;
         Mockito.when(getStreamChannelByStatusService.execute(new GetStreamChannelByStatusQuery(status))).thenThrow(ContentCoreException.class);
 
-        ResponseEntity<StreamChannelList> actual = underTest.getObservableStreamChannels();
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.getObservableStreamChannels());
     }
 
     @Test
     void getStreamChannelsByStatus_valid() {
         StreamChannelStatus status = StreamChannelStatus.OBSERVABLE;
         StreamChannelList list = new StreamChannelList(List.of(new StreamChannelDto(UUID.randomUUID(), "name", StreamChannelPlatform.TWITCH, false)));
-        ResponseEntity<StreamChannelList> expected = ResponseEntity.ok(list);
         Mockito.when(getStreamChannelByStatusService.execute(new GetStreamChannelByStatusQuery(status))).thenReturn(list);
 
-        ResponseEntity<StreamChannelList> actual = underTest.getObservableStreamChannels();
-        assertEquals(expected.getStatusCode(), actual.getStatusCode());
-        assertNotNull(expected.getBody());
-        assertEquals(expected.getBody().getChannels().size(), expected.getBody().getChannels().size());
+        StreamChannelList actual = underTest.getObservableStreamChannels();
+        assertNotNull(actual);
+        assertEquals(list.getChannels().size(), actual.getChannels().size());
     }
 
     @Test
@@ -78,10 +72,7 @@ class StreamChannelControllerTest {
                 0,
                 time));
 
-        ResponseEntity<Void> expected = ResponseEntity.internalServerError().build();
-        ResponseEntity<Void> actual = underTest.postStreamData(dto);
-
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.postStreamData(dto));
     }
 
     @Test
@@ -90,10 +81,7 @@ class StreamChannelControllerTest {
         LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamDataDto dto = new StreamDataDto(id, "name", "title", 0, time);
 
-        ResponseEntity<Void> expected = ResponseEntity.ok().build();
-        ResponseEntity<Void> actual = underTest.postStreamData(dto);
-
-        assertEquals(expected, actual);
+        assertDoesNotThrow(() -> underTest.postStreamData(dto));
     }
 
     @Test
@@ -103,9 +91,7 @@ class StreamChannelControllerTest {
         StreamEndDto dto = new StreamEndDto(id, time);
         doThrow(new ContentCoreException("smth")).when(endStreamService).execute(new EndStreamCommand(id, time));
 
-        ResponseEntity<Void> expected = ResponseEntity.internalServerError().build();
-        ResponseEntity<Void> actual = underTest.endStream(dto);
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.endStream(dto));
     }
 
     @Test
@@ -114,8 +100,6 @@ class StreamChannelControllerTest {
         LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamEndDto dto = new StreamEndDto(id, time);
 
-        ResponseEntity<Void> expected = ResponseEntity.ok().build();
-        ResponseEntity<Void> actual = underTest.endStream(dto);
-        assertEquals(expected, actual);
+        assertDoesNotThrow(() -> underTest.endStream(dto));
     }
 }

@@ -7,18 +7,14 @@ import com.github.he305.contentcore.account.application.dto.JwtRefreshTokenDto;
 import com.github.he305.contentcore.account.application.dto.JwtResponseDto;
 import com.github.he305.contentcore.account.application.dto.LoginRequestDto;
 import com.github.he305.contentcore.account.application.dto.RegisterServiceDto;
-import com.github.he305.contentcore.account.application.exceptions.JwtRefreshTokenNotValidException;
 import com.github.he305.contentcore.account.application.service.LoginAccountService;
 import com.github.he305.contentcore.account.application.service.RefreshTokenService;
 import com.github.he305.contentcore.account.application.service.RegisterAccountService;
 import com.github.he305.contentcore.account.application.service.RegisterServiceService;
-import com.github.he305.contentcore.account.domain.exceptions.AccountLoginException;
 import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.shared.validators.StringValidator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Slf4j
 public class AuthController {
 
     private final RegisterServiceService registerServiceService;
@@ -38,49 +33,33 @@ public class AuthController {
     private String serviceRegisterKey;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> login(@RequestBody LoginRequestDto dto) {
-        try {
-            LoginAccountCommand command = new LoginAccountCommand(dto.getUsername(), dto.getPassword());
-            return ResponseEntity.ok(loginAccountService.execute(command));
-        } catch (AccountLoginException ex) {
-            return ResponseEntity.badRequest().build();
-        }
+    public JwtResponseDto login(@RequestBody LoginRequestDto dto) {
+        LoginAccountCommand command = new LoginAccountCommand(dto.getUsername(), dto.getPassword());
+        return loginAccountService.execute(command);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JwtResponseDto> register(@RequestBody LoginRequestDto dto) {
-        try {
-            String username = StringValidator.isNullOrEmpty(dto.getUsername());
-            String password = StringValidator.isNullOrEmpty(dto.getPassword());
-            RegisterAccountCommand command = new RegisterAccountCommand(username, password);
-            return ResponseEntity.ok(registerAccountService.execute(command));
-        } catch (ContentCoreException ex) {
-            return ResponseEntity.badRequest().build();
-        }
+    public JwtResponseDto register(@RequestBody LoginRequestDto dto) {
+        String username = StringValidator.isNullOrEmpty(dto.getUsername());
+        String password = StringValidator.isNullOrEmpty(dto.getPassword());
+        RegisterAccountCommand command = new RegisterAccountCommand(username, password);
+        return registerAccountService.execute(command);
     }
 
     @PostMapping("/registerService")
-    public ResponseEntity<JwtResponseDto> registerService(@RequestBody RegisterServiceDto dto) {
+    public JwtResponseDto registerService(@RequestBody RegisterServiceDto dto) {
         if (!dto.getServiceRegisterKey().equals(serviceRegisterKey)) {
-            return ResponseEntity.badRequest().build();
+            throw new ContentCoreException("Service register key is invalid");
         }
 
-        try {
-            String username = StringValidator.isNullOrEmpty(dto.getUsername());
-            String password = StringValidator.isNullOrEmpty(dto.getPassword());
-            RegisterServiceCommand command = new RegisterServiceCommand(username, password);
-            return ResponseEntity.ok(registerServiceService.execute(command));
-        } catch (ContentCoreException ex) {
-            return ResponseEntity.badRequest().build();
-        }
+        String username = StringValidator.isNullOrEmpty(dto.getUsername());
+        String password = StringValidator.isNullOrEmpty(dto.getPassword());
+        RegisterServiceCommand command = new RegisterServiceCommand(username, password);
+        return registerServiceService.execute(command);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<JwtResponseDto> refreshToken(@RequestBody JwtRefreshTokenDto refreshTokenDto) {
-        try {
-            return ResponseEntity.ok(refreshTokenService.refreshToken(refreshTokenDto));
-        } catch (JwtRefreshTokenNotValidException ex) {
-            return ResponseEntity.badRequest().build();
-        }
+    public JwtResponseDto refreshToken(@RequestBody JwtRefreshTokenDto refreshTokenDto) {
+        return refreshTokenService.refreshToken(refreshTokenDto);
     }
 }

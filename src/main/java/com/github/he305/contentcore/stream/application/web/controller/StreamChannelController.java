@@ -1,6 +1,5 @@
 package com.github.he305.contentcore.stream.application.web.controller;
 
-import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.stream.application.commands.EndStreamCommand;
 import com.github.he305.contentcore.stream.application.commands.PostStreamerDataCommand;
 import com.github.he305.contentcore.stream.application.dto.StreamChannelList;
@@ -12,32 +11,24 @@ import com.github.he305.contentcore.stream.application.services.GetStreamChannel
 import com.github.he305.contentcore.stream.application.services.PostStreamerDataService;
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelStatus;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/stream")
 @RequiredArgsConstructor
-@Slf4j
 public class StreamChannelController {
     private final GetStreamChannelByStatusService getStreamChannelByStatusService;
     private final PostStreamerDataService postStreamerDataService;
     private final EndStreamService endStreamService;
 
     @GetMapping()
-    public ResponseEntity<StreamChannelList> getObservableStreamChannels() {
-        try {
-            GetStreamChannelByStatusQuery query = new GetStreamChannelByStatusQuery(StreamChannelStatus.OBSERVABLE);
-            return ResponseEntity.ok(getStreamChannelByStatusService.execute(query));
-        } catch (ContentCoreException ex) {
-            log.error(ex.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+    public StreamChannelList getObservableStreamChannels() {
+        GetStreamChannelByStatusQuery query = new GetStreamChannelByStatusQuery(StreamChannelStatus.OBSERVABLE);
+        return getStreamChannelByStatusService.execute(query);
     }
 
     @PostMapping("/data")
-    public ResponseEntity<Void> postStreamData(@RequestBody StreamDataDto dto) {
+    public void postStreamData(@RequestBody StreamDataDto dto) {
         PostStreamerDataCommand command = new PostStreamerDataCommand(
                 dto.getStreamChannelId(),
                 dto.getName(),
@@ -45,24 +36,12 @@ public class StreamChannelController {
                 dto.getViewerCount(),
                 dto.getTime()
         );
-        try {
-            postStreamerDataService.execute(command);
-            return ResponseEntity.ok().build();
-        } catch (ContentCoreException ex) {
-            log.error(ex.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+        postStreamerDataService.execute(command);
     }
 
     @PostMapping("/end")
-    public ResponseEntity<Void> endStream(@RequestBody StreamEndDto dto) {
+    public void endStream(@RequestBody StreamEndDto dto) {
         EndStreamCommand command = new EndStreamCommand(dto.getStreamerChannelId(), dto.getEndTime());
-        try {
-            endStreamService.execute(command);
-            return ResponseEntity.ok().build();
-        } catch (ContentCoreException ex) {
-            log.error(ex.toString());
-            return ResponseEntity.internalServerError().build();
-        }
+        endStreamService.execute(command);
     }
 }
