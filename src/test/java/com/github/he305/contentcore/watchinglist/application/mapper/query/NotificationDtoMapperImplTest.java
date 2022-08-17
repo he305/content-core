@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +28,7 @@ class NotificationDtoMapperImplTest {
     @Test
     void toDto() {
         NotificationId id = new NotificationId(UUID.randomUUID());
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
 
         NotificationData data = new NotificationData(time, "test");
         Mockito.when(externalNotificationExchangeService.getNotificationDataById(id)).thenReturn(data);

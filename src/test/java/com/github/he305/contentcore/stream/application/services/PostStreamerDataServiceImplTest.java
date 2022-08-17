@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +35,7 @@ class PostStreamerDataServiceImplTest {
                 "name",
                 "title",
                 0,
-                LocalDateTime.now()
+                LocalDateTime.now(ZoneOffset.UTC)
         );
 
         StreamChannel streamChannel = new StreamChannel(new StreamChannelContentAccountId(UUID.randomUUID()), StreamChannelPlatform.TWITCH);

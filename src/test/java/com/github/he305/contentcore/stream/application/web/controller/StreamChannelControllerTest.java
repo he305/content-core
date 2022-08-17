@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,7 +69,7 @@ class StreamChannelControllerTest {
     @Test
     void postStreamData_error() {
         UUID id = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamDataDto dto = new StreamDataDto(id, "name", "title", 0, time);
         doThrow(new ContentCoreException("smth")).when(postStreamerDataService).execute(new PostStreamerDataCommand(
                 id,
@@ -86,7 +87,7 @@ class StreamChannelControllerTest {
     @Test
     void postStreamData_valid() {
         UUID id = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamDataDto dto = new StreamDataDto(id, "name", "title", 0, time);
 
         ResponseEntity<Void> expected = ResponseEntity.ok().build();
@@ -98,7 +99,7 @@ class StreamChannelControllerTest {
     @Test
     void endStream_error() {
         UUID id = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamEndDto dto = new StreamEndDto(id, time);
         doThrow(new ContentCoreException("smth")).when(endStreamService).execute(new EndStreamCommand(id, time));
 
@@ -110,7 +111,7 @@ class StreamChannelControllerTest {
     @Test
     void endStream_valid() {
         UUID id = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamEndDto dto = new StreamEndDto(id, time);
 
         ResponseEntity<Void> expected = ResponseEntity.ok().build();

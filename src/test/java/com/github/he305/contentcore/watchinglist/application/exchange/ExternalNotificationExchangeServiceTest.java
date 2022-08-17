@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,7 +27,7 @@ class ExternalNotificationExchangeServiceTest {
     @Test
     void getNotificationDataById() {
         UUID id = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         NotificationData notificationData = new NotificationData(time, "test");
         Mockito.when(notificationExchangeService.getNotificationDataById(id)).thenReturn(notificationData);
         NotificationData actual = underTest.getNotificationDataById(new NotificationId(id));

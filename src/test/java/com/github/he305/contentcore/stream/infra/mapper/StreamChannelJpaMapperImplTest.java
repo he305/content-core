@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +38,7 @@ class StreamChannelJpaMapperImplTest {
         UUID contentAccountId = UUID.randomUUID();
         UUID streamId = UUID.randomUUID();
         UUID streamDataId = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamData streamData = new StreamData(streamDataId, "name", "title", 30, time);
         Stream stream = new Stream(
                 streamId,
@@ -95,7 +96,7 @@ class StreamChannelJpaMapperImplTest {
         UUID contentAccountId = UUID.randomUUID();
         UUID streamId = UUID.randomUUID();
         UUID streamDataId = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamData streamData = new StreamData(streamDataId, "name", "title", 30, time);
         Stream stream = new Stream(
                 streamId,

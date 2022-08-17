@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +47,7 @@ class StreamListStreamExchangeServiceImplTest {
     @Test
     void getLastData_someData() {
         UUID id = UUID.randomUUID();
-        StreamData streamData = new StreamData("game name", "title", 322, LocalDateTime.now());
+        StreamData streamData = new StreamData("game name", "title", 322, LocalDateTime.now(ZoneOffset.UTC));
         Mockito.when(streamExchangeService.getLastLiveStreamData(id)).thenReturn(streamData);
         StreamListEntryLastDataDto expected = new StreamListEntryLastDataDto(
                 "title",

@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +18,7 @@ class StreamDataTest {
 
     @Test
     void test_toString() {
-        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
         StreamData data = new StreamData("long game name", "long title", 322, time);
 
         String expected = "Title: long title, game name: long game name, viewers: 322";

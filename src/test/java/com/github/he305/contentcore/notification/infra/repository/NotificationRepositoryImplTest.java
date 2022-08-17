@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ class NotificationRepositoryImplTest {
 
     @Test
     void save() {
-        Notification notification = new Notification("mes", UUID.randomUUID(), LocalDateTime.now());
+        Notification notification = new Notification("mes", UUID.randomUUID(), LocalDateTime.now(ZoneOffset.UTC));
         Mockito.when(notificationJpaMapper.toJpa(notification)).thenReturn(new NotificationJpa());
         assertDoesNotThrow(() -> underTest.save(notification));
     }
@@ -53,7 +54,7 @@ class NotificationRepositoryImplTest {
     void findById_valid() {
         UUID id = UUID.randomUUID();
         NotificationJpa notificationJpa = new NotificationJpa();
-        Notification expected = new Notification(id, new ContentAccountId(id), new NotificationData(LocalDateTime.now(), "mes"));
+        Notification expected = new Notification(id, new ContentAccountId(id), new NotificationData(LocalDateTime.now(ZoneOffset.UTC), "mes"));
         Mockito.when(jpaNotificationRepository.findById(id)).thenReturn(Optional.of(notificationJpa));
         Mockito.when(notificationJpaMapper.toDomain(notificationJpa)).thenReturn(expected);
 

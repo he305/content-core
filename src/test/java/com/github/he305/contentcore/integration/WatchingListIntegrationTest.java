@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +32,7 @@ class WatchingListIntegrationTest extends IntegrationTestBase {
 
     @SneakyThrows
     String register() {
-        String username = "user" + LocalDateTime.now();
+        String username = "user" + LocalDateTime.now(ZoneOffset.UTC);
         String password = "pass";
 
         LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
