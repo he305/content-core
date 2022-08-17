@@ -1,5 +1,6 @@
 package com.github.he305.contentcore.streamlist.application.web.controller;
 
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.streamlist.application.dto.StreamListDto;
 import com.github.he305.contentcore.streamlist.application.query.GetStreamListQuery;
 import com.github.he305.contentcore.streamlist.application.services.GetStreamListService;
@@ -10,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class StreamListControllerTest {
@@ -47,9 +48,7 @@ class StreamListControllerTest {
 
         Mockito.when(getStreamListService.execute(query)).thenThrow(StreamListNotFoundException.class);
 
-        ResponseEntity<StreamListDto> expected = ResponseEntity.badRequest().build();
-        ResponseEntity<StreamListDto> actual = underTest.getStreamList();
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.getStreamList());
     }
 
     @Test
@@ -60,8 +59,7 @@ class StreamListControllerTest {
         StreamListDto dto = new StreamListDto(Collections.emptyList());
         Mockito.when(getStreamListService.execute(query)).thenReturn(dto);
 
-        ResponseEntity<StreamListDto> expected = ResponseEntity.ok(dto);
-        ResponseEntity<StreamListDto> actual = underTest.getStreamList();
-        assertEquals(expected, actual);
+        StreamListDto actual = underTest.getStreamList();
+        assertEquals(dto, actual);
     }
 }

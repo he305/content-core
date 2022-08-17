@@ -14,16 +14,17 @@ import com.github.he305.contentcore.account.application.service.RegisterAccountS
 import com.github.he305.contentcore.account.application.service.RegisterServiceService;
 import com.github.he305.contentcore.account.domain.exceptions.AccountAlreadyExistsException;
 import com.github.he305.contentcore.account.domain.exceptions.AccountLoginException;
+import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class AuthControllerTest {
@@ -45,10 +46,8 @@ class AuthControllerTest {
         LoginRequestDto dto = new LoginRequestDto("user", "pass");
         LoginAccountCommand command = new LoginAccountCommand("user", "pass");
         Mockito.when(loginAccountService.execute(command)).thenThrow(AccountLoginException.class);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
 
-        ResponseEntity<JwtResponseDto> actual = underTest.login(dto);
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.login(dto));
     }
 
     @Test
@@ -57,10 +56,9 @@ class AuthControllerTest {
         LoginAccountCommand command = new LoginAccountCommand("user", "pass");
         JwtResponseDto res = new JwtResponseDto("test", "refresh");
         Mockito.when(loginAccountService.execute(command)).thenReturn(res);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
-        ResponseEntity<JwtResponseDto> actual = underTest.login(dto);
-        assertEquals(expected, actual);
+        JwtResponseDto actual = underTest.login(dto);
+        assertEquals(res, actual);
     }
 
     @Test
@@ -68,10 +66,8 @@ class AuthControllerTest {
         LoginRequestDto dto = new LoginRequestDto("user", "pass");
         RegisterAccountCommand command = new RegisterAccountCommand("user", "pass");
         Mockito.when(registerAccountService.execute(command)).thenThrow(AccountAlreadyExistsException.class);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
 
-        ResponseEntity<JwtResponseDto> actual = underTest.register(dto);
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.register(dto));
     }
 
 
@@ -79,9 +75,8 @@ class AuthControllerTest {
     void register_blankPassword() {
         LoginRequestDto dto = new LoginRequestDto("asd", "");
 
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
-        ResponseEntity<JwtResponseDto> actual = underTest.register(dto);
-        assertEquals(expected, actual);
+
+        assertThrows(ContentCoreException.class, () -> underTest.register(dto));
     }
 
     @Test
@@ -90,20 +85,17 @@ class AuthControllerTest {
         RegisterAccountCommand command = new RegisterAccountCommand("user", "pass");
         JwtResponseDto res = new JwtResponseDto("test", "refresh");
         Mockito.when(registerAccountService.execute(command)).thenReturn(res);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
-        ResponseEntity<JwtResponseDto> actual = underTest.register(dto);
-        assertEquals(expected, actual);
+        JwtResponseDto actual = underTest.register(dto);
+        assertEquals(res, actual);
     }
 
     @Test
     void registerService_notEqualSecretKey() {
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
         ReflectionTestUtils.setField(underTest, "serviceRegisterKey", "test");
 
         RegisterServiceDto dto = new RegisterServiceDto("user", "pass", "1");
-        ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.registerService(dto));
     }
 
     @Test
@@ -112,10 +104,8 @@ class AuthControllerTest {
         RegisterServiceDto dto = new RegisterServiceDto("user", "pass", "test");
         RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
         Mockito.when(registerServiceService.execute(command)).thenThrow(AccountAlreadyExistsException.class);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
 
-        ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.registerService(dto));
     }
 
     @Test
@@ -125,20 +115,17 @@ class AuthControllerTest {
         RegisterServiceCommand command = new RegisterServiceCommand("user", "pass");
         JwtResponseDto res = new JwtResponseDto("test", "refresh");
         Mockito.when(registerServiceService.execute(command)).thenReturn(res);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
-        ResponseEntity<JwtResponseDto> actual = underTest.registerService(dto);
-        assertEquals(expected, actual);
+        JwtResponseDto actual = underTest.registerService(dto);
+        assertEquals(res, actual);
     }
 
     @Test
     void refreshToken_notValid() {
         JwtRefreshTokenDto dto = new JwtRefreshTokenDto("token");
         Mockito.when(refreshTokenService.refreshToken(dto)).thenThrow(JwtRefreshTokenNotValidException.class);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.badRequest().build();
 
-        ResponseEntity<JwtResponseDto> actual = underTest.refreshToken(dto);
-        assertEquals(expected, actual);
+        assertThrows(ContentCoreException.class, () -> underTest.refreshToken(dto));
     }
 
     @Test
@@ -146,9 +133,8 @@ class AuthControllerTest {
         JwtRefreshTokenDto dto = new JwtRefreshTokenDto("token");
         JwtResponseDto res = new JwtResponseDto("token", "refresh");
         Mockito.when(refreshTokenService.refreshToken(dto)).thenReturn(res);
-        ResponseEntity<JwtResponseDto> expected = ResponseEntity.ok(res);
 
-        ResponseEntity<JwtResponseDto> actual = underTest.refreshToken(dto);
-        assertEquals(expected, actual);
+        JwtResponseDto actual = underTest.refreshToken(dto);
+        assertEquals(res, actual);
     }
 }
