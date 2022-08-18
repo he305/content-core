@@ -11,7 +11,7 @@ public class StreamChannelPlatformMapperImpl implements StreamChannelPlatformMap
     public StreamChannelPlatform getStreamChannelPlatform(Platform contentAccountPlatform) throws ErrorCreatingStreamChannelPlatform {
         try {
             return StreamChannelPlatform.valueOf(contentAccountPlatform.name());
-        } catch (RuntimeException ex) {
+        } catch (IllegalArgumentException ex) {
             throw new ErrorCreatingStreamChannelPlatform(contentAccountPlatform);
         }
     }

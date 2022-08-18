@@ -5,10 +5,14 @@ import com.github.he305.contentcore.stream.domain.exceptions.ErrorCreatingStream
 import com.github.he305.contentcore.stream.domain.model.enums.StreamChannelPlatform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
 class StreamChannelPlatformMapperImplTest {
 
     private StreamChannelPlatformMapperImpl underTest;
@@ -20,7 +24,8 @@ class StreamChannelPlatformMapperImplTest {
 
     @Test
     void getStreamChannelPlatform_error() {
-        Platform platform = Platform.TWITTER;
+        Platform platform = Mockito.mock(Platform.class);
+        Mockito.when(platform.name()).thenReturn("not in a enum");
         assertThrows(ErrorCreatingStreamChannelPlatform.class, () ->
                 underTest.getStreamChannelPlatform(platform));
     }
