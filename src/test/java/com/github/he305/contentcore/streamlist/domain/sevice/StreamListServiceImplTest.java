@@ -40,7 +40,7 @@ class StreamListServiceImplTest {
         UUID memberId = UUID.randomUUID();
         WatchingListContentAccountAddedEvent event = new WatchingListContentAccountAddedEvent(contentAccountId, memberId);
 
-        ContentAccountDetails contentAccountDetails = new ContentAccountDetails("name", Platform.TWITTER);
+        ContentAccountDetails contentAccountDetails = new ContentAccountDetails("name", null);
         Mockito.when(contentAccountExchangeService.getContentAccountById(contentAccountId)).thenReturn(contentAccountDetails);
         Mockito.when(streamListPlatformValidator.isStreamChannel(contentAccountDetails.getPlatform())).thenReturn(false);
 
@@ -82,7 +82,7 @@ class StreamListServiceImplTest {
         UUID memberId = UUID.randomUUID();
         WatchingListContentAccountRemovedEvent event = new WatchingListContentAccountRemovedEvent(contentAccountId, memberId);
 
-        ContentAccountDetails contentAccountDetails = new ContentAccountDetails("name", Platform.TWITTER);
+        ContentAccountDetails contentAccountDetails = new ContentAccountDetails("name", null);
         Mockito.when(contentAccountExchangeService.getContentAccountById(contentAccountId)).thenReturn(contentAccountDetails);
         Mockito.when(streamListPlatformValidator.isStreamChannel(contentAccountDetails.getPlatform())).thenReturn(false);
 
