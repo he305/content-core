@@ -61,6 +61,15 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         });
     }
 
+    public void updateWatchingListEntryName(String oldName, String newName) {
+        Optional<WatchingListEntry> existingEntry = watchingListEntries.stream().filter(entry -> entry.getContentCreatorName().equals(oldName)).findAny();
+        if (existingEntry.isEmpty()) {
+            throw new WatchingListEntryNotExistsException(oldName);
+        }
+
+        existingEntry.get().updateContentCreatorName(newName);
+    }
+
     public void addWatchingListEntry(String name, Set<ContentAccountEntry> contentAccountSet) {
         if (contentAccountSet.isEmpty()) {
             throw new ContentAccountSetEmptyException();

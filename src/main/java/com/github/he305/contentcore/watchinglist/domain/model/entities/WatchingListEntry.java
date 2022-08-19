@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class WatchingListEntry {
     private final UUID id;
-    private final ContentCreator contentCreator;
+    private ContentCreator contentCreator;
     private Set<ContentAccountEntry> contentAccountSet = new HashSet<>();
 
     public WatchingListEntry(ContentCreator contentCreator) {
@@ -99,6 +99,10 @@ public class WatchingListEntry {
         });
 
         return resultMap;
+    }
+
+    public void updateContentCreatorName(String newName) {
+        this.contentCreator = new ContentCreator(newName);
     }
 
     public void addNotificationForContentAccountId(WatchingListContentAccountId watchingListContentAccountId, UUID notificationId) {

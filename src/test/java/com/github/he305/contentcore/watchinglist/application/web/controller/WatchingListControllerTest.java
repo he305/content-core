@@ -2,6 +2,7 @@ package com.github.he305.contentcore.watchinglist.application.web.controller;
 
 import com.github.he305.contentcore.shared.exceptions.ContentCoreException;
 import com.github.he305.contentcore.watchinglist.application.commands.DeleteWatchingEntryCommand;
+import com.github.he305.contentcore.watchinglist.application.commands.UpdateWatchingListEntryNameCommand;
 import com.github.he305.contentcore.watchinglist.application.dto.*;
 import com.github.he305.contentcore.watchinglist.application.dto.query.GetNotificationForContentAccountDto;
 import com.github.he305.contentcore.watchinglist.application.dto.query.NotificationForContentAccountDto;
@@ -44,6 +45,8 @@ class WatchingListControllerTest {
     private DeleteWatchingEntryService deleteWatchingEntryService;
     @Mock
     private GetPlatformsService getPlatformsService;
+    @Mock
+    private UpdateWatchingListEntryNameService updateWatchingListEntryNameService;
     @InjectMocks
     private WatchingListController underTest;
 
@@ -196,5 +199,23 @@ class WatchingListControllerTest {
         Mockito.when(getPlatformsService.execute()).thenReturn(dto);
         PlatformsDto actual = underTest.getPlatforms();
         assertEquals(dto, actual);
+    }
+
+    @Test
+    void updateWatchingListEntryName_valid() {
+        UUID id = setSecurityContext();
+        UpdateWatchingListEntryNameDto dto = new UpdateWatchingListEntryNameDto("oldName", "newName");
+        UpdateWatchingListEntryNameCommand command = new UpdateWatchingListEntryNameCommand(id, "oldName", "newName");
+
+        assertDoesNotThrow(() -> underTest.updateWatchingListEntryName(dto));
+    }
+
+    @Test
+    void updateWatchingListEntryName_exception() {
+        UUID id = setSecurityContext();
+        UpdateWatchingListEntryNameDto dto = new UpdateWatchingListEntryNameDto("oldName", "newName");
+        UpdateWatchingListEntryNameCommand command = new UpdateWatchingListEntryNameCommand(id, "oldName", "newName");
+        doThrow(ContentCoreException.class).when(updateWatchingListEntryNameService).execute(command);
+        assertThrows(ContentCoreException.class, () -> underTest.updateWatchingListEntryName(dto));
     }
 }
