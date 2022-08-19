@@ -150,6 +150,26 @@ class WatchingListTest {
     }
 
     @Test
+    void deleteWatchingListEntry_valid_deleteSeveralAccounts() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
+
+        String name = "testName";
+        Set<ContentAccountEntry> set = Set.of(
+                new ContentAccountEntry("test", new WatchingListContentAccountId(UUID.randomUUID())),
+                new ContentAccountEntry("test1", new WatchingListContentAccountId(UUID.randomUUID()))
+        );
+
+        assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, set));
+        List<WatchingListEntry> entryList = watchingList.getWatchingListEntries();
+        assertEquals(1, entryList.size());
+
+        assertDoesNotThrow(() ->
+                watchingList.deleteWatchingListEntry(name));
+
+        assertTrue(watchingList.getWatchingListEntries().isEmpty());
+    }
+
+    @Test
     void deleteWatchingListEntry_valid() {
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
