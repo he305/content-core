@@ -87,7 +87,7 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
                 .filter(entry -> entry.getContentCreatorName().equals(entryName))
                 .findAny().orElseThrow(() -> new WatchingListEntryNotExistsException(entryName));
 
-        Set<ContentAccountEntry> entries = existingEntry.getContentAccountSet();
+        Set<ContentAccountEntry> entries = new HashSet<>(existingEntry.getContentAccountSet());
 
         entries.forEach(entry -> {
             existingEntry.removeContentAccount(entry);
