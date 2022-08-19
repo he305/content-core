@@ -205,4 +205,27 @@ class WatchingListTest {
         assertEquals(anotherName, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
         assertEquals(set, watchingList.getWatchingListEntries().get(0).getContentAccountSet());
     }
+
+    @Test
+    void updateWatchingListEntryName_notFound_shouldThrow() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
+        assertTrue(watchingList.getWatchingListEntries().isEmpty());
+        assertThrows(WatchingListEntryNotExistsException.class, () ->
+                watchingList.updateWatchingListEntryName("oldName", "newName"));
+    }
+
+    @Test
+    void updateWatchingListEntryName_valid() {
+        WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID(), List.of(
+                new WatchingListEntry(new ContentCreator("toChange"), Set.of()),
+                new WatchingListEntry(new ContentCreator("unrelated"), Set.of())
+        ));
+
+        assertEquals(2, watchingList.getWatchingListEntries().size());
+        assertDoesNotThrow(() -> watchingList.updateWatchingListEntryName("toChange", "newName"));
+        assertEquals(2, watchingList.getWatchingListEntries().size());
+        assertTrue(watchingList.getWatchingListEntries().stream().anyMatch(watchingListEntry -> watchingListEntry.getContentCreatorName().equals("newName")));
+        assertTrue(watchingList.getWatchingListEntries().stream().anyMatch(watchingListEntry -> watchingListEntry.getContentCreatorName().equals("unrelated")));
+        assertFalse(watchingList.getWatchingListEntries().stream().anyMatch(watchingListEntry -> watchingListEntry.getContentCreatorName().equals("toChange")));
+    }
 }
