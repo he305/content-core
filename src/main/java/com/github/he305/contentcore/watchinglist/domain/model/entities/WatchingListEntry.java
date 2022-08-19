@@ -1,6 +1,5 @@
 package com.github.he305.contentcore.watchinglist.domain.model.entities;
 
-import com.github.he305.contentcore.shared.util.SetUtils;
 import com.github.he305.contentcore.watchinglist.domain.model.enums.WatchingListEntryUpdateResult;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
@@ -64,6 +63,22 @@ public class WatchingListEntry {
 
     public Map<ContentAccountEntry, WatchingListEntryUpdateResult> updateEntry(Set<ContentAccountEntry> newEntries) {
         Map<ContentAccountEntry, WatchingListEntryUpdateResult> resultMap = new HashMap<>();
+
+        Set<ContentAccountEntry> contentAccountEntriesToRemove = new HashSet<>();
+        contentAccountSet.forEach(existingAccount -> {
+            Optional<ContentAccountEntry> optionalNewEntry = newEntries
+                    .stream()
+                    .filter(contentAccountEntry -> contentAccountEntry.getWatchingListContentAccountId().equals(existingAccount.getWatchingListContentAccountId()))
+                    .findAny();
+
+            if (optionalNewEntry.isEmpty()) {
+                contentAccountEntriesToRemove.add(existingAccount);
+                resultMap.put(existingAccount, WatchingListEntryUpdateResult.REMOVED);
+            }
+        });
+
+        contentAccountEntriesToRemove.forEach(contentAccountSet::remove);
+
         newEntries.forEach(newEntry -> {
             Optional<ContentAccountEntry> entry = contentAccountSet
                     .stream()
@@ -81,13 +96,6 @@ public class WatchingListEntry {
 
             contentAccountSet.add(newEntry);
             resultMap.put(newEntry, WatchingListEntryUpdateResult.ADDED);
-        });
-
-        Set<ContentAccountEntry> contentAccountEntriesToDelete = SetUtils.findUniqueInFirstSet(contentAccountSet, newEntries);
-
-        contentAccountEntriesToDelete.forEach(contentAccountEntryToDelete -> {
-            contentAccountSet.remove(contentAccountEntryToDelete);
-            resultMap.put(contentAccountEntryToDelete, WatchingListEntryUpdateResult.REMOVED);
         });
 
         return resultMap;

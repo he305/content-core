@@ -71,7 +71,8 @@ class WatchingListTest {
         assertEquals(1, entryList.size());
 
         Set<ContentAccountEntry> resultSet = watchingList.getWatchingListEntries().get(0).getContentAccountSet();
-        assertEquals(newSet, resultSet);
+        assertEquals(newSet.size(), resultSet.size());
+
         assertEquals(name, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
         Collection<Object> events = watchingList.getEvents();
         assertEquals(4, events.size() - initialEventSize);
