@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface StreamListContentAccountExchangeService {
     ContentAccountDetails getContentAccount(UUID contentAccountId);
+
+    String getUrlContentAccount(ContentAccountDetails details);
 }

@@ -31,4 +31,14 @@ class StreamListContentAccountExchangeServiceImplTest {
         ContentAccountDetails actual = underTest.getContentAccount(id);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void getUrlContentAccount() {
+        ContentAccountDetails accountDetails = new ContentAccountDetails("name", Platform.TWITCH);
+        String expected = "url";
+        Mockito.when(contentAccountExchangeService.getUrlForContentAccount(accountDetails)).thenReturn(expected);
+
+        String actual = underTest.getUrlContentAccount(accountDetails);
+        assertEquals(expected, actual);
+    }
 }

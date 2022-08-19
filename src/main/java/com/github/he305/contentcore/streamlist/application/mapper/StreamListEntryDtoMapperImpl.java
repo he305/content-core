@@ -22,11 +22,13 @@ public class StreamListEntryDtoMapperImpl implements StreamListEntryDtoMapper {
         ContentAccountDetails account = contentAccountExchangeService.getContentAccount(id.getId());
         boolean isLive = streamListStreamExchangeService.getIsLive(id.getId());
         StreamListEntryLastDataDto dataDto = streamListStreamExchangeService.getLastData(id.getId());
+        String url = contentAccountExchangeService.getUrlContentAccount(account);
 
         return new StreamListEntryDto(
                 account.getName(),
                 StreamChannelPlatform.valueOf(account.getPlatform().name()),
                 isLive,
+                url,
                 dataDto
         );
     }

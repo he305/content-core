@@ -12,5 +12,6 @@ public class StreamListEntryDto {
     private final String name;
     private final StreamChannelPlatform platform;
     private final boolean isLive;
+    private final String url;
     private final StreamListEntryLastDataDto currentData;
 }

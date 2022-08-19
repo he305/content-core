@@ -36,12 +36,14 @@ class StreamListEntryDtoMapperImplTest {
         StreamChannelId channelId = new StreamChannelId(id);
         ContentAccountDetails account = new ContentAccountDetails("name", Platform.TWITCH);
         boolean isLive = true;
+        String url = "url";
         StreamListEntryLastDataDto dataDto = StreamListEntryLastDataDto.empty();
         Mockito.when(contentAccountExchangeService.getContentAccount(id)).thenReturn(account);
         Mockito.when(streamListStreamExchangeService.getIsLive(id)).thenReturn(isLive);
         Mockito.when(streamListStreamExchangeService.getLastData(id)).thenReturn(dataDto);
+        Mockito.when(contentAccountExchangeService.getUrlContentAccount(account)).thenReturn(url);
 
-        StreamListEntryDto expected = new StreamListEntryDto(account.getName(), StreamChannelPlatform.TWITCH, isLive, dataDto);
+        StreamListEntryDto expected = new StreamListEntryDto(account.getName(), StreamChannelPlatform.TWITCH, isLive, url, dataDto);
         StreamListEntryDto actual = underTest.toDto(channelId);
         assertEquals(expected, actual);
     }

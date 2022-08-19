@@ -16,4 +16,9 @@ public class StreamListContentAccountExchangeServiceImpl implements StreamListCo
     public ContentAccountDetails getContentAccount(UUID contentAccountId) {
         return contentAccountExchangeService.getContentAccountById(contentAccountId);
     }
+
+    @Override
+    public String getUrlContentAccount(ContentAccountDetails details) {
+        return contentAccountExchangeService.getUrlForContentAccount(details);
+    }
 }
