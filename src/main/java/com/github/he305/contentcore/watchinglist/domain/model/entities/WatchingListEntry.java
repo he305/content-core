@@ -1,15 +1,14 @@
 package com.github.he305.contentcore.watchinglist.domain.model.entities;
 
+import com.github.he305.contentcore.shared.util.SetUtils;
+import com.github.he305.contentcore.watchinglist.domain.model.enums.WatchingListEntryUpdateResult;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -61,6 +60,37 @@ public class WatchingListEntry {
         }
 
         return contentAccountSet.remove(entry.get());
+    }
+
+    public Map<ContentAccountEntry, WatchingListEntryUpdateResult> updateEntry(Set<ContentAccountEntry> newEntries) {
+        Map<ContentAccountEntry, WatchingListEntryUpdateResult> resultMap = new HashMap<>();
+        newEntries.forEach(newEntry -> {
+            Optional<ContentAccountEntry> entry = contentAccountSet
+                    .stream()
+                    .filter(contentAccountEntry -> contentAccountEntry.getWatchingListContentAccountId().equals(newEntry.getWatchingListContentAccountId()))
+                    .findAny();
+            if (entry.isPresent()) {
+                if (!newEntry.getAlias().equals(entry.get().getAlias())) {
+                    entry.get().setAlias(newEntry.getAlias());
+                    resultMap.put(newEntry, WatchingListEntryUpdateResult.NAME_CHANGED);
+                    return;
+                }
+                resultMap.put(newEntry, WatchingListEntryUpdateResult.UNCHANGED);
+                return;
+            }
+
+            contentAccountSet.add(newEntry);
+            resultMap.put(newEntry, WatchingListEntryUpdateResult.ADDED);
+        });
+
+        Set<ContentAccountEntry> contentAccountEntriesToDelete = SetUtils.findUniqueInFirstSet(contentAccountSet, newEntries);
+
+        contentAccountEntriesToDelete.forEach(contentAccountEntryToDelete -> {
+            contentAccountSet.remove(contentAccountEntryToDelete);
+            resultMap.put(contentAccountEntryToDelete, WatchingListEntryUpdateResult.REMOVED);
+        });
+
+        return resultMap;
     }
 
     public void addNotificationForContentAccountId(WatchingListContentAccountId watchingListContentAccountId, UUID notificationId) {
