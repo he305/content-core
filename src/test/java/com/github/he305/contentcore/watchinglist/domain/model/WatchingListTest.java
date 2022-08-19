@@ -50,20 +50,24 @@ class WatchingListTest {
 
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
+        ContentAccountEntry existingAccount = new ContentAccountEntry("test0", existing);
+        ContentAccountEntry intersectsChangedAccount = new ContentAccountEntry("test1", intersectsChanged);
+        ContentAccountEntry unchangedAccount = new ContentAccountEntry("unchanged", intersectsUnchanged);
         String name = "testName";
         Set<ContentAccountEntry> oldSet = Set.of(
-                new ContentAccountEntry(existing.getId(), "test0", existing, Set.of()),
-                new ContentAccountEntry(intersectsChanged.getId(), "test1", intersectsChanged, Set.of()),
-                new ContentAccountEntry(intersectsUnchanged.getId(), "unchanged", intersectsUnchanged, Set.of())
+                existingAccount,
+                intersectsChangedAccount,
+                unchangedAccount
         );
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, oldSet));
         int initialEventSize = watchingList.getEvents().size();
 
+        ContentAccountEntry addedAccount = new ContentAccountEntry("test2", newId);
         Set<ContentAccountEntry> newSet = Set.of(
-                new ContentAccountEntry(intersectsUnchanged.getId(), "unchanged", intersectsUnchanged, Set.of()),
-                new ContentAccountEntry(intersectsChanged.getId(), "new_test", intersectsChanged, Set.of()),
-                new ContentAccountEntry(newId.getId(), "test2", newId, Set.of())
+                unchangedAccount,
+                intersectsChangedAccount,
+                addedAccount
         );
 
         assertDoesNotThrow(() -> watchingList.updateWatchingListEntry(name, newSet));
