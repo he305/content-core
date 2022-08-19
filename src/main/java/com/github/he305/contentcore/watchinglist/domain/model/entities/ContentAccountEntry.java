@@ -13,7 +13,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class ContentAccountEntry {
     private final UUID id;
-    private final String alias;
+    private String alias;
     private final WatchingListContentAccountId watchingListContentAccountId;
     private final Set<NotificationId> notificationIds;
 
@@ -29,6 +29,10 @@ public class ContentAccountEntry {
         this.alias = alias;
         this.watchingListContentAccountId = watchingListContentAccountId;
         this.notificationIds = notificationIds;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public boolean addNotificationId(NotificationId id) {

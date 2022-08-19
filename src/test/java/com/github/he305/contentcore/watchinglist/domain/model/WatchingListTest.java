@@ -9,6 +9,7 @@ import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCrea
 import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -42,23 +43,31 @@ class WatchingListTest {
     @Test
     void updateWatchingListEntry_valid() {
         WatchingListContentAccountId existing = new WatchingListContentAccountId(UUID.randomUUID());
-        WatchingListContentAccountId intersects = new WatchingListContentAccountId(UUID.randomUUID());
+        WatchingListContentAccountId intersectsChanged = new WatchingListContentAccountId(UUID.randomUUID());
+        WatchingListContentAccountId intersectsUnchanged = new WatchingListContentAccountId(UUID.randomUUID());
         WatchingListContentAccountId newId = new WatchingListContentAccountId(UUID.randomUUID());
 
 
         WatchingList watchingList = new WatchingList(UUID.randomUUID(), UUID.randomUUID());
 
+        ContentAccountEntry existingAccount = new ContentAccountEntry("test0", existing);
+        ContentAccountEntry intersectsChangedAccount = new ContentAccountEntry("test1", intersectsChanged);
+        ContentAccountEntry unchangedAccount = new ContentAccountEntry("unchanged", intersectsUnchanged);
         String name = "testName";
         Set<ContentAccountEntry> oldSet = Set.of(
-                new ContentAccountEntry("test", existing),
-                new ContentAccountEntry("test", intersects)
+                existingAccount,
+                intersectsChangedAccount,
+                unchangedAccount
         );
 
         assertDoesNotThrow(() -> watchingList.addWatchingListEntry(name, oldSet));
+        int initialEventSize = watchingList.getEvents().size();
 
+        ContentAccountEntry addedAccount = new ContentAccountEntry("test2", newId);
         Set<ContentAccountEntry> newSet = Set.of(
-                new ContentAccountEntry("test", intersects),
-                new ContentAccountEntry("test", newId)
+                unchangedAccount,
+                intersectsChangedAccount,
+                addedAccount
         );
 
         assertDoesNotThrow(() -> watchingList.updateWatchingListEntry(name, newSet));
@@ -66,8 +75,11 @@ class WatchingListTest {
         assertEquals(1, entryList.size());
 
         Set<ContentAccountEntry> resultSet = watchingList.getWatchingListEntries().get(0).getContentAccountSet();
-        assertEquals(newSet, resultSet);
+        assertEquals(newSet.size(), resultSet.size());
+
         assertEquals(name, watchingList.getWatchingListEntries().get(0).getContentCreatorName());
+        Collection<Object> events = watchingList.getEvents();
+        assertEquals(4, events.size() - initialEventSize);
     }
 
     @Test

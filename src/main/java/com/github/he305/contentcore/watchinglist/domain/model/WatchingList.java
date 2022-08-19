@@ -1,6 +1,5 @@
 package com.github.he305.contentcore.watchinglist.domain.model;
 
-import com.github.he305.contentcore.shared.util.SetUtils;
 import com.github.he305.contentcore.watchinglist.application.exceptions.ContentAccountSetEmptyException;
 import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryAlreadyExistException;
 import com.github.he305.contentcore.watchinglist.application.exceptions.WatchingListEntryNotExistsException;
@@ -10,6 +9,7 @@ import com.github.he305.contentcore.watchinglist.domain.events.WatchingListConte
 import com.github.he305.contentcore.watchinglist.domain.events.WatchingListContentAccountRemovedEvent;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.ContentAccountEntry;
 import com.github.he305.contentcore.watchinglist.domain.model.entities.WatchingListEntry;
+import com.github.he305.contentcore.watchinglist.domain.model.enums.WatchingListEntryUpdateResult;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.MemberId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
@@ -49,20 +49,14 @@ public class WatchingList extends AbstractAggregateRoot<WatchingList> {
         }
 
         WatchingListEntry watchingListEntry = existingEntry.get();
-        Set<ContentAccountEntry> existingSet = watchingListEntry.getContentAccountSet();
-        Set<ContentAccountEntry> contentAccountIdsToAdd = SetUtils.findUniqueInFirstSet(contentAccountSet, existingSet);
-        Set<ContentAccountEntry> contentAccountIdsToDelete = SetUtils.findUniqueInFirstSet(existingSet, contentAccountSet);
-
-        contentAccountIdsToDelete.forEach(entry -> {
-            if (watchingListEntry.removeContentAccount(entry)) {
-                registerEvent(new ContentAccountRemovedEvent(entry.getWatchingListContentAccountId().getId()));
-                registerEvent(new WatchingListContentAccountRemovedEvent(entry.getWatchingListContentAccountId().getId(), memberId.getId()));
-            }
-        });
-        contentAccountIdsToAdd.forEach(entry -> {
-            if (watchingListEntry.addContentAccount(entry)) {
-                registerEvent(new ContentAccountAddedEvent(entry.getWatchingListContentAccountId().getId()));
-                registerEvent(new WatchingListContentAccountAddedEvent(entry.getWatchingListContentAccountId().getId(), memberId.getId()));
+        Map<ContentAccountEntry, WatchingListEntryUpdateResult> updateResultMap = watchingListEntry.updateEntry(contentAccountSet);
+        updateResultMap.forEach((key, value) -> {
+            if (value == WatchingListEntryUpdateResult.ADDED) {
+                registerEvent(new ContentAccountAddedEvent(key.getWatchingListContentAccountId().getId()));
+                registerEvent(new WatchingListContentAccountAddedEvent(key.getWatchingListContentAccountId().getId(), memberId.getId()));
+            } else if (value == WatchingListEntryUpdateResult.REMOVED) {
+                registerEvent(new ContentAccountRemovedEvent(key.getWatchingListContentAccountId().getId()));
+                registerEvent(new WatchingListContentAccountRemovedEvent(key.getWatchingListContentAccountId().getId(), memberId.getId()));
             }
         });
     }

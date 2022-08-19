@@ -1,11 +1,13 @@
 package com.github.he305.contentcore.watchinglist.domain.model.entities;
 
+import com.github.he305.contentcore.watchinglist.domain.model.enums.WatchingListEntryUpdateResult;
 import com.github.he305.contentcore.watchinglist.domain.model.values.ContentCreator;
 import com.github.he305.contentcore.watchinglist.domain.model.values.NotificationId;
 import com.github.he305.contentcore.watchinglist.domain.model.values.WatchingListContentAccountId;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -116,5 +118,38 @@ class WatchingListEntryTest {
 
         Set<NotificationId> actual2 = entry.getAndDeleteNotificationsForContentAccountId(watchingListContentAccountId);
         assertEquals(0, actual2.size());
+    }
+
+    @Test
+    void updateEntry_addNew_removeExisting_tryToAddAgain_renameExisting() {
+        WatchingListContentAccountId id = new WatchingListContentAccountId(UUID.randomUUID());
+        ContentAccountEntry toRemove = new ContentAccountEntry("test", id);
+        WatchingListEntry entry = new WatchingListEntry(new ContentCreator("name"), Set.of(
+                toRemove
+        ));
+
+        WatchingListContentAccountId newId = new WatchingListContentAccountId(UUID.randomUUID());
+        ContentAccountEntry toAdd = new ContentAccountEntry("test", newId);
+        Set<ContentAccountEntry> toAddSet = Set.of(
+                toAdd
+        );
+
+        Map<ContentAccountEntry, WatchingListEntryUpdateResult> resultMap = entry.updateEntry(toAddSet);
+        assertEquals(2, resultMap.size());
+        assertEquals(WatchingListEntryUpdateResult.REMOVED, resultMap.get(toRemove));
+        assertEquals(WatchingListEntryUpdateResult.ADDED, resultMap.get(toAdd));
+
+        Map<ContentAccountEntry, WatchingListEntryUpdateResult> addAgainResultMap = entry.updateEntry(toAddSet);
+        assertEquals(1, addAgainResultMap.size());
+        assertEquals(WatchingListEntryUpdateResult.UNCHANGED, addAgainResultMap.get(toAdd));
+
+        ContentAccountEntry toRename = new ContentAccountEntry("new name", newId);
+        Set<ContentAccountEntry> toRenameSet = Set.of(
+                toRename
+        );
+
+        Map<ContentAccountEntry, WatchingListEntryUpdateResult> renameResultMap = entry.updateEntry(toRenameSet);
+        assertEquals(1, renameResultMap.size());
+        assertEquals(WatchingListEntryUpdateResult.NAME_CHANGED, renameResultMap.get(toRename));
     }
 }
