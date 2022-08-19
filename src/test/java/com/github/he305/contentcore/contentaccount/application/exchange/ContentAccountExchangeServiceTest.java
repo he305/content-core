@@ -4,6 +4,7 @@ import com.github.he305.contentcore.contentaccount.application.query.GetContentA
 import com.github.he305.contentcore.contentaccount.application.query.GetContentAccountIdQuery;
 import com.github.he305.contentcore.contentaccount.application.services.GetContentAccountDetailsService;
 import com.github.he305.contentcore.contentaccount.application.services.GetContentAccountIdService;
+import com.github.he305.contentcore.contentaccount.application.services.GetContentAccountUrlService;
 import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
 import com.github.he305.contentcore.contentaccount.domain.model.values.ContentAccountDetails;
 import com.github.he305.contentcore.watchinglist.application.exchange.WatchingListContentAccount;
@@ -28,6 +29,8 @@ class ContentAccountExchangeServiceTest {
     private GetContentAccountIdService getContentAccountIdService;
     @Mock
     private GetContentAccountDetailsService getContentAccountDetailsService;
+    @Mock
+    private GetContentAccountUrlService getContentAccountUrlService;
 
     @InjectMocks
     private ContentAccountExchangeService underTest;
@@ -74,6 +77,14 @@ class ContentAccountExchangeServiceTest {
             Mockito.when(getContentAccountDetailsService.execute(query)).thenReturn(details);
             assertDoesNotThrow(() -> underTest.getContentAccountById(data));
         });
+    }
 
+    @Test
+    void getUrlForContentAccount_valid() {
+        ContentAccountDetails details = new ContentAccountDetails("name", Platform.TWITCH);
+        String expected = "some url";
+        Mockito.when(getContentAccountUrlService.getUrL(details)).thenReturn(expected);
+        String actual = underTest.getUrlForContentAccount(details);
+        assertEquals(expected, actual);
     }
 }

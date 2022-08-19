@@ -38,7 +38,7 @@ class StreamListDtoMapperImplTest {
                 Set.of(streamChannelId)
         );
 
-        StreamListEntryDto entryDto = new StreamListEntryDto("name", StreamChannelPlatform.TWITCH, true, StreamListEntryLastDataDto.empty());
+        StreamListEntryDto entryDto = new StreamListEntryDto("name", StreamChannelPlatform.TWITCH, true, "", StreamListEntryLastDataDto.empty());
         Mockito.when(streamListEntryDtoMapper.toDto(streamChannelId)).thenReturn(entryDto);
 
         StreamListDto expected = new StreamListDto(List.of(entryDto));
