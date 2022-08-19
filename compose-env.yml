@@ -2,22 +2,11 @@ version: '3'
 services:
   content_core_db-dev:
     image: postgres
-    container_name: container_core_db-dev
+    container_name: content_core_db
     restart: always
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
-      POSTGRES_DB: container_core_db-dev
-  content_core-dev:
-    build:
-      context: .
-    restart: always
-    container_name: content_core-dev
+      POSTGRES_DB: content_core_db
     ports:
-      - 8082:8081
-    depends_on:
-      - content_core_db-dev
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://content_core_db-dev:5432/container_core_db-dev
-      - SPRING_DATASOURCE_USERNAME=admin
-      - SPRING_DATASOURCE_PASSWORD=admin
+      - 5444:5432
