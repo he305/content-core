@@ -19,6 +19,8 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       POSTGRES_DB: content-core-db
+    networks:
+      - content-network
   content-core:
     image: 'he305/content-core:latest'
     restart: always
@@ -27,21 +29,28 @@ services:
       - 8081:8081
     depends_on:
       - content-core-db
+      - content-discovery
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://content-core-db:5432/content-core-db
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
+      - EUREKA_HOST=http://content-discovery:9000/eureka
+    networks:
+      - content-network
   stream-feeder:
     restart: always
     image: he305/stream-feeder:latest
     container_name: stream-feeder
     depends_on:
       - content-core
+      - content-discovery
     environment:
       - twitch-client-id-env= #IF TWITCH SUPPORT IS REQUIRED, PASS THE TWITCH CLIENT ID 
-      - twitch-client-secret-env= #IF TWITCH SUPPORT IS REQUIRED, PASS THE TWITCH SECRET
+      - twitch-client-secret-env= #IF TWITCH SUPPORT IS REQUIRED, PASS THE TWITCH CLIENT SECRET 
       - wasd-token= #IF WASD SUPPORT IS REQUIRED, PASS THE WASD TOKEN
-      - content-core-base-url=http://content-core:8081/api
+      - EUREKA_HOST=http://content-discovery:9000/eureka
+    networks:
+      - content-network
   content-web:
     image: 'he305/content-web:latest'
     restart: always
@@ -52,7 +61,20 @@ services:
       - 3000:80
     environment:
       - NODE_ENV=production
+    networks:
+      - content-network
+  content-discovery:
+    restart: always
+    image: 'he305/content-discovery:latest'
+    container_name: content-discovery
+    ports:
+      - 9000:9000
+    networks:
+      - content-network
 
 volumes:
   content-core-data:
+
+networks:
+  content-network:
 ```
