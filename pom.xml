@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<testcontainers.version>1.17.3</testcontainers.version>
+		<spring-cloud.version>2021.0.3</spring-cloud.version>
 		<sonar.organization>he305</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>he305_content-core</sonar.projectKey>
@@ -142,6 +143,10 @@
 			<version>4.6.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -149,6 +154,13 @@
 				<groupId>org.testcontainers</groupId>
 				<artifactId>testcontainers-bom</artifactId>
 				<version>${testcontainers.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
