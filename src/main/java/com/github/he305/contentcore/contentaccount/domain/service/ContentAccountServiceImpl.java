@@ -16,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ContentAccountServiceImpl implements ContentAccountService {
     private final ContentAccountRepository repository;
+    private final ContentAccountVerifierService verifierService;
 
     @Override
     public ContentAccount getContentAccountOrCreate(ContentAccountDetails details) {
@@ -29,6 +30,7 @@ public class ContentAccountServiceImpl implements ContentAccountService {
     }
 
     private ContentAccount createContentAccount(ContentAccountDetails details) {
+        verifierService.verify(details);
         ContentAccount contentAccount = new ContentAccount(UUID.randomUUID(), details);
         repository.save(contentAccount);
         return contentAccount;

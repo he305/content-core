@@ -20,12 +20,15 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 class ContentAccountServiceImplTest {
 
     @Mock
     private ContentAccountRepository contentAccountRepository;
+    @Mock
+    private ContentAccountVerifierService verifierService;
     @InjectMocks
     private ContentAccountServiceImpl underTest;
 
@@ -43,7 +46,7 @@ class ContentAccountServiceImplTest {
     void getContentAccountOrCreate_createNew() {
         ContentAccountDetails details = new ContentAccountDetails("name", Platform.TWITCH);
         Mockito.when(contentAccountRepository.getByContentAccountDetails(details)).thenReturn(Optional.empty());
-
+        doNothing().when(verifierService).verify(details);
         ContentAccount actual = underTest.getContentAccountOrCreate(details);
         ContentAccount expected = new ContentAccount(actual.getId(), details);
         assertEquals(expected, actual);
