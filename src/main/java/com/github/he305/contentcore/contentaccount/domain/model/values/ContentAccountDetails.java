@@ -3,10 +3,12 @@ package com.github.he305.contentcore.contentaccount.domain.model.values;
 import com.github.he305.contentcore.contentaccount.domain.model.enums.Platform;
 import com.github.he305.contentcore.shared.validators.StringValidator;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Objects;
 
 @Getter
+@ToString
 public class ContentAccountDetails {
     private final String name;
     private final Platform platform;
