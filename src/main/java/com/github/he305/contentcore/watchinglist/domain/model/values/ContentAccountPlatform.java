@@ -4,5 +4,6 @@ public enum ContentAccountPlatform {
     TWITCH,
     WASD,
     GOODGAME,
-    YOUTUBE
+    YOUTUBE,
+    VKPLAY
 }
