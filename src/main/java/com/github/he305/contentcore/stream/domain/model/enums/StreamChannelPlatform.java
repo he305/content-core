@@ -4,5 +4,6 @@ public enum StreamChannelPlatform {
     TWITCH,
     WASD,
     GOODGAME,
-    YOUTUBE
+    YOUTUBE,
+    VKPLAY
 }
