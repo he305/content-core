@@ -30,6 +30,7 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.
                 authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/actuator/*").permitAll() // Unsafe, need to add api gateway
                         .antMatchers("/api/auth/*").permitAll()
                         .antMatchers("/v2/api-docs",
                                 "/configuration/ui",
