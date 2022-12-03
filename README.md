@@ -5,6 +5,7 @@
 ### Usage
 
 Set up the whole `content` environment using `docker-compose.yml`. If necessary, provide streaming services credentials.
+Use `prometheus.yml` config located in `./config/prod/` to enable grafana.
 
 ```yaml
 version: '3'
@@ -71,9 +72,40 @@ services:
       - 9000:9000
     networks:
       - content-network
+  content-account-verifier:
+    restart: always
+    image: 'he305/content-account-verifier:latest'
+    depends_on:
+      - content-discovery
+    container_name: content-account-verifier
+    environment:
+      - EUREKA_HOST=http://content-discovery:9000/eureka
+    networks:
+      - content-network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - content-network
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 10001:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - content-network
 
 volumes:
   content-core-data:
+  grafana-data:
 
 networks:
   content-network:

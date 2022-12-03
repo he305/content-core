@@ -30,14 +30,17 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.
                 authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/actuator/**").permitAll() // Unsafe, need to add api gateway
                         .antMatchers("/api/auth/*").permitAll()
-                        .antMatchers("/v2/api-docs",
+                        .antMatchers("/v3/api-docs/**",
                                 "/configuration/ui",
                                 "/swagger-resources/**",
                                 "/configuration/security",
                                 "/swagger-ui/*",
                                 "/webjars/**",
-                                "/h2-console/**").permitAll()
+                                "/h2-console/**",
+                                "/context-path/**",
+                                "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()
