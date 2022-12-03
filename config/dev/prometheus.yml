@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    monitor: 'content-dev'
+
+scrape_configs:
+  # Make Prometheus scrape itself for metrics.
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: [ 'localhost:9090' ]
+
+  # Discover Eureka services to scrape.
+  - job_name: 'eureka'
+    # Scrape Eureka itself to discover new services.
+    eureka_sd_configs:
+      - server: http://content-discovery-dev:9000/eureka
+    metrics_path: /actuator/prometheus
