@@ -29,3 +29,29 @@ eureka:
       defaultZone: ${EUREKA_HOST:http://localhost:9000/eureka}
   instance:
     instance-id: core-instance-${random.uuid}
+
+management:
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+      status:
+        http-mapping:
+          up: 207
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, beans, metrics, prometheus
+  info:
+    env:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+info:
+  app:
+    name: Content core
