@@ -36,6 +36,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
       - EUREKA_HOST=http://content-discovery:9000/eureka
+      - ZIPKIN_HOST=http://zipkin:9411
     networks:
       - content-network
   stream-feeder:
@@ -100,6 +101,13 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - content-network
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
     networks:
       - content-network
 
