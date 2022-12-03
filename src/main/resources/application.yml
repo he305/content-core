@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: core
+  zipkin:
+    baseUrl: ${ZIPKIN_HOST:http://localhost:9411/}
   datasource:
     url: jdbc:postgresql://127.0.0.1:5444/content_core_db
     username: admin
