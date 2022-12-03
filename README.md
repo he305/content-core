@@ -51,6 +51,7 @@ services:
       - twitch-client-secret-env= #IF TWITCH SUPPORT IS REQUIRED, PASS THE TWITCH CLIENT SECRET 
       - wasd-token= #IF WASD SUPPORT IS REQUIRED, PASS THE WASD TOKEN
       - EUREKA_HOST=http://content-discovery:9000/eureka
+      - ZIPKIN_HOST=http://zipkin:9411
     networks:
       - content-network
   content-web:
@@ -81,6 +82,7 @@ services:
     container_name: content-account-verifier
     environment:
       - EUREKA_HOST=http://content-discovery:9000/eureka
+      - ZIPKIN_HOST=http://zipkin:9411
     networks:
       - content-network
 
